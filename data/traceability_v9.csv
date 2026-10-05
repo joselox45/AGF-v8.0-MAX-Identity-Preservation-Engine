@@ -1,0 +1,9 @@
+id,requisito,fuente,prueba,criterio,estado,evidencia,razon
+T21,Embedding real ArcFace (ONNX 512-d),docs/V9_ROADMAP.md §2-P1,tests/test_v9_pendientes.py::test_arcface_blocked_without_weights,Estado BLOCKED sin pesos; PASS exige evidence_hash,NOT_RUN,,
+T22,Embedding real FaceNet (ONNX 128-d),docs/V9_ROADMAP.md §2-P1,tests/test_v9_pendientes.py::test_facenet_blocked_without_weights,Estado BLOCKED sin pesos; PASS exige evidence_hash,NOT_RUN,,
+T23,Comparador coseno fail-closed,docs/V9_ROADMAP.md §2-P1,tests/test_v9_pendientes.py::test_cosine_fail_closed_y_threshold,Cosine computado en dimensión igual; BLOCKED en vector ausente,NOT_RUN,,
+T24,Anti-replay de embeddings,docs/V9_ROADMAP.md §2-P1,tests/test_v9_pendientes.py::test_antireplay_rejects_identical,Cos ≥ 0.99999 ⇒ FAIL (fabricación),NOT_RUN,,
+T25,Cadena de custodia SHA-512,docs/V9_ROADMAP.md §2-P2,tests/test_v9_pendientes.py::test_chain_detects_tampering,Modificación de payload ⇒ FAIL con seq,NOT_RUN,,
+T26,Firma Ed25519 de evidencia,docs/V9_ROADMAP.md §2-P2,tests/test_v9_pendientes.py::test_hmac_degrades_unverified,Sin Ed25519 ⇒ UNVERIFIED (no conformidad),NOT_RUN,,
+T27,SPIFFE ID + did:key de agente,docs/V9_ROADMAP.md §2-P3,tests/test_v9_pendientes.py::test_enroll_blocked_without_crypto,Sin cryptography ⇒ BLOCKED (agente no identificado),NOT_RUN,,
+T28,Verificación estructural SVID,docs/V9_ROADMAP.md §2-P3,tests/test_v9_pendientes.py::test_verify_agent_fail_closed,DID/spiffe ausentes ⇒ BLOCKED/FAIL,NOT_RUN,,
