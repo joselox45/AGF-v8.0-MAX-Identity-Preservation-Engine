@@ -1,24 +1,10 @@
-"""
-AGF Chat Runtime — PROMPT KERNEL v0.2
-=====================================
-Mejoras sobre v0.1 (auditoría externa, 7.5/10 → objetivo 9+):
-  M1  Definiciones operativas: DAÑO / ELEMENTO NO DAÑADO / RECONSTRUCCIÓN
-      LEGÍTIMA vs ILEGÍTIMA (elimina la zona gris de "reconstruir").
-  M2  Roles explícitos de imagen: REFERENCE = ancla de identidad (no se
-      edita); TARGET = base a reparar (única que se interviene).
-  M3  Principio de MÍNIMA INTERVENCIÓN: ante la duda, no intervenir.
-  M4  ALLOWED jerarquizada en orden estricto de preferencia.
-  M5  Iluminación: solo corrige defecto de captura evidente, nunca
-      mejora estética (cierra el "cuando sea necesaria" vago).
-  M6  VERIFICATION con formato exacto: cambios, justificación por
-      reconstrucción, provenance, confianza, áreas inciertas.
-Salida: texto plano copiable (chat-window contract).
-"""
-
-from __future__ import annotations
-
+# AGF Chat Runtime - PROMPT KERNEL v0.2 + M7
+# Extraido del bundle single-file; mantener sincronizados.
 from dataclasses import dataclass
 from typing import Optional
+
+
+
 
 KERNEL_VERSION = "AGF_CHAT_RUNTIME v0.2 — PROMPT KERNEL"
 OPERATIONS = ("RESTORE", "REPAIR", "RECONSTRUCT")
@@ -31,7 +17,10 @@ DEFINITIONS = """DEFINITIONS:
   (a) información visible en REFERENCE_IMAGE, o (b) continuidad local evidente
   de TARGET_IMAGE.
 - RECONSTRUCCIÓN ILEGÍTIMA: añadir detalle, textura, iluminación o geometría
-  no respaldados por (a) ni (b). Prohibida siempre."""
+  no respaldados por (a) ni (b). Prohibida siempre.
+- RASGOS NATURALES (NO son daño): arrugas, lunares, pecas, textura de piel,
+  poros, sombras naturales del rostro, vetas, grietas o desgaste auténtico
+  del objeto/sujeto fotografiado. Nunca se "reparan"."""
 
 MINIMUM_INTERVENTION = """PRINCIPLE OF MINIMUM INTERVENTION:
 Prefiere dejar un área imperfecta antes que introducir información no
@@ -66,6 +55,8 @@ FORBIDDEN = [
     "reconstrucción ilegítima (definiciones arriba)",
     "usar 'iluminación' como justificación estética de cambios de tono o rostro",
     "sobre-reparar: extender la intervención a regiones sanas",
+    "interpretar rasgos naturales (arrugas, lunares, pecas, textura de piel, "
+    "sombras naturales) como daño o artefacto",
 ]
 
 VERIFICATION_FORMAT = """VERIFICATION (obligatorio, formato exacto):
