@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AGF Evidence State (T29)",
+  "type": "object",
+  "required": ["state", "conformant", "reason"],
+  "properties": {
+    "state": {
+      "enum": ["NO_EVIDENCE", "EVIDENCE_UNAVAILABLE", "EVIDENCE_INVALID",
+               "EVIDENCE_INSUFFICIENT", "EVIDENCE_VALID", "EVIDENCE_INDEPENDENT"]
+    },
+    "conformant": {"type": "boolean"},
+    "reason": {"type": "string", "minLength": 1}
+  },
+  "description": "Conformidad solo con EVIDENCE_VALID o EVIDENCE_INDEPENDENT (fail-closed)."
+}

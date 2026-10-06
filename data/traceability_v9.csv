@@ -7,3 +7,7 @@ T25,Cadena de custodia SHA-512,docs/V9_ROADMAP.md §2-P2,tests/test_v9_pendiente
 T26,Firma Ed25519 de evidencia,docs/V9_ROADMAP.md §2-P2,tests/test_v9_pendientes.py::test_hmac_degrades_unverified,Sin Ed25519 ⇒ UNVERIFIED (no conformidad),NOT_RUN,,
 T27,SPIFFE ID + did:key de agente,docs/V9_ROADMAP.md §2-P3,tests/test_v9_pendientes.py::test_enroll_blocked_without_crypto,Sin cryptography ⇒ BLOCKED (agente no identificado),NOT_RUN,,
 T28,Verificación estructural SVID,docs/V9_ROADMAP.md §2-P3,tests/test_v9_pendientes.py::test_verify_agent_fail_closed,DID/spiffe ausentes ⇒ BLOCKED/FAIL,NOT_RUN,,
+id,requisito,fuente,prueba,criterio,estado,evidencia,razon
+T29,Taxonomia de estados de evidencia,docs/ATTESTATION_AND_BENCHMARK.md,tests/test_t29_t30_attest.py::TestTaxonomy::test_all_six_states,6 estados; conformidad solo VALID/INDEPENDENT,NOT_RUN,,
+T30,Detector facial + benchmark robustez,docs/ATTESTATION_AND_BENCHMARK.md,tools/bio_benchmark.py,TAR/FAR @ umbral; BLOCKED sin modelos,NOT_RUN,,
+T31,Attestation independiente Ed25519,docs/ATTESTATION_AND_BENCHMARK.md,tests/test_t29_t30_attest.py::TestAttestation::test_roundtrip,ATTESTED con firma verificable por terceros,NOT_RUN,,
