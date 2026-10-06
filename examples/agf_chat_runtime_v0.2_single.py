@@ -33,7 +33,10 @@ DEFINITIONS = """DEFINITIONS:
   (a) información visible en REFERENCE_IMAGE, o (b) continuidad local evidente
   de TARGET_IMAGE.
 - RECONSTRUCCIÓN ILEGÍTIMA: añadir detalle, textura, iluminación o geometría
-  no respaldados por (a) ni (b). Prohibida siempre."""
+  no respaldados por (a) ni (b). Prohibida siempre.
+- RASGOS NATURALES (NO son daño): arrugas, lunares, pecas, textura de piel,
+  poros, sombras naturales del rostro, vetas, grietas o desgaste auténtico
+  del objeto/sujeto fotografiado. Nunca se "reparan"."""
 
 MINIMUM_INTERVENTION = """PRINCIPLE OF MINIMUM INTERVENTION:
 Prefiere dejar un área imperfecta antes que introducir información no
@@ -68,6 +71,8 @@ FORBIDDEN = [
     "reconstrucción ilegítima (definiciones arriba)",
     "usar 'iluminación' como justificación estética de cambios de tono o rostro",
     "sobre-reparar: extender la intervención a regiones sanas",
+    "interpretar rasgos naturales (arrugas, lunares, pecas, textura de piel, "
+    "sombras naturales) como daño o artefacto",
 ]
 
 VERIFICATION_FORMAT = """VERIFICATION (obligatorio, formato exacto):
@@ -616,10 +621,8 @@ class ChatRuntime:
 if __name__ == "__main__":
     rt = ChatRuntime(max_retries=1)
     step = rt.start("REPAIR", b"REFERENCE_IMAGE_BYTES", b"TARGET_IMAGE_BYTES")
-    print("== KERNEL v0.2 LISTO PARA LA VENTANA DEL LLM ==")
+    print("== KERNEL v0.2+M7 LISTO PARA LA VENTANA DEL LLM ==")
     print(step.dispatch_prompt)
-    print("== INSTRUCCIÓN AL OPERADOR ==")
-    print(step.dispatch_instruction)
     step = rt.feed(RuntimeEvent("OUTPUT_RECEIVED", b"EDITED_IMAGE_BYTES",
                                 declared_provenance="RECONSTRUCTED"))
     print("== DECISIÓN ==", step.state.value, "->", step.message)
