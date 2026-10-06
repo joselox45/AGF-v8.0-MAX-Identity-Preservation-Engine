@@ -7,7 +7,7 @@
   },
   "T22": {
     "status": "BLOCKED",
-    "reason": "mismo pipeline; correr con modelo facenet.tflite"
+    "reason": "correr este closure con modelo facenet.tflite"
   },
   "verification": {
     "rule": "FACE_VERIFY_TFLITE",
@@ -17,9 +17,9 @@
     "evidence_hash": "3c278446e39d7757153476d1f74b85a7e0114cbb9187f05a6375f637b61cdfcad58ee3602df62971fa8172b86fb9caba4b8461733aafae92bef0a8a414aedacb"
   },
   "_meta": {
-    "ts": "2026-10-06T23:53:57.589059+00:00",
+    "ts": "2026-10-06T23:55:41.914390+00:00",
     "kind": "arcface",
-    "normalize": true,
+    "normalize_mode": "div255",
     "host": "termux",
     "fail_closed": true
   }
