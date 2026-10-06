@@ -1,0 +1,26 @@
+{
+  "T21": {
+    "status": "PASS",
+    "model_id": "facenet:tflite:54660297ebad23b7",
+    "evidence_hash": "0f3b8765153a67651ff2113db5916dda994a7e1168f845c6ee064f8d2bfffb50f9171a4aeaab1f31568474e26c4563f35a18fbb65a502435a987801ead32647f",
+    "weights_sha256": "54660297ebad23b7106a8ccd05f2f2f616b3d39bf7d7e82e148cf8ed7e27ae1a"
+  },
+  "T22": {
+    "status": "BLOCKED",
+    "reason": "mismo pipeline; correr con modelo facenet.tflite"
+  },
+  "verification": {
+    "rule": "FACE_VERIFY_TFLITE",
+    "cosine": 0.967478,
+    "status": "PASS",
+    "reason": "cosine 0.9675 vs umbral 0.65",
+    "evidence_hash": "9da8503b3cc5da5ec2f34ecf7ac0f0c042edbf0ed6e5453087a1262ca167e8c15276157ad4c4bc91843b1869208b1e5e9373919276392e6e4302ccbb18e2bcf1"
+  },
+  "_meta": {
+    "ts": "2026-10-06T22:46:30.844312+00:00",
+    "kind": "facenet",
+    "normalize": false,
+    "host": "termux",
+    "fail_closed": true
+  }
+}
