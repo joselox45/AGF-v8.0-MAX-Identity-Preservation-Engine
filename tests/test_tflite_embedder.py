@@ -48,6 +48,26 @@ class TestTFLiteEmbedder(unittest.TestCase):
         finally:
             te.TFLiteFaceEmbedder._get_interpreter_class = orig
 
+    def test_normalize_flag(self):
+        orig = te.TFLiteFaceEmbedder._get_interpreter_class
+        seen = {}
+        class SpyInterp(FakeInterp):
+            def set_tensor(self, idx, val):
+                seen["val"] = float(val.mean())
+                super().set_tensor(idx, val)
+        te.TFLiteFaceEmbedder._get_interpreter_class = lambda self: SpyInterp
+        try:
+            import numpy as np
+            px = (np.ones((4, 4, 3)) * 255).tolist()   # todo blanco
+            e = te.TFLiteFaceEmbedder("arcface", b"m", normalize=True)
+            e.embed(px)
+            self.assertAlmostEqual(seen["val"], (255 - 127.5) / 128.0, places=3)
+            e2 = te.TFLiteFaceEmbedder("arcface", b"m", normalize=False)
+            e2.embed(px)
+            self.assertAlmostEqual(seen["val"], 255.0, places=3)
+        finally:
+            te.TFLiteFaceEmbedder._get_interpreter_class = orig
+
     def test_comparator_antireplay(self):
         a = te.EmbeddingResult(te.EmbeddingStatus.PASS, "arcface:x",
                                vector=[0.6, 0.8] + [0.01] * 510)
