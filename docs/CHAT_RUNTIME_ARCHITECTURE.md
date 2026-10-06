@@ -48,3 +48,15 @@ Evidencia ausente, verificación bloqueada o procedencia no declarada ⇒
 python -m unittest discover -s tests -v
 python examples/chat_runtime_demo.py
 ```
+
+
+## Kernel v0.2 (auditoría externa 7.5/10 → cierre de zonas grises)
+
+| Mejora | Cierra el riesgo |
+|---|---|
+| M1 DEFINITIONS operativas (DAÑO / NO DAÑADO / reconstrucción legítima vs ilegítima) | "reconstruir información perdida" ya no es interpretable a capricho |
+| M2 INPUT ROLES explícitos | REFERENCE = ancla (no se edita); TARGET = única imagen intervenida |
+| M3 PRINCIPLE OF MINIMUM INTERVENTION | sobre-reparación y alucinación quedan desincentivadas |
+| M4 ALLOWED jerarquizada (orden estricto) | prioridad clara ante conflictos |
+| M5 Iluminación solo ante defecto de captura evidente | cierra el "cuando sea necesaria" vago |
+| M6 VERIFICATION con formato exacto (CHANGES/JUSTIFICATION/PROVENANCE/CONFIDENCE/UNCERTAIN_AREAS) | la verificación ya no queda vacía ni genérica |

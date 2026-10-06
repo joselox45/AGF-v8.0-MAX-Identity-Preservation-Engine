@@ -17,7 +17,10 @@ class TestKernel(unittest.TestCase):
         k = PromptKernel()
         r = k.build("REPAIR", "ref123", "tgt456")
         for token in ("IDENTITY_PRESERVATION = MAX", "FORBIDDEN",
-                      "VERIFICATION:", "REQUIRED", "REPAIR"):
+                      "AGF_VERIFICATION_REPORT", "MINIMUM_INTERVENTION",
+                      "INPUT ROLES", "REFERENCE_IMAGE", "TARGET_IMAGE",
+                      "RECONSTRUCTION" if False else "DAÑO",
+                      "CONFIDENCE:", "UNCERTAIN_AREAS:", "REPAIR"):
             self.assertIn(token, r.prompt_block)
 
     def test_kernel_rejects_unknown_operation(self):
