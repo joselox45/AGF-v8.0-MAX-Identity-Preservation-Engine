@@ -43,10 +43,14 @@ class TFLiteFaceEmbedder:
     }
 
     def __init__(self, model_kind: str, model_bytes: Optional[bytes] = None,
-                 normalize: bool = True):
+                 normalize: str = "arcface"):
         """normalize=True: entrada (x-127.5)/128 (ArcFace ONNX estandar).
         normalize=False: el modelo incluye su propia capa de escalado
         (p.ej. facenet.tflite derivado de deepface) -> NO normalizar."""
+        if isinstance(normalize, bool):
+            normalize = "arcface" if normalize else "raw"
+        if normalize not in ("arcface", "raw", "div255"):
+            raise ValueError("normalize debe ser arcface|raw|div255")
         if model_kind not in self.MODEL_SPECS:
             raise ValueError(f"model_kind debe ser uno de {list(self.MODEL_SPECS)}")
         self.model_kind = model_kind
@@ -107,8 +111,10 @@ class TFLiteFaceEmbedder:
                 arr = arr[y1:y2, x1:x2]
             h, w = self.spec["input_size"]
             arr = self._resize_np(arr, (h, w))
-            if self.normalize:
+            if self.normalize == "arcface":
                 arr = (arr - 127.5) / 128.0
+            elif self.normalize == "div255":
+                arr = arr / 255.0
             arr = np.expand_dims(arr, axis=0)  # NHWC
             self._interp.set_tensor(self._in_idx, arr)
             self._interp.invoke()

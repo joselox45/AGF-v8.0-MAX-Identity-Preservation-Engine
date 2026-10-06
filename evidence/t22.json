@@ -2,7 +2,7 @@
   "T22": {
     "status": "PASS",
     "model_id": "facenet:tflite:54660297ebad23b7",
-    "evidence_hash": "bc0cc71fb92dae972f2691163c8276b9a76160401e0f1ce5f9d59c21caaa6b3c876e8a5528f5d0e5a7558ab305c3f72b35bf9e29b347ccf515f781dc5ed807f2",
+    "evidence_hash": "0f3b8765153a67651ff2113db5916dda994a7e1168f845c6ee064f8d2bfffb50f9171a4aeaab1f31568474e26c4563f35a18fbb65a502435a987801ead32647f",
     "weights_sha256": "54660297ebad23b7106a8ccd05f2f2f616b3d39bf7d7e82e148cf8ed7e27ae1a"
   },
   "T21": {
@@ -11,13 +11,13 @@
   },
   "verification": {
     "rule": "FACE_VERIFY_TFLITE",
-    "cosine": 0.524247,
-    "status": "FAIL",
-    "reason": "cosine 0.5242 vs umbral 0.65",
-    "evidence_hash": "a1376a10f2f85f19ab3df107dd714206ee305aa435dc2a53a501c9beeda2853762e81da60595ce53f82afa043942855e4fc8a86ec9a36affa25b5442fff260ee"
+    "cosine": 0.967478,
+    "status": "PASS",
+    "reason": "cosine 0.9675 vs umbral 0.65",
+    "evidence_hash": "9da8503b3cc5da5ec2f34ecf7ac0f0c042edbf0ed6e5453087a1262ca167e8c15276157ad4c4bc91843b1869208b1e5e9373919276392e6e4302ccbb18e2bcf1"
   },
   "_meta": {
-    "ts": "2026-10-06T23:55:46.177916+00:00",
+    "ts": "2026-10-06T23:57:35.195589+00:00",
     "kind": "facenet",
     "normalize_mode": "raw",
     "host": "termux",
