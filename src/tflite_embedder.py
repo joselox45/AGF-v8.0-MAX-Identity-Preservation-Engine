@@ -42,11 +42,16 @@ class TFLiteFaceEmbedder:
         "facenet": {"input_size": (160, 160), "output_dim": 128},
     }
 
-    def __init__(self, model_kind: str, model_bytes: Optional[bytes] = None):
+    def __init__(self, model_kind: str, model_bytes: Optional[bytes] = None,
+                 normalize: bool = True):
+        """normalize=True: entrada (x-127.5)/128 (ArcFace ONNX estandar).
+        normalize=False: el modelo incluye su propia capa de escalado
+        (p.ej. facenet.tflite derivado de deepface) -> NO normalizar."""
         if model_kind not in self.MODEL_SPECS:
             raise ValueError(f"model_kind debe ser uno de {list(self.MODEL_SPECS)}")
         self.model_kind = model_kind
         self.spec = self.MODEL_SPECS[model_kind]
+        self.normalize = normalize
         self.model_id = f"{model_kind}:tflite:unknown-weights"
         self._interp = None
         self._in_idx = self._out_idx = None
@@ -102,7 +107,8 @@ class TFLiteFaceEmbedder:
                 arr = arr[y1:y2, x1:x2]
             h, w = self.spec["input_size"]
             arr = self._resize_np(arr, (h, w))
-            arr = (arr - 127.5) / 128.0
+            if self.normalize:
+                arr = (arr - 127.5) / 128.0
             arr = np.expand_dims(arr, axis=0)  # NHWC
             self._interp.set_tensor(self._in_idx, arr)
             self._interp.invoke()
