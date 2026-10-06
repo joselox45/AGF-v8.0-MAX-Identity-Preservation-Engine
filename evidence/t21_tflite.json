@@ -1,9 +1,9 @@
 {
   "T21": {
     "status": "PASS",
-    "model_id": "facenet:tflite:54660297ebad23b7",
-    "evidence_hash": "0f3b8765153a67651ff2113db5916dda994a7e1168f845c6ee064f8d2bfffb50f9171a4aeaab1f31568474e26c4563f35a18fbb65a502435a987801ead32647f",
-    "weights_sha256": "54660297ebad23b7106a8ccd05f2f2f616b3d39bf7d7e82e148cf8ed7e27ae1a"
+    "model_id": "arcface:tflite:700ea787ab479a13",
+    "evidence_hash": "8ef14121a8ca20ff0157b56967b830833be4b4c54b01fcbd34297886882fc1c24381b8aee787ed12a3f698ed926a97170e6da53db9a9653ca68e3f00e180ea45",
+    "weights_sha256": "700ea787ab479a13ddf9c8225215569f88065748aa2b8f2b384735c5e6521bef"
   },
   "T22": {
     "status": "BLOCKED",
@@ -11,15 +11,15 @@
   },
   "verification": {
     "rule": "FACE_VERIFY_TFLITE",
-    "cosine": 0.967478,
+    "cosine": 0.772993,
     "status": "PASS",
-    "reason": "cosine 0.9675 vs umbral 0.65",
-    "evidence_hash": "9da8503b3cc5da5ec2f34ecf7ac0f0c042edbf0ed6e5453087a1262ca167e8c15276157ad4c4bc91843b1869208b1e5e9373919276392e6e4302ccbb18e2bcf1"
+    "reason": "cosine 0.7730 vs umbral 0.65",
+    "evidence_hash": "3c278446e39d7757153476d1f74b85a7e0114cbb9187f05a6375f637b61cdfcad58ee3602df62971fa8172b86fb9caba4b8461733aafae92bef0a8a414aedacb"
   },
   "_meta": {
-    "ts": "2026-10-06T22:46:30.844312+00:00",
-    "kind": "facenet",
-    "normalize": false,
+    "ts": "2026-10-06T23:53:57.589059+00:00",
+    "kind": "arcface",
+    "normalize": true,
     "host": "termux",
     "fail_closed": true
   }
