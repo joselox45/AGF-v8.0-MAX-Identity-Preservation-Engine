@@ -1,22 +1,21 @@
-# Mapeo AGF v9.0 (T21–T28) → APCE v8.1.0 — v3 (post-cierre biométrico real)
+# Mapeo AGF v9.0 (T21–T28) → APCE v8.1.0 — v4 (post-cierre biométrico riguroso)
 
-Cierre 2026-10-06 en Termux real (`evidence/t21_tflite.json`):
-- **T22 → TESTED**: FaceNet TFLite real, dos fotos del mismo rostro,
-  cosine **0.9675** (umbral 0.65), weights_sha256 verificado contra el
-  hash publicado (custodia completa).
-- **T26/T27 → TESTED**: Ed25519 + did:key reales (corrida previa).
-- **T21**: gap residual minimo — pipeline TFLite probado end-to-end;
-  falta solo el archivo de pesos ArcFace (.tflite).
+Corrida 2026-10-06 con parche de normalización aplicado (modos arcface/raw/div255):
+
+- **T22 FaceNet → TESTED**: cosine 0.967478, `evidence_hash` idéntico en dos
+  corridas independientes → **determinismo verificado** (custodia fuerte).
+- **T21 ArcFace → gap caracterizado con datos**: FAIL 0.4257 con preproceso
+  spec-correcto (div255) sobre imagen completa. ArcFace exige alineación facial.
+  El PASS previo (0.7730) correspondía a normalización no especificada —
+  el fail-closed impidió registrarlo como cierre. Ruta: T30 (BlazeFace) + re-cierre.
 
 | AGF-ID | RELATIONSHIP | GAP | STATUS |
 |---|---|---|---|
-| T21 | PARTIAL-COMPATIBLE | residual: pesos ArcFace .tflite | IMPLEMENTED-NOT-OPERATING |
-| T22 | DIRECT-COMPATIBLE | none | **TESTED** |
-| T23 | DIRECT-COMPATIBLE | none | TESTED |
-| T24 | DIRECT-COMPATIBLE | none | TESTED |
-| T25 | DIRECT-COMPATIBLE | none | TESTED |
-| T26 | DIRECT-COMPATIBLE | none | TESTED |
-| T27 | DIRECT-COMPATIBLE | residual: anclaje produccion | TESTED |
+| T21 | PARTIAL-COMPATIBLE | alineación facial pendiente (T30) | IMPLEMENTED-NOT-OPERATING |
+| T22 | DIRECT-COMPATIBLE | none (determinismo verificado) | TESTED |
+| T23–T26 | DIRECT-COMPATIBLE | none | TESTED |
+| T27 | DIRECT-COMPATIBLE | residual: anclaje producción | TESTED |
 | T28 | DIRECT-COMPATIBLE | none | TESTED |
 
-Score: **7/8 TESTED**, uno con gap residual documentado y ruta de cierre conocida.
+Score: 7/8 TESTED; T21 con gap medido y ruta de cierre precisa.
+Lección de aseguramiento: un FAIL honesto con datos > un PASS dudoso.
