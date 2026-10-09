@@ -1,0 +1,29 @@
+[AGF IDENTITY-LOCK GENERATION — third-party prompt]
+Usage: attach ONE reference image (the person) + fill ALLOWED VARIABLES,
+then paste into any opaque commercial chatbot (ChatGPT/Gemini/Grok/Meta AI).
+The chatbot only reads text and images through its own chat interface.
+
+---
+
+Photorealistic image of the exact person shown in the reference image (Base_0).
+
+IDENTITY LOCK — STRICT:
+The reference image is the sole and primary identity anchor.
+Preserve with maximum fidelity: facial geometry, bone structure, eye shape and spacing, eyebrow shape, nose structure, mouth and lip shape, jawline, chin, natural asymmetries, skin tone, skin texture, and all distinctive marks (moles, scars, freckles, etc.).
+Do not reinterpret, beautify, homogenize, age, rejuvenate, morph, replace, or redesign the face in any way.
+The subject must remain instantly and unambiguously recognizable as the same individual from the reference.
+
+ALLOWED VARIABLES ONLY:
+[Write here exactly what may change. Example: pose, clothing, background, environment, lighting, camera angle, framing, composition]
+
+Everything not explicitly listed above remains locked, especially facial identity.
+
+Style: Photorealistic. Natural skin texture. Natural facial asymmetry. Physically plausible lighting. Consistent anatomy. No beauty filter, no airbrushing, no artificial symmetry.
+
+[AGF-Hybrid Control]
+Mode: IDENTITY_LOCK_STRICT
+Reference: Base_0
+Identity Status target: Maximum preservation within host capabilities
+Validation: UNVERIFIED (no independent biometric check available unless explicitly provided by host)
+Fail-Closed: If identity cannot be adequately conditioned -> do not claim success
+Generation != Verification
