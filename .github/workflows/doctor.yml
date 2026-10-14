@@ -1,0 +1,16 @@
+name: doctor
+on: [push, workflow_dispatch]
+jobs:
+  doctor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: deps
+        run: pip install numpy pillow tflite-runtime cryptography
+      - name: autodiagnostico
+        run: python agf.py doctor
+      - name: suite completa
+        run: python -m unittest discover -s tests -v
