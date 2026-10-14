@@ -55,7 +55,7 @@ APCE v8.1.0 CANÓNICO (control plane, G1–G6)
    └── BLACK-BOX LLM CHAT WINDOW        (único canal: texto + imágenes)
 ```
 
-## Posicionamiento (síntesis de 7 auditorías externas, oct 2024→2026)
+## Posicionamiento (síntesis de 7 auditorías externas, oct 2026 (9 auditorías))
 
 Este repositorio es un **marco de verificación fail-closed y trazabilidad
 ejecutable sobre LLMs opacos** — no una herramienta plug-and-play de edición

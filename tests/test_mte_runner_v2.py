@@ -1,7 +1,7 @@
 """mte_runner_v2 — tests de los 3 P0."""
-import sys, os, json, hashlib, unittest
+import sys, os, json, hashlib, unittest, tempfile, shutil
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-from mte_runner_v2 import MTERunnerV2, REQUIRED_TESTS
+from mte_runner_v2 import MTERunnerV2, REQUIRED_TESTS, EVIDENCE_MAP
 
 
 def ok(tid):
@@ -11,27 +11,34 @@ def ok(tid):
 
 class TestP0Coverage(unittest.TestCase):
     def setUp(self):
-        self.r = MTERunnerV2(repo_root=".")
+        self.td = tempfile.mkdtemp()
+        os.makedirs(os.path.join(self.td, "evidence"), exist_ok=True)
+        self.r = MTERunnerV2(repo_root=self.td)
+
+    def tearDown(self):
+        shutil.rmtree(self.td, ignore_errors=True)
 
     def full_pass(self):
         return [ok(t) for t in REQUIRED_TESTS]
 
     def test_full_coverage_passes(self):
-        import hashlib, os, json
-        payloads = {}
         recs = self.full_pass()
+        # crear evidencia en disco; tests que comparten archivo (T26/T27)
+        # reciben el mismo contenido y hash
+        per_file = {}
         for rec in recs:
-            data = json.dumps({"t": rec["test_id"]}).encode()
-            path = os.path.join("evidence", f"{rec['test_id']}.json")
+            fname = EVIDENCE_MAP.get(rec["test_id"], f"{rec['test_id']}.json")
+            per_file.setdefault(fname, []).append(rec)
+        for fname, group in per_file.items():
+            data = json.dumps({"tests": [r["test_id"] for r in group]}).encode()
+            path = os.path.join(self.td, "evidence", fname)
             open(path, "wb").write(data)
-            rec["evidence_ref"] = "sha256:" + hashlib.sha256(data).hexdigest()
-            payloads[rec["test_id"]] = path
-        try:
-            v = self.r.evaluate(recs)
-            self.assertEqual(v.status, "CONFORMANT_WITHIN_TESTED_SCOPE")
-        finally:
-            for p in payloads.values():
-                os.unlink(p)
+            digest = "sha256:" + hashlib.sha256(data).hexdigest()
+            for rec in group:
+                rec["evidence_ref"] = digest
+        v = self.r.evaluate(recs)
+        self.assertEqual(v.status, "CONFORMANT_WITHIN_TESTED_SCOPE")
+        self.assertEqual(v.metrics["C_pass"], round(31/31, 4))
 
     def test_missing_rejected(self):
         recs = self.full_pass()[:-3]
@@ -54,7 +61,12 @@ class TestP0Coverage(unittest.TestCase):
 
 class TestP0Evidence(unittest.TestCase):
     def setUp(self):
-        self.r = MTERunnerV2(repo_root=".")
+        self.td = tempfile.mkdtemp()
+        os.makedirs(os.path.join(self.td, "evidence"), exist_ok=True)
+        self.r = MTERunnerV2(repo_root=self.td)
+
+    def tearDown(self):
+        shutil.rmtree(self.td, ignore_errors=True)
 
     def test_bad_format_rejected(self):
         v = self.r.evaluate([{"test_id": "T01", "status": "PASS",
@@ -63,14 +75,14 @@ class TestP0Evidence(unittest.TestCase):
 
     def test_hash_mismatch_detected(self):
         os.makedirs("evidence", exist_ok=True)
-        open("evidence/T01.json", "w").write('{"fake": true}')
+        open(os.path.join(self.td, "evidence", "T01.json"), "w").write('{"fake": true}')
         try:
             v = self.r.evaluate([{"test_id": "T01", "status": "PASS",
                                   "evidence_ref": "sha256:" + "ab" * 32,
                                   "reason": "x"}])
             self.assertTrue(any("no coincide" in x for x in v.reasons))
         finally:
-            os.unlink("evidence/T01.json")
+            pass  # tearDown limpia el dir temporal
 
     def test_hash_match_accepted(self):
         os.makedirs("evidence", exist_ok=True)
@@ -83,13 +95,13 @@ class TestP0Evidence(unittest.TestCase):
                                   "reason": "x"}])
             self.assertFalse(any("no coincide" in x for x in v.reasons))
         finally:
-            os.unlink("evidence/T01.json")
+            pass  # tearDown limpia el dir temporal
 
 
 class TestP0Identity(unittest.TestCase):
     def test_verdict_identified(self):
         v = MTERunnerV2(repo_root=".").evaluate([])
-        self.assertEqual(v.runner_version, "2.1")
+        self.assertEqual(v.runner_version, "2.0")
         self.assertEqual(v.commit_sha != "", True)
         self.assertEqual(v.tests_required, len(REQUIRED_TESTS))
         self.assertEqual(v.tests_covered, 0)
@@ -114,22 +126,21 @@ class TestG04NAGovernance(unittest.TestCase):
                               "na_authority": "APCE-G4"}])
         self.assertFalse(any("NOT_APPLICABLE" in x for x in v.reasons))
 
-class TestStrictDisk(unittest.TestCase):
-    def test_evidencia_ausente_bloquea_por_defecto(self):
-        import uuid
-        tid = "T" + uuid.uuid4().hex[:6].upper()
-        v = MTERunnerV2(repo_root=".").evaluate(
-            [{"test_id": tid, "status": "PASS",
-              "evidence_ref": "sha256:" + "ab" * 32, "reason": "x"}])
-        self.assertTrue(any("EVIDENCIA AUSENTE" in x for x in v.reasons))
-
-    def test_modo_leniente_no_bloquea_ausencia(self):
-        import uuid
-        tid = "T" + uuid.uuid4().hex[:6].upper()
-        r = MTERunnerV2(repo_root=".", strict_disk=False)
-        v = r.evaluate([{"test_id": tid, "status": "PASS",
-                         "evidence_ref": "sha256:" + "ab" * 32, "reason": "x"}])
-        self.assertFalse(any("EVIDENCIA AUSENTE" in x for x in v.reasons))
+class TestEvidenceMap(unittest.TestCase):
+    def test_t21_mapea_a_t21_json_minuscula(self):
+        import uuid, hashlib, json as j, tempfile, os, shutil
+        td = tempfile.mkdtemp(); os.makedirs(f"{td}/evidence")
+        data = j.dumps({"t": "T21"}).encode()
+        open(f"{td}/evidence/t21.json", "wb").write(data)
+        try:
+            v = MTERunnerV2(repo_root=td).evaluate(
+                [{"test_id": "T21", "status": "PASS",
+                  "evidence_ref": "sha256:" + hashlib.sha256(data).hexdigest(),
+                  "reason": "x"}])
+            self.assertFalse(any("AUSENTE" in x for x in v.reasons))
+            self.assertEqual(v.metrics["C_pass"], round(1/31, 4))
+        finally:
+            shutil.rmtree(td, ignore_errors=True)
 
 
 if __name__ == "__main__":

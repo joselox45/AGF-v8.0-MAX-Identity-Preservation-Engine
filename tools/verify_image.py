@@ -19,6 +19,11 @@ ap.add_argument("norm", nargs="?", default="raw")
 ap.add_argument("detector", nargs="?", default=None)
 ap.add_argument("--provenance-declared", action="store_true")
 ap.add_argument("--cross-tested", action="store_true")
+ap.add_argument("--subject-label", default=None,
+                help="same|diff|unknown — etiqueta del par (auditoria 10: "
+                     "los JSON no registraban si el par era mismo/distinto sujeto)")
+ap.add_argument("--prompt-sha256", default=None,
+                help="hash del kernel/pegar usado en la corrida (trazabilidad)")
 a = ap.parse_args()
 
 import numpy as np
@@ -70,7 +75,9 @@ vl = VerdictLayers().evaluate(
     anti_replay_clean=anti_replay)
 
 out = {"verdict": vl.to_dict(),
-       "inputs": {"ref_sha256": hashlib.sha256(open(a.ref, "rb").read()).hexdigest(),
+       "inputs": {"subject_label": a.subject_label or "unknown",
+                  "prompt_sha256": a.prompt_sha256,
+                  "ref_sha256": hashlib.sha256(open(a.ref, "rb").read()).hexdigest(),
                   "candidate_sha256": hashlib.sha256(open(a.candidate, "rb").read()).hexdigest(),
                   "weights_sha256": hashlib.sha256(w_bytes).hexdigest(),
                   "model_id": r.model_id, "pipeline": "aligned" if det else "full_image"},
