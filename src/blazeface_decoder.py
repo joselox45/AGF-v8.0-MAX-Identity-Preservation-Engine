@@ -1,8 +1,10 @@
 """
 AGF T21-ALIGN — Decodificador real de BlazeFace (short-range, 128px).
-Salida del modelo TFLite (MediaPipe face_detection):
-  - regression: (1, 896, 16)  -> 4 box offsets + 12 offsets de 6 keypoints
-  - classification: (1, 896, 1) -> scores (sigmoid)
+Box coder SSD con scales (x/y/w/h_scale = 128):
+  centro  = anchor_centro + raw_offset / 128
+  tamano  = anchor_tamano * exp(raw_size / 128)
+  keypoint= anchor_centro + raw_kp / 128     (sin multiplicar por anchor)
+Salidas: regression (1,896,16) = 4 box + 12 kp · classification (1,896,1).
 """
 
 from __future__ import annotations
@@ -52,21 +54,23 @@ def _sigmoid(x):
 
 
 def decode(reg, cls, anchors, input_size=128, score_thresh=0.7):
-    """reg: (896,16); cls: (896,1) crudos del modelo. Devuelve FaceDetection[]."""
+    """reg: (896,16); cls: (896,1) crudos del modelo. Devuelve FaceDetection[].
+    Box coder SSD con scales: offset=raw/S, size=anchor*exp(raw/S)."""
+    S = float(input_size)
     dets = []
     for i, a in enumerate(anchors):
         score = _sigmoid(float(cls[i][0]))
         if score < score_thresh:
             continue
         dx, dy, dw, dh = (float(v) for v in reg[i][:4])
-        cx = (a.cx + dx * a.w) * input_size
-        cy = (a.cy + dy * a.h) * input_size
-        w = a.w * math.exp(dw) * input_size
-        h = a.h * math.exp(dh) * input_size
+        cx = (a.cx + dx / S) * input_size
+        cy = (a.cy + dy / S) * input_size
+        w = a.w * math.exp(dw / S) * input_size
+        h = a.h * math.exp(dh / S) * input_size
         kps = []
         for k in range(6):
-            kx = (a.cx + float(reg[i][4 + 2 * k]) * a.w) * input_size
-            ky = (a.cy + float(reg[i][5 + 2 * k]) * a.h) * input_size
+            kx = (a.cx + float(reg[i][4 + 2 * k]) / S) * input_size
+            ky = (a.cy + float(reg[i][5 + 2 * k]) / S) * input_size
             kps.append((kx, ky))
         dets.append(FaceDetection(score,
                                   (cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2),
