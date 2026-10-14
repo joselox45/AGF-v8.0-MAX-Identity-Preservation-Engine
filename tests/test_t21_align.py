@@ -1,4 +1,4 @@
-"""T21-ALIGN — tests: anchors, decode sintetico, NMS, similitud."""
+"""T21-ALIGN — tests: anchors, decode sintetico (semantica SSD scales), NMS, similitud."""
 import sys, os, math, unittest
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 from blazeface_decoder import generate_anchors, decode, nms, FaceDetection
@@ -13,18 +13,36 @@ class TestBlazeFace(unittest.TestCase):
         anchors = generate_anchors()
         import numpy as np
         reg = np.zeros((896, 16), dtype="float32")
-        cls = np.full((896, 1), -20.0, dtype="float32")  # scores ~0
-        # anchor 100: caja perfecta centrada, sin offsets
-        reg[100][3] = math.log(0.5)   # w mitad del anchor
-        reg[100][4 + 2 * 1] = 0.1     # keypoint ojo izq offset
-        cls[100][0] = 10.0            # score ~1
+        cls = np.full((896, 1), -20.0, dtype="float32")
+        cls[100][0] = 10.0
+        reg[100][6] = 1.0
         dets = decode(reg, cls, anchors)
         self.assertEqual(len(dets), 1)
         d = dets[0]
         self.assertGreater(d.score, 0.99)
         a = anchors[100]
-        self.assertAlmostEqual((d.box[0] + d.box[2]) / 2, a.cx * 128, places=3)
-        self.assertGreater(d.keypoints[1][0], d.keypoints[0][0])  # ojo izq a la derecha
+        self.assertAlmostEqual((d.box[0] + d.box[2]) / 2, a.cx * 128, places=2)
+        self.assertGreater(d.keypoints[1][0], d.keypoints[0][0])
+        self.assertAlmostEqual(d.keypoints[1][0] - d.keypoints[0][0], 1.0, places=2)
+
+    def test_decode_no_blowup_con_valores_reales(self):
+        anchors = generate_anchors()
+        import numpy as np
+        reg = np.zeros((896, 16), dtype="float32")
+        cls = np.full((896, 1), -20.0, dtype="float32")
+        reg[729] = [-8.49, -7.32, 52.21, 52.21, -19.91, -19.49, 3.2, -18.88,
+                    -8.43, -7.14, -8.94, 3.86, -32.44, -15.04, 14.96, -13.52]
+        cls[729][0] = 1.07
+        dets = decode(reg, cls, anchors, score_thresh=0.5)
+        self.assertEqual(len(dets), 1)
+        d = dets[0]
+        for v in d.box:
+            self.assertLess(abs(v), 400)
+        x0, y0 = d.keypoints[0]; x1, y1 = d.keypoints[1]
+        _, yn = d.keypoints[2]; _, ym = d.keypoints[3]
+        self.assertLess(min(y0, y1), yn)
+        self.assertLess(yn, ym)
+        self.assertGreater(x1, x0)
 
     def test_nms_suppresses_duplicates(self):
         d1 = FaceDetection(0.95, (10, 10, 50, 50), [])
