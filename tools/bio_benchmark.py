@@ -35,12 +35,13 @@ if a.detector:
     det = TFLiteFaceDetector(open(a.detector, "rb").read())
 
 def crop_face(path):
-    px = np.asarray(Image.open(path).convert("RGB"))
+    img = Image.open(path).convert("RGB")
+    px = np.asarray(img)
     if det is not None and det._interp is not None:
+        from face_align import align_face
         r = det.detect(px.tolist())
         if r.status == "PASS" and r.detections:
-            d = r.detections[0]
-            return px[d.y1:d.y2, d.x1:d.x2]
+            return np.asarray(align_face(img, r.detections[0].keypoints, 112))
     return px  # sin detector: imagen completa (resultado menos robusto)
 
 comp = VectorComparator(threshold=a.threshold)

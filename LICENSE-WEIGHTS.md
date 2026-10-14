@@ -1,6 +1,6 @@
 # Terminos de pesos de modelos de terceros (LICENSE-WEIGHTS)
 
-El codigo de este repositorio es MIT (ver LICENSE-CODE). Los ARCHIVOS DE
+El codigo de este repositorio es MIT (ver LICENSE). Los ARCHIVOS DE
 PESOS (modelos .tflite/.onnx) son de terceros y se rigen por sus propias
 licencias. Este repositorio NO distribuye pesos.
 
