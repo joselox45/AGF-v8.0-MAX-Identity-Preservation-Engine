@@ -55,15 +55,15 @@ APCE v8.1.0 CANÓNICO (control plane, G1–G6)
    └── BLACK-BOX LLM CHAT WINDOW        (único canal: texto + imágenes)
 ```
 
-## Estado de aseguramiento (mapping v4)
+## Estado de aseguramiento (mapping v6)
 
-7/8 controles TESTED con evidencia real en Termux. **T21 (ArcFace) =
-OPERATIONAL_DEGRADED**: pipeline implementado, gap de alineación medido
-(cosine 0.4257 sin alinear; colapso de recorte detectado y documentado),
-ruta de cierre en docs/T21_ALIGN.md. Nada declarado OPERATING_EFFECTIVE
-por diseño. Comparación con métodos SOTA (IP-Adapter, InstantID, PuLID):
-**NO DETERMINED** — protocolo en docs/BENCHMARK_COMPARISON.md.
-Detalle: `data/apce_mapping_t21_t28.csv`.
+**8/8 controles TESTED** con evidencia real en Termux: T21 ArcFace
+cerrado (cosine 0.8901 con alineación BlazeFace; root cause corregido:
+box coder SSD /128) y T22 FaceNet determinista (0.9675 byte-a-byte).
+Benchmark T30 ejecutado con muestra mínima declarada (TAR n=1, cos 0.9743).
+Nada declarado OPERATING_EFFECTIVE por diseño. Comparación SOTA completa
+y matriz adversarial 8x4: protocolos publicados, ejecución roadmap.
+Detalle: `data/apce_mapping_t21_t28.csv` (mapping v6).
 
 ## Licencias
 
