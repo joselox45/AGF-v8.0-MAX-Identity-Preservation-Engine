@@ -95,11 +95,18 @@ class MTERunnerV2:
         missing = sorted(REQUIRED_SET - set(ids))
         if missing:
             reasons.append(f"pruebas obligatorias ausentes: {missing}")
-        # estados invalidos + evidencia
+        # estados invalidos + evidencia + exclusiones gobernadas (G-04)
         for r in records:
             if r.get("status") not in VALID_STATES:
                 reasons.append(
                     f"{r.get('test_id')}: estado invalido {r.get('status')!r}")
+            if r.get("status") == "NOT_APPLICABLE":
+                if not (r.get("na_justification") or "").strip():
+                    reasons.append(
+                        f"{r.get('test_id')}: NOT_APPLICABLE sin justificacion")
+                if not (r.get("na_authority") or "").strip():
+                    reasons.append(
+                        f"{r.get('test_id')}: NOT_APPLICABLE sin autoridad que aprueba la exclusion")
             bad_ev = self._check_evidence(r)
             if bad_ev:
                 reasons.append(bad_ev)
