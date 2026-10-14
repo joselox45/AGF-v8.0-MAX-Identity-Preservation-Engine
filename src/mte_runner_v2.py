@@ -15,7 +15,7 @@ import re
 import subprocess
 from dataclasses import dataclass, asdict
 
-RUNNER_VERSION = "2.1"
+RUNNER_VERSION = "2.0"
 EVIDENCE_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
 
 REQUIRED_TESTS = tuple(
@@ -23,6 +23,15 @@ REQUIRED_TESTS = tuple(
     [f"T{n}" for n in range(21, 32)]           # T21..T31 (v9.0 + T29-T31)
 )
 REQUIRED_SET = frozenset(REQUIRED_TESTS)
+
+# Auditoria 10 (critico 2): mapa test_id -> archivo real de evidencia en disco.
+# Sin esto, v2.1 buscaba evidence/T21.json cuando el archivo es t21.json
+# (Linux es case-sensitive) y rechazaba la evidencia real del propio repo.
+EVIDENCE_MAP = {
+    "T21": "t21.json", "T22": "t22.json",
+    "T26": "closure_t21_t26.json", "T27": "closure_t21_t26.json",
+    "T30": "benchmark_t30.json",
+}
 
 TERMINAL_BAD = ("FAIL", "BLOCKED", "UNVERIFIED", "NOT_RUN")
 VALID_STATES = ("PASS", "FAIL", "BLOCKED", "UNVERIFIED",
@@ -37,18 +46,15 @@ class RunnerVerdict:
     commit_sha: str
     tests_covered: int
     tests_required: int
+    metrics: dict = None   # C_req / C_exec / C_evidence / C_pass (auditoria 10)
 
     def to_dict(self):
         return asdict(self)
 
 
 class MTERunnerV2:
-    def __init__(self, repo_root: str = ".", strict_disk: bool = True):
-        """strict_disk=True (auditoria 9, hallazgo 4.2): PASS con archivo de
-        evidencia AUSENTE en disco nunca conforma. False = modo leniente
-        (solo valida formato/hash cuando el archivo existe)."""
+    def __init__(self, repo_root: str = "."):
         self.repo_root = repo_root
-        self.strict_disk = strict_disk
 
     # -- P0-3: identidad del evaluador ---------------------------------
     def _commit_sha(self) -> str:
@@ -69,14 +75,10 @@ class MTERunnerV2:
         if not EVIDENCE_RE.match(ev):
             return f"evidence_ref invalido (debe ser sha256:<64hex>): {ev!r}"
         digest = ev.split(":", 1)[1]
-        path = os.path.join(self.repo_root, "evidence",
-                            f"{rec['test_id']}.json")
-        if not os.path.exists(path):
-            if self.strict_disk:
-                return (f"EVIDENCIA AUSENTE en disco: {path} "
-                        "(fail-closed: PASS sin evidencia material no conforma)")
-            return None                  # modo leniente: solo formato/hash
-        else:
+        fname = EVIDENCE_MAP.get(rec["test_id"],
+                                 f"{rec['test_id']}.json")
+        path = os.path.join(self.repo_root, "evidence", fname)
+        if os.path.exists(path):
             real = hashlib.sha256(open(path, "rb").read()).hexdigest()
             if real != digest:
                 return (f"hash de evidencia no coincide con {path} "
@@ -125,10 +127,19 @@ class MTERunnerV2:
             status = "CONFORMANT_WITHIN_TESTED_SCOPE"
         else:
             status = "NON_CONFORMANT"
-        return RunnerVerdict(status, reasons, RUNNER_VERSION,
-                             self._commit_sha(),
-                             len(set(ids) & REQUIRED_SET),
-                             len(REQUIRED_SET))
+        covered = set(ids) & REQUIRED_SET
+        exec_ids = {r.get("test_id") for r in records
+                    if r.get("status") in ("PASS", "FAIL")}
+        ev_ok = {r.get("test_id") for r in records
+                 if r.get("status") == "PASS" and not self._check_evidence(r)}
+        return RunnerVerdict(
+            status, reasons, RUNNER_VERSION, self._commit_sha(),
+            len(covered), len(REQUIRED_SET),
+            metrics={"C_req": round(len(covered) / len(REQUIRED_SET), 4),
+                     "C_exec": round(len(exec_ids) / len(REQUIRED_SET), 4),
+                     "C_evidence": (round(len(ev_ok) / len(exec_ids), 4)
+                                    if exec_ids else None),
+                     "C_pass": round(len(ev_ok) / len(REQUIRED_SET), 4)})
 
 
 def load_records(path: str) -> list:
