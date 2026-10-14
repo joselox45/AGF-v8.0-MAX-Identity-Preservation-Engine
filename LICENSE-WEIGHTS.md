@@ -1,6 +1,11 @@
 # Terminos de pesos de modelos de terceros (LICENSE-WEIGHTS)
 
-El codigo de este repositorio es MIT (ver LICENSE). Los ARCHIVOS DE
+AMBITO DEL MIT (LICENSE): cubre UNICAMENTE el codigo original de este
+repositorio (src/, tools/, tests/, agf.py, examples/*.py, docs/).
+Los pesos de modelos de terceros NO estan cubiertos por el MIT.
+
+
+El codigo de este repositorio es MIT (ver LICENSE-CODE). Los ARCHIVOS DE
 PESOS (modelos .tflite/.onnx) son de terceros y se rigen por sus propias
 licencias. Este repositorio NO distribuye pesos.
 
