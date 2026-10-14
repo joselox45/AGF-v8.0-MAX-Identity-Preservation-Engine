@@ -68,6 +68,10 @@ aseguramiento que el caso de uso actual aún no exige, y se declara como tal.
 
 ## Estado de aseguramiento (mapping v6)
 
+**PRIMER L3 SUPPORTED (2026-10-14):** identidad preservada certificada
+sobre la salida de un LLM comercial opaco — cosine 0.931, FaceNet custodiado,
+tres capas L1/L2/L3 completas (evidence/verify_2026-10-14/). n=1 declarado.
+
 **8/8 controles TESTED** con evidencia real en Termux: T21 ArcFace
 cerrado (cosine 0.8901 con alineación BlazeFace; root cause corregido:
 box coder SSD /128) y T22 FaceNet determinista (0.9675 byte-a-byte).
