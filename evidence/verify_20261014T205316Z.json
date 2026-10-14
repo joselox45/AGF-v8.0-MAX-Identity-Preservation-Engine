@@ -1,0 +1,23 @@
+{
+  "verdict": {
+    "L1_formal": "PASS",
+    "L2_biometric": "FAIL",
+    "L3_identity": "REFUTED",
+    "cosine": 0.476014,
+    "threshold": 0.65,
+    "reasons": [
+      "L3: biometria FAIL -> identidad REFUTED (la salida no corresponde al sujeto)"
+    ]
+  },
+  "inputs": {
+    "ref_sha256": "8a8a19d8c3605d6cc8b2e59b4a7566677e1ae69805a2658333f4914f787ae590",
+    "candidate_sha256": "93bc332d8d9fe3040a0ebf0e02ac8126b18c45aba3f05b9de207a4611de2fcce",
+    "weights_sha256": "54660297ebad23b7106a8ccd05f2f2f616b3d39bf7d7e82e148cf8ed7e27ae1a",
+    "model_id": "facenet:tflite:54660297ebad23b7",
+    "pipeline": "aligned"
+  },
+  "_meta": {
+    "ts": "2026-10-14T20:53:16.686961+00:00",
+    "host": "termux"
+  }
+}
