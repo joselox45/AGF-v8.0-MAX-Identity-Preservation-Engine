@@ -1,0 +1,46 @@
+{
+  "tipo": "AGF_CLOSURE_EVIDENCE",
+  "version": "v8.0",
+  "timestamp": "2026-10-14T17:50:00Z",
+  "base": {
+    "path": "/mnt/data/photo3006173392461253603.jpeg",
+    "sha256": "100c60b8c8da71a41438c72d3edbe79b3f1a406800eeef02caf37d1a771ac5cd",
+    "sha512": "7a4eea7543f8671f4448c3b75cfb5c2897c0540f1d4eff99b09130141fb42c786b8654d830bc45cbfb78151cbe844f62ac3a3d559bb9e115c4a3be84d6102701"
+  },
+  "base2": {
+    "path": "/mnt/data/photo8807293561610933368.jpeg",
+    "sha256": "b7e958721a642e8dad07ca23fac7205ef318947d90878ea0782eb4e94ba7679f",
+    "sha512": "82d95f8052cf6750ab4fd6b70e927d6b5ab1452b75075973f066c7a7bb8187c7ef1a4d418efc33fbd77ab208086306c7dd4842379073c05f351d2dccc1ee38b1"
+  },
+  "generada": {
+    "path": "/mnt/data/gallery/image_20261014_124633.webp",
+    "sha256": "e3198b37db8435f7c025b712caaa8cc5317095a92911670267fbec479d06a8f4",
+    "sha512": "17e4fb34ad7524dabacd8a5b3ff05589574e928a92713363d082bbdfe7b0dfa75e0f43532cd843ebda105eb1eb89c36d7f980923e6af35a604ce7019b574a497"
+  },
+  "closure": {
+    "modelo": "facenet proxy TFLite (proxy en este entorno, real requiere facenet.tflite del repo)",
+    "metodo": "cosine similarity embeddings faciales",
+    "cosine": 0.9317877292633057,
+    "umbral_ACEPTADO": 0.65,
+    "veredicto": "PASS",
+    "detail": "proxy embedding via Haar 12544 dims"
+  },
+  "procedencia": {
+    "BASE0": "RECOVERED",
+    "GENERADA": "GENERATED condicionada por kernel REPAIR 2b2c87...",
+    "ENTORNO": "RECONSTRUCTED oficina CEO IA",
+    "VESTIMENTA": "RECONSTRUCTED alta costura"
+  },
+  "kernel": {
+    "artefacto": "out/kernel_REPAIR_20261014T174341Z.txt",
+    "sha256": "2b2c873593a0dc47de200d9c7e01633ac0587891d4273f2b25ad392f5d684be9"
+  },
+  "_agf_review": {
+    "fecha_revision": "2026-10-14",
+    "que_demuestra": "Primer caso real del protocolo AGF en ventana de chat comercial opaca (Meta AI): kernel trazable (sha256 2b2c8735... identico al artefacto agf.py go del repo), procedencia etiquetada por region, ciclo de cierre completado en la ventana.",
+    "que_NO_demuestra": "La verificacion biometrica uso un PROXY (Haar 12544 dims), no el facenet.tflite custodiado (sha256 54660297...). El cosine 0.9318 es de espacio de embedding distinto: NO comparable a evidence/t22.json (0.9675, FaceNet real, reproducible byte-a-byte).",
+    "estado_biometrico": "UNVERIFIED (proxy) — requiere closure local con pesos reales para TESTED",
+    "governor": "APCE G2: estados cerrados no promovidos; G1: PASS proxy no cuenta como veredicto certificado",
+    "matriz_adversarial": "caso 1/8 (Meta AI, generacion condicionada con kernel REPAIR)"
+  }
+}
