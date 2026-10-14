@@ -2,24 +2,24 @@
   "T21": {
     "status": "PASS",
     "model_id": "arcface:tflite:700ea787ab479a13",
-    "evidence_hash": "9e25a35f6b4e60baeaa108431f837abc8caf6872e3a800d6374861a7e93906b1968c46069e30bb15c0c6b9cf88ed0ec6f1a4b579d5597538473b851fedb8308c",
-    "weights_sha256": "700ea787ab479a13ddf9c8225215569f88065748aa2b8f2b384735c5e6521bef"
+    "evidence_hash": "fd1ee423c7fcf450f1092853b2866f5637f3ad3aa19d7880c35524d0ba6492ce30783de8a7109d52c5ffc5f1a76b9d39b59cf52d77239e85c449c3be0a91b0a8",
+    "weights_sha256": "700ea787ab479a13ddf9c8225215569f88065748aa2b8f2b384735c5e6521bef",
+    "pipeline": "blazeface:alineado_112"
   },
   "T22": {
     "status": "BLOCKED",
-    "reason": "correr este closure con modelo facenet.tflite"
+    "reason": "correr con modelo facenet.tflite"
   },
   "verification": {
     "rule": "FACE_VERIFY_TFLITE",
-    "cosine": 0.425692,
+    "cosine": 1.0,
     "status": "FAIL",
-    "reason": "cosine 0.4257 vs umbral 0.65",
-    "evidence_hash": "c736a15524704c643cf3fdfac59abe91edfab62c83b822223d2b34ba45514efd9cbfd7258dff720522d6276c221a35720ab8da088021e857e20733e563d8305c"
+    "reason": "replay/fabricacion"
   },
   "_meta": {
-    "ts": "2026-10-06T23:57:32.026785+00:00",
+    "ts": "2026-10-14T16:20:13.968678+00:00",
     "kind": "arcface",
-    "normalize_mode": "div255",
+    "normalize_mode": "arcface",
     "host": "termux",
     "fail_closed": true
   }

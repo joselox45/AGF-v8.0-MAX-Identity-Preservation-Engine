@@ -81,6 +81,26 @@ class TestP0Identity(unittest.TestCase):
         self.assertEqual(v.tests_required, len(REQUIRED_TESTS))
         self.assertEqual(v.tests_covered, 0)
 
+class TestG04NAGovernance(unittest.TestCase):
+    def setUp(self):
+        self.r = MTERunnerV2(repo_root=".")
+
+    def test_na_without_justification_rejected(self):
+        v = self.r.evaluate([{"test_id": "T01", "status": "NOT_APPLICABLE",
+                              "na_authority": "APCE"}])
+        self.assertTrue(any("sin justificacion" in x for x in v.reasons))
+
+    def test_na_without_authority_rejected(self):
+        v = self.r.evaluate([{"test_id": "T01", "status": "NOT_APPLICABLE",
+                              "na_justification": "sin host LLM"}])
+        self.assertTrue(any("sin autoridad" in x for x in v.reasons))
+
+    def test_na_governed_accepted(self):
+        v = self.r.evaluate([{"test_id": "T01", "status": "NOT_APPLICABLE",
+                              "na_justification": "sin host LLM en este entorno",
+                              "na_authority": "APCE-G4"}])
+        self.assertFalse(any("NOT_APPLICABLE" in x for x in v.reasons))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -2,20 +2,19 @@
 """
 AGF v8 MAX — CLI maestra (chat-window framework)
 ================================================
-Punto unico de operacion. Todo corre del lado del operador;
+Punto único de operación. Todo corre del lado del operador;
 los LLMs opacos solo reciben texto por su ventana de chat.
 
-  python agf.py doctor     # autodiagnostico de componentes
-  python agf.py kernel OP  # emitir bloque [AGF_OPERATION]
-  python agf.py go         # kernel -> portapapeles (operador solo pega)
-  python agf.py run        # ciclo demo del Chat Runtime
+  python agf.py doctor                     # autodiagnóstico de componentes
+  python agf.py kernel REPAIR              # emitir bloque [AGF_OPERATION]
+  python agf.py run                        # ciclo demo del Chat Runtime
   python agf.py closure A.jpg B.jpg M.tflite [arcface|facenet] [norm|raw|div255]
   python agf.py benchmark --spec pares.json --embedder M.tflite
   python agf.py attest evidence/x.json [--seed HEX]
-  python agf.py demo-ventana
+  python agf.py demo-ventana               # protocolo operador paso a paso
 
 PRINCIPIO: AGF no controla el LLM interno; controla y verifica la
-interaccion a traves de su ventana de chat. Sin API, sin pesos, sin backend.
+interacción a través de su ventana de chat. Sin API, sin pesos, sin backend.
 """
 
 import json
@@ -27,8 +26,11 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(ROOT, "src"))
 
 
+# ------------------------------------------------------------------ doctor
 def cmd_doctor(_):
-    from evidence_taxonomy import EvidenceClassifier
+    """Autodiagnóstico: estado de cada componente (fail-closed)."""
+    from evidence_taxonomy import EvidenceClassifier, EvidenceState
+    c = EvidenceClassifier()
     checks = []
 
     def check(name, fn):
@@ -37,17 +39,18 @@ def cmd_doctor(_):
         except Exception as e:
             ok, detail = False, str(e)
         checks.append({"componente": name, "ok": ok, "detail": detail})
+        return ok
 
     check("python", lambda: (sys.version_info >= (3, 9),
                              f"{sys.version_info.major}.{sys.version_info.minor}"))
-    check("numpy", lambda: (True, __import__("numpy").__version__))
-    check("PIL", lambda: (True, __import__("PIL").__version__))
+    check("numpy", lambda: (__import__("numpy").__version__, True)[::-1])
+    check("PIL", lambda: (__import__("PIL").__version__, True)[::-1])
     def _tflite():
         from tflite_runtime.interpreter import Interpreter  # noqa
         return True, "tflite_runtime OK"
     check("tflite_runtime", _tflite)
     def _crypto():
-        import cryptography
+        import cryptography  # noqa
         return True, cryptography.__version__
     check("cryptography", _crypto)
     def _kernel():
@@ -75,11 +78,12 @@ def cmd_doctor(_):
 
     n_ok = sum(1 for x in checks if x["ok"])
     estado = "OPERATIVO" if n_ok == len(checks) else \
-             "PARCIAL (componentes en False degradan a BLOCKED; nada se fabrica)"
+             "PARCIAL (los componentes en False degradan a BLOCKED; nada se fabrica)"
     print(json.dumps({"estado": estado, "ok": f"{n_ok}/{len(checks)}",
                       "checks": checks}, indent=2, ensure_ascii=False))
 
 
+# ------------------------------------------------------------------ kernel
 def cmd_kernel(args):
     from prompt_kernel import PromptKernel, KernelError
     op = args[0] if args else "REPAIR"
@@ -89,10 +93,39 @@ def cmd_kernel(args):
     except KernelError as e:
         print(json.dumps({"status": "BLOCKED", "reason": str(e)})); sys.exit(2)
     print(kr.prompt_block)
-    print("\n# OPERADOR: adjunta referencia + objetivo en la ventana del LLM.")
+    print("\n# OPERADOR: adjunta referencia + objetivo en la ventana del LLM "
+          "y pega el bloque. El modelo opaco nunca ejecuta este codigo.")
 
 
+def cmd_run(_):
+    p = os.path.join(ROOT, "examples", "agf_chat_runtime_v0.2_single.py")
+    subprocess.run([sys.executable, p])
+
+
+def cmd_demo_ventana(_):
+    print("""PROTOCOLO OPERADOR — ejecucion estricta en ventana de chat
+=========================================================
+PASO 1 (este equipo):  python agf.py kernel REPAIR
+PASO 2 (ventana LLM):  adjunta 2 imagenes + pega el bloque [AGF_OPERATION]
+PASO 3 (ventana LLM):  recibe imagen editada + [AGF_VERIFICATION_REPORT]
+PASO 4 (este equipo):  registra hashes  ->  sha512sum foto_editada.jpg
+PASO 5 (opcional):     python agf.py attest evidence/<archivo>.json
+
+Regla de oro: sin API, sin plugins. La ventana de chat es el unico canal.""")
+
+
+def _delegate(script, args):
+    p = os.path.join(ROOT, "tools", script)
+    if not os.path.exists(p):
+        print(json.dumps({"status": "BLOCKED",
+                          "reason": f"falta {p}"})); sys.exit(2)
+    subprocess.run([sys.executable, p] + args)
+
+
+
+# ------------------------------------------------------------------ go
 def cmd_go(args):
+    """Kernel -> portapapeles + instrucciones. El operador solo pega."""
     from prompt_kernel import PromptKernel, KernelError
     op = args[0] if args else "REPAIR"
     try:
@@ -117,30 +150,23 @@ def cmd_go(args):
         print(kr.prompt_block)
 
 
-def cmd_run(_):
-    p = os.path.join(ROOT, "examples", "agf_chat_runtime_v0.2_single.py")
-    subprocess.run([sys.executable, p])
-
-
-def cmd_demo_ventana(_):
-    print("""PROTOCOLO OPERADOR — ejecucion estricta en ventana de chat
-PASO 1 (este equipo):  python agf.py go
-PASO 2 (ventana LLM):  adjunta 2 imagenes + pega
-PASO 3 (ventana LLM):  recibe imagen editada + reporte
-PASO 4 (este equipo):  sha512sum foto_editada.jpg
-PASO 5 (opcional):     python agf.py attest evidence/<archivo>.json
-Regla de oro: sin API. La ventana de chat es el unico canal.""")
-
-
-def _delegate(script, args):
-    p = os.path.join(ROOT, "tools", script)
-    if not os.path.exists(p):
-        print(json.dumps({"status": "BLOCKED", "reason": f"falta {p}"})); sys.exit(2)
-    subprocess.run([sys.executable, p] + args)
-
+# ------------------------------------------------------------------ evaluate
+def cmd_evaluate(args):
+    """G-01/G-02/G-03: evaluar registros JSON con mte_runner v2.
+    Uso: python agf.py evaluate records.json"""
+    if not args:
+        print(json.dumps({"status": "BLOCKED",
+                          "reason": "uso: python agf.py evaluate records.json"}))
+        sys.exit(2)
+    from mte_runner_v2 import MTERunnerV2, load_records
+    records = load_records(args[0])
+    v = MTERunnerV2(repo_root=ROOT).evaluate(records)
+    print(json.dumps(v.to_dict(), indent=2, ensure_ascii=False))
+    sys.exit(0 if v.status.startswith("CONFORMANT") else 1)
 
 COMMANDS = {
     "doctor": cmd_doctor,
+    "evaluate": cmd_evaluate,
     "go": cmd_go,
     "kernel": cmd_kernel,
     "run": cmd_run,
