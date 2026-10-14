@@ -19,8 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-------------------------------------------------------------------------------
-AMBITO: Esta licencia cubre UNICAMENTE el codigo original de este repositorio
-(src/, tools/, tests/, agf.py, examples/*.py, docs/). Los pesos de modelos de
-terceros NO estan cubiertos (ver LICENSE-WEIGHTS.md).
