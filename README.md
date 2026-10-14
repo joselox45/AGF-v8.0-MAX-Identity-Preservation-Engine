@@ -2,8 +2,14 @@
 
 Motor de preservación de identidad con **ejecución estricta en la ventana de chat**
 de LLMs comerciales opacos (ChatGPT, Gemini, Grok, Meta AI). Sin API, sin plugins,
-sin acceso al modelo. AGF no controla el LLM interno: controla y verifica la
-interacción a través de su interfaz conversacional.
+sin acceso al modelo.
+
+**Precisión de enforcement (auditoría 2026-10-14):** AGF no puede imponer
+comportamiento al LLM (nadie puede, en caja negra). Lo que hace: (a) instruir
+con un kernel de mínima intervención, (b) exigir reporte de procedencia, y
+(c) **verificar biométricamente la salida del lado del operador y bloquear
+(BLOCKED) lo que no evidencia identidad**. Es observabilidad + decisión
+post-hoc fail-closed, no prevención en el modelo. Ver docs/GLOSSARY.md.
 
 ## Uso en 30 segundos (operador)
 
@@ -11,7 +17,8 @@ interacción a través de su interfaz conversacional.
 git clone https://github.com/joselox45/AGF-v8.0-MAX-Identity-Preservation-Engine.git
 cd AGF-v8.0-MAX-Identity-Preservation-Engine
 python agf.py doctor    # autodiagnóstico (9/9 OPERATIVO en Termux)
-python agf.py go        # kernel copiado al portapapeles -> pega en tu chatbot
+python agf.py go        # kernel como artefacto firmado (out/ + sha256)
+                        # opcional: --clipboard (no recomendado: clipboard managers)
 ```
 
 1. Abre tu chatbot → adjunta imagen de referencia + objetivo → pega → envía.
@@ -22,8 +29,12 @@ El tercero **no necesita leer el prompt**: `agf.py go` lo entrega listo para peg
 
 ## Qué garantiza el sistema
 
-- **Fail-closed**: sin evidencia → BLOCKED. Nunca se fabrica un PASS
-  (demostrado en vivo: un PASS dudoso fue detectado y rechazado — evidence/t21.json).
+- **Fail-closed en el veredicto**: sin evidencia → BLOCKED. Nunca se fabrica
+  un *veredicto* (demostrado en vivo: un PASS dudoso detectado y rechazado —
+  evidence/t21.json). La generación en el LLM sí fabrica píxeles (toda
+  generación lo hace): por eso la fabricación se **acota** (mínima
+  intervención) y se **verifica** post-hoc. No afirmamos zero-fabrication
+  de píxeles; afirmamos zero-fabrication de *aseguramientos*.
 - **Verificación biométrica real**: FaceNet TFLite en Android, cosine 0.9675
   reproducible byte-a-byte (evidence/t22.json), pesos con SHA-256 verificado.
 - **Procedencia epistemológica**: RECOVERED ≠ RECONSTRUCTED ≠ GENERATED, forzada en código.
@@ -46,9 +57,13 @@ APCE v8.1.0 CANÓNICO (control plane, G1–G6)
 
 ## Estado de aseguramiento (mapping v4)
 
-7/8 controles TESTED con evidencia real en Termux; T21 (ArcFace) con gap medido
-y ruta de cierre (T21-ALIGN: BlazeFace + alineación). Nada declarado
-OPERATING_EFFECTIVE por diseño. Detalle: `data/apce_mapping_t21_t28.csv`.
+7/8 controles TESTED con evidencia real en Termux. **T21 (ArcFace) =
+OPERATIONAL_DEGRADED**: pipeline implementado, gap de alineación medido
+(cosine 0.4257 sin alinear; colapso de recorte detectado y documentado),
+ruta de cierre en docs/T21_ALIGN.md. Nada declarado OPERATING_EFFECTIVE
+por diseño. Comparación con métodos SOTA (IP-Adapter, InstantID, PuLID):
+**NO DETERMINED** — protocolo en docs/BENCHMARK_COMPARISON.md.
+Detalle: `data/apce_mapping_t21_t28.csv`.
 
 ## Licencias
 
@@ -58,8 +73,13 @@ OPERATING_EFFECTIVE por diseño. Detalle: `data/apce_mapping_t21_t28.csv`.
 
 ## Documentos clave
 
+Empieza por docs/GLOSSARY.md: todo el proyecto son 3 conceptos
+(GOVERNOR / ENGINE / CANAL), no 8 siglas.
+
 | Doc | Contenido |
 |---|---|
+| `docs/GLOSSARY.md` | 3 conceptos que explican todo |
+| `docs/BENCHMARK_COMPARISON.md` | Protocolo comparativo vs SOTA |
 | `docs/QUICKSTART_TERCEROS.md` | Uso para terceros (2 comandos) |
 | `docs/FRAMEWORK_CHAT_WINDOW.md` | Marco de ejecución en ventana de chat |
 | `docs/AGF_T21_T28_APCE_MAPPING.md` | Mapping con evidencia y gaps |
