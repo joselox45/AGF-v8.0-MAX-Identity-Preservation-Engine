@@ -43,14 +43,10 @@ class TFLiteFaceEmbedder:
     }
 
     def __init__(self, model_kind: str, model_bytes: Optional[bytes] = None,
-                 normalize: str = "arcface"):
+                 normalize: bool = True):
         """normalize=True: entrada (x-127.5)/128 (ArcFace ONNX estandar).
         normalize=False: el modelo incluye su propia capa de escalado
         (p.ej. facenet.tflite derivado de deepface) -> NO normalizar."""
-        if isinstance(normalize, bool):
-            normalize = "arcface" if normalize else "raw"
-        if normalize not in ("arcface", "raw", "div255"):
-            raise ValueError("normalize debe ser arcface|raw|div255")
         if model_kind not in self.MODEL_SPECS:
             raise ValueError(f"model_kind debe ser uno de {list(self.MODEL_SPECS)}")
         self.model_kind = model_kind
@@ -111,10 +107,8 @@ class TFLiteFaceEmbedder:
                 arr = arr[y1:y2, x1:x2]
             h, w = self.spec["input_size"]
             arr = self._resize_np(arr, (h, w))
-            if self.normalize == "arcface":
+            if self.normalize:
                 arr = (arr - 127.5) / 128.0
-            elif self.normalize == "div255":
-                arr = arr / 255.0
             arr = np.expand_dims(arr, axis=0)  # NHWC
             self._interp.set_tensor(self._in_idx, arr)
             self._interp.invoke()
@@ -165,7 +159,12 @@ class VectorComparator:
         cos = self.cosine(reference.vector, candidate.vector)
         out["cosine"] = round(cos, 6)
         if cos >= self.identical_tolerance:
-            return {**out, "status": "FAIL", "reason": "replay/fabricacion"}
+            # Auditoria 9 (4.6): indistinguible != fraude probado.
+            return {**out, "status": "FAIL",
+                    "reason": ("REQUIRES_REVIEW: vectores estadisticamente "
+                               "indistinguibles (cos>=0.99999); no acredita "
+                               "dos capturas independientes. No equivale a "
+                               "fraude probado.")}
         out["status"] = "PASS" if cos >= self.threshold else "FAIL"
         out["reason"] = f"cosine {cos:.4f} vs umbral {self.threshold}"
         out["evidence_hash"] = hashlib.sha512(
