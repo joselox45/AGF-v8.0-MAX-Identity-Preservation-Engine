@@ -20,7 +20,7 @@ class TestKernel(unittest.TestCase):
                       "AGF_VERIFICATION_REPORT", "MINIMUM_INTERVENTION",
                       "INPUT ROLES", "REFERENCE_IMAGE", "TARGET_IMAGE",
                       "RECONSTRUCTION" if False else "DAÑO",
-                      "CONFIDENCE:", "UNCERTAIN_AREAS:", "REPAIR"):
+                      "CONFIDENCE:", "UNCERTAIN_AREAS:", "arrugas", "REPAIR"):
             self.assertIn(token, r.prompt_block)
 
     def test_kernel_rejects_unknown_operation(self):

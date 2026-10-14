@@ -13,6 +13,9 @@ from datetime import datetime, timezone
 ap = argparse.ArgumentParser()
 ap.add_argument("evidence_file")
 ap.add_argument("--seed", default=None, help="64 hex chars; si omite, genera")
+ap.add_argument("--signer", default="anon",
+                help="identidad del attestor (handle/nombre) — sin esto la "
+                     "firma no dice QUIEN atesto (auditoria 9, 4.5)")
 a = ap.parse_args()
 
 try:
@@ -47,6 +50,7 @@ pk = sk.public_key().public_bytes_raw().hex()
 verdict = "ATTESTED" if all(c["ok"] for c in checks) else "REJECTED"
 body = json.dumps({"evidence_file": a.evidence_file,
                    "file_sha512": file_sha,
+                   "signer": a.signer,
                    "checks": checks, "verdict": verdict,
                    "ts": datetime.now(timezone.utc).isoformat()},
                   sort_keys=True).encode()

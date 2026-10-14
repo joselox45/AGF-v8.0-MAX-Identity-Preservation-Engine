@@ -17,8 +17,21 @@ class TestP0Coverage(unittest.TestCase):
         return [ok(t) for t in REQUIRED_TESTS]
 
     def test_full_coverage_passes(self):
-        v = self.r.evaluate(self.full_pass())
-        self.assertEqual(v.status, "CONFORMANT_WITHIN_TESTED_SCOPE")
+        import hashlib, os, json
+        payloads = {}
+        recs = self.full_pass()
+        for rec in recs:
+            data = json.dumps({"t": rec["test_id"]}).encode()
+            path = os.path.join("evidence", f"{rec['test_id']}.json")
+            open(path, "wb").write(data)
+            rec["evidence_ref"] = "sha256:" + hashlib.sha256(data).hexdigest()
+            payloads[rec["test_id"]] = path
+        try:
+            v = self.r.evaluate(recs)
+            self.assertEqual(v.status, "CONFORMANT_WITHIN_TESTED_SCOPE")
+        finally:
+            for p in payloads.values():
+                os.unlink(p)
 
     def test_missing_rejected(self):
         recs = self.full_pass()[:-3]
@@ -76,7 +89,7 @@ class TestP0Evidence(unittest.TestCase):
 class TestP0Identity(unittest.TestCase):
     def test_verdict_identified(self):
         v = MTERunnerV2(repo_root=".").evaluate([])
-        self.assertEqual(v.runner_version, "2.0")
+        self.assertEqual(v.runner_version, "2.1")
         self.assertEqual(v.commit_sha != "", True)
         self.assertEqual(v.tests_required, len(REQUIRED_TESTS))
         self.assertEqual(v.tests_covered, 0)
@@ -100,6 +113,23 @@ class TestG04NAGovernance(unittest.TestCase):
                               "na_justification": "sin host LLM en este entorno",
                               "na_authority": "APCE-G4"}])
         self.assertFalse(any("NOT_APPLICABLE" in x for x in v.reasons))
+
+class TestStrictDisk(unittest.TestCase):
+    def test_evidencia_ausente_bloquea_por_defecto(self):
+        import uuid
+        tid = "T" + uuid.uuid4().hex[:6].upper()
+        v = MTERunnerV2(repo_root=".").evaluate(
+            [{"test_id": tid, "status": "PASS",
+              "evidence_ref": "sha256:" + "ab" * 32, "reason": "x"}])
+        self.assertTrue(any("EVIDENCIA AUSENTE" in x for x in v.reasons))
+
+    def test_modo_leniente_no_bloquea_ausencia(self):
+        import uuid
+        tid = "T" + uuid.uuid4().hex[:6].upper()
+        r = MTERunnerV2(repo_root=".", strict_disk=False)
+        v = r.evaluate([{"test_id": tid, "status": "PASS",
+                         "evidence_ref": "sha256:" + "ab" * 32, "reason": "x"}])
+        self.assertFalse(any("EVIDENCIA AUSENTE" in x for x in v.reasons))
 
 
 if __name__ == "__main__":

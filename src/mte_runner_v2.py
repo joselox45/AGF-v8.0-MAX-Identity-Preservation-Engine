@@ -15,7 +15,7 @@ import re
 import subprocess
 from dataclasses import dataclass, asdict
 
-RUNNER_VERSION = "2.0"
+RUNNER_VERSION = "2.1"
 EVIDENCE_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
 
 REQUIRED_TESTS = tuple(
@@ -43,8 +43,12 @@ class RunnerVerdict:
 
 
 class MTERunnerV2:
-    def __init__(self, repo_root: str = "."):
+    def __init__(self, repo_root: str = ".", strict_disk: bool = True):
+        """strict_disk=True (auditoria 9, hallazgo 4.2): PASS con archivo de
+        evidencia AUSENTE en disco nunca conforma. False = modo leniente
+        (solo valida formato/hash cuando el archivo existe)."""
         self.repo_root = repo_root
+        self.strict_disk = strict_disk
 
     # -- P0-3: identidad del evaluador ---------------------------------
     def _commit_sha(self) -> str:
@@ -67,7 +71,12 @@ class MTERunnerV2:
         digest = ev.split(":", 1)[1]
         path = os.path.join(self.repo_root, "evidence",
                             f"{rec['test_id']}.json")
-        if os.path.exists(path):
+        if not os.path.exists(path):
+            if self.strict_disk:
+                return (f"EVIDENCIA AUSENTE en disco: {path} "
+                        "(fail-closed: PASS sin evidencia material no conforma)")
+            return None                  # modo leniente: solo formato/hash
+        else:
             real = hashlib.sha256(open(path, "rb").read()).hexdigest()
             if real != digest:
                 return (f"hash de evidencia no coincide con {path} "

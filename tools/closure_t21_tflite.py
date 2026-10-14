@@ -65,7 +65,9 @@ out = {
             "reason": f"correr con modelo {'arcface.tflite' if other == 'T21' else 'facenet.tflite'}"},
     "verification": verdict,
     "_meta": {"ts": datetime.now(timezone.utc).isoformat(), "kind": kind,
-              "normalize_mode": normalize, "host": "termux", "fail_closed": True},
+              "normalize_mode": normalize, "host": "termux", "fail_closed": True,
+              "ref_sha256": hashlib.sha256(open(ref_path, "rb").read()).hexdigest(),
+              "tgt_sha256": hashlib.sha256(open(tgt_path, "rb").read()).hexdigest()},
 }
 os.makedirs("evidence", exist_ok=True)
 path = f"evidence/{key.lower()}.json"

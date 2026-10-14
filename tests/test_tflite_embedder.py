@@ -74,7 +74,7 @@ class TestTFLiteEmbedder(unittest.TestCase):
         b = te.EmbeddingResult(te.EmbeddingStatus.PASS, "arcface:x",
                                vector=[0.6, 0.8] + [0.01] * 510)
         c = te.VectorComparator()
-        self.assertEqual(c.verify(a, a)["status"], "FAIL")      # replay
+        self.assertEqual(c.verify(a, a)["status"], "FAIL")      # indistinguibles
         v = c.verify(a, b)
         self.assertIn(v["status"], ("PASS", "FAIL"))
         self.assertIn("cosine", v)
