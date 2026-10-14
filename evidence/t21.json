@@ -2,7 +2,7 @@
   "T21": {
     "status": "PASS",
     "model_id": "arcface:tflite:700ea787ab479a13",
-    "evidence_hash": "fd1ee423c7fcf450f1092853b2866f5637f3ad3aa19d7880c35524d0ba6492ce30783de8a7109d52c5ffc5f1a76b9d39b59cf52d77239e85c449c3be0a91b0a8",
+    "evidence_hash": "cf1ba64c66473fbb8f8a5246d6a1b93b99fec5357c300b256f61d6590e40e1d78810dc3ea263eccc1a835d574b045501fa365cb3e5668106bf36090c4c4898a3",
     "weights_sha256": "700ea787ab479a13ddf9c8225215569f88065748aa2b8f2b384735c5e6521bef",
     "pipeline": "blazeface:alineado_112"
   },
@@ -17,9 +17,9 @@
     "reason": "replay/fabricacion"
   },
   "_meta": {
-    "ts": "2026-10-14T16:20:13.968678+00:00",
+    "ts": "2026-10-14T17:23:10.778334+00:00",
     "kind": "arcface",
-    "normalize_mode": "arcface",
+    "normalize_mode": "div255",
     "host": "termux",
     "fail_closed": true
   }
