@@ -125,32 +125,37 @@ def _delegate(script, args):
 
 # ------------------------------------------------------------------ go
 def cmd_go(args):
-    """Kernel -> portapapeles + instrucciones. El operador solo pega."""
+    """Artefacto firmado con hash (auditable); portapapeles opcional (--clipboard).
+    Evita leak por clipboard managers: el operador pega desde un archivo
+    con hash verificable, no desde memoria compartida."""
+    import hashlib as hl
+    from datetime import datetime, timezone
     from prompt_kernel import PromptKernel, KernelError
-    op = args[0] if args else "REPAIR"
+    op = args[0] if args and not args[0].startswith("-") else "REPAIR"
     try:
         kr = PromptKernel().build(op, "<referencia>", "<objetivo>")
     except KernelError as e:
         print(json.dumps({"status": "BLOCKED", "reason": str(e)})); sys.exit(2)
-    copied = False
-    try:
-        import shutil, subprocess as sp
-        if shutil.which("termux-clipboard-set"):
-            sp.run(["termux-clipboard-set"], input=kr.prompt_block.encode(), check=True)
-            copied = True
-    except Exception:
-        copied = False
-    if copied:
-        print("[OK] Bloque copiado al portapapeles.")
-        print("1. Abre tu chatbot y adjunta las 2 imagenes.")
-        print("2. Pega (manten pulsado -> Pegar) y envia.")
-        print("3. Recibe imagen + [AGF_VERIFICATION_REPORT].")
-    else:
-        print("[INFO] Sin termux-api: copia el bloque manualmente.")
-        print(kr.prompt_block)
+    ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    os.makedirs("out", exist_ok=True)
+    path = os.path.join("out", f"kernel_{op}_{ts}.txt")
+    open(path, "w").write(kr.prompt_block)
+    digest = hl.sha256(kr.prompt_block.encode()).hexdigest()
+    print(f"[OK] Artefacto: {path}")
+    print(f"[OK] sha256: {digest}")
+    if "--clipboard" in args:
+        try:
+            import shutil, subprocess as sp
+            if shutil.which("termux-clipboard-set"):
+                sp.run(["termux-clipboard-set"], input=kr.prompt_block.encode(), check=True)
+                print("[OK] Tambien copiado al portapapeles.")
+        except Exception:
+            print("[INFO] Portapapeles no disponible.")
+    print("1. Abre tu chatbot y adjunta las 2 imagenes.")
+    print(f"2. Pega el contenido de {path} y envia.")
+    print("3. Recibe imagen + [AGF_VERIFICATION_REPORT].")
 
 
-# ------------------------------------------------------------------ evaluate
 def cmd_evaluate(args):
     """G-01/G-02/G-03: evaluar registros JSON con mte_runner v2.
     Uso: python agf.py evaluate records.json"""
@@ -163,6 +168,7 @@ def cmd_evaluate(args):
     v = MTERunnerV2(repo_root=ROOT).evaluate(records)
     print(json.dumps(v.to_dict(), indent=2, ensure_ascii=False))
     sys.exit(0 if v.status.startswith("CONFORMANT") else 1)
+
 
 COMMANDS = {
     "doctor": cmd_doctor,
