@@ -55,6 +55,17 @@ APCE v8.1.0 CANÓNICO (control plane, G1–G6)
    └── BLACK-BOX LLM CHAT WINDOW        (único canal: texto + imágenes)
 ```
 
+## Posicionamiento (síntesis de 7 auditorías externas, oct 2024→2026)
+
+Este repositorio es un **marco de verificación fail-closed y trazabilidad
+ejecutable sobre LLMs opacos** — no una herramienta plug-and-play de edición
+de imágenes. Para preservación de identidad en producción masiva existen
+caminos más directos (IP-Adapter, InstantID). Para gobernar lo que un LLM
+black-box devuelve, con evidencia firmable y cero veredictos fabricados,
+este es uno de los enfoques más rigurosos publicados. La pila de
+gobernanza (APCE/O0/G1-G6) es deliberada: está diseñada para un nivel de
+aseguramiento que el caso de uso actual aún no exige, y se declara como tal.
+
 ## Estado de aseguramiento (mapping v6)
 
 **8/8 controles TESTED** con evidencia real en Termux: T21 ArcFace
