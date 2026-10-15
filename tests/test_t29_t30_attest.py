@@ -43,7 +43,8 @@ class TestAttestation(unittest.TestCase):
             self.skipTest("sin cryptography")
         import subprocess, tempfile
         ev = {"verification": {"status": "PASS", "cosine": 0.9},
-              "weights_sha256": "ab", "evidence_hash": "cd"}
+              "weights_sha256": "54660297ebad23b7106a8ccd05f2f2f616b3d39bf7d7e82e148cf8ed7e27ae1a",
+              "evidence_hash": "cd"}
         td = tempfile.mkdtemp()
         p = os.path.join(td, "ev.json")
         json.dump(ev, open(p, "w"))
