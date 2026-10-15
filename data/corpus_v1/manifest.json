@@ -1,0 +1,417 @@
+{
+  "corpus": "agf-corpus-v1",
+  "seed": 20261014,
+  "n_ids": 20,
+  "modelo_base": "procedural-parametrico",
+  "claims_habilitados": "pipeline-validation ONLY (rostro parametrico, no fotorealista)",
+  "variantes": [
+    "base",
+    "dano",
+    "luz",
+    "oclusion",
+    "pose"
+  ],
+  "created_utc": "2026-10-15T00:12:44.310547+00:00",
+  "files": {
+    "id_001/base.png": {
+      "sha256": "a80951e5cadf0b114351fe66ec1bacb21a44de5e0f5f2b8c7eb0758976cb45bd",
+      "seed": 20261015
+    },
+    "id_001/dano.png": {
+      "sha256": "1c5eb5acb2f71afb359042404ada47d8d58bf30f114c076d1c1c5aceb3fba234",
+      "seed": 20261015
+    },
+    "id_001/pose.png": {
+      "sha256": "912a06b49fe6c394fa443adf21d7293ce53c460d914a908b1daa9d8dab145b4b",
+      "seed": 20261015
+    },
+    "id_001/luz.png": {
+      "sha256": "659eabfd2fd92c589a4cde1925fc4bbf113a1286717533d48591bcbe2fbe78c1",
+      "seed": 20261015
+    },
+    "id_001/oclusion.png": {
+      "sha256": "d9a9c2bcc25d4affc8ea5654390b24c60439bab78f39a9c644f6eba152eac353",
+      "seed": 20261015
+    },
+    "id_002/base.png": {
+      "sha256": "76fbc512147f90ac043238baa6e20ef4d7fcf55718c18a36a4044bbf91a3faa9",
+      "seed": 20261016
+    },
+    "id_002/dano.png": {
+      "sha256": "74f98bdc8ede0bb2b2c24813fcd8a650325022cd9ffafb3d16ca330caadb7ac5",
+      "seed": 20261016
+    },
+    "id_002/pose.png": {
+      "sha256": "74699bcde6a969ffca365ab67a0ce4f3d45a739357e75d158bdc261ba4670eac",
+      "seed": 20261016
+    },
+    "id_002/luz.png": {
+      "sha256": "cf62e9a83407616d2a1864eeee82838ea271360777bddb3960016978be99568c",
+      "seed": 20261016
+    },
+    "id_002/oclusion.png": {
+      "sha256": "b0b07e9112e685d544448d31dd3ccdb0f8c5857bd983b2984ce0718c73022614",
+      "seed": 20261016
+    },
+    "id_003/base.png": {
+      "sha256": "b74cb4c3e1af4c024d500823150bcf84635f89e59a2136a7e5db95a183156462",
+      "seed": 20261017
+    },
+    "id_003/dano.png": {
+      "sha256": "873cf589274b218a4b545134588f4ce4c435655e1fbf40b955f2241ac578eb11",
+      "seed": 20261017
+    },
+    "id_003/pose.png": {
+      "sha256": "a803130fdebf4b587279680060fb70b3ba74c1d70d4b56e160492d5fe8d322a1",
+      "seed": 20261017
+    },
+    "id_003/luz.png": {
+      "sha256": "ede2aae14eaf92fdf9828fda9aeb8f455a2490af9d9ae1e96430f97730f7434c",
+      "seed": 20261017
+    },
+    "id_003/oclusion.png": {
+      "sha256": "bd2914fe4bc0f2f33b010773f073e2630217a34521d251a9f2347e6417bd4779",
+      "seed": 20261017
+    },
+    "id_004/base.png": {
+      "sha256": "656b8cc56b31a90ba75335fcb1bbc56232a26f3bf71737fbcdbde36fba243d95",
+      "seed": 20261018
+    },
+    "id_004/dano.png": {
+      "sha256": "fe4edf400081215220380c4a0199b29b4facc7e79172e3a60a71b1dd7c976825",
+      "seed": 20261018
+    },
+    "id_004/pose.png": {
+      "sha256": "a9b2e453843c68fc955fbcb63e7a3ee59f067c5dc3b99130f600cd1c4b255dd8",
+      "seed": 20261018
+    },
+    "id_004/luz.png": {
+      "sha256": "f4efae6b0d98594a98b0eaf3a9a822305a17114bcac97ed17256c6d93f423455",
+      "seed": 20261018
+    },
+    "id_004/oclusion.png": {
+      "sha256": "d8534bf82287724abe072cc8ec37deb52db887feccaeee76f105f51e6c83632c",
+      "seed": 20261018
+    },
+    "id_005/base.png": {
+      "sha256": "96fa594a54e703acce578d911b6129105236d570d3deb43f0409e47db5dacfa8",
+      "seed": 20261019
+    },
+    "id_005/dano.png": {
+      "sha256": "e3b4d404e28ff6e5516f5f271092c6a54a3f50a876317602d97baff5b75ed5c2",
+      "seed": 20261019
+    },
+    "id_005/pose.png": {
+      "sha256": "c77a805283e5ed6726a146c571fd7f1fa00ae840c5526c2364fdb8808c7a3c44",
+      "seed": 20261019
+    },
+    "id_005/luz.png": {
+      "sha256": "fd33761c6ff31a127573fa7acf2cf41b14c98c45c206614fdbc115edd922bc9c",
+      "seed": 20261019
+    },
+    "id_005/oclusion.png": {
+      "sha256": "5da0a09824fdd9ca0f183d3393c9ab774ac87e67084d1137c68f6d8f1aee88b3",
+      "seed": 20261019
+    },
+    "id_006/base.png": {
+      "sha256": "69845c627c92c488b651e27678c865d0b0ed59a58c0cc7c9f690cf28c316053f",
+      "seed": 20261020
+    },
+    "id_006/dano.png": {
+      "sha256": "ccc9bc69d893d176ebbf895377ad21cf921e91da9ba0d138fde7670da3f21279",
+      "seed": 20261020
+    },
+    "id_006/pose.png": {
+      "sha256": "3e47d7f54c8f06f18f2b33bc94e62a749269120757ae069eef40f862e51f38e1",
+      "seed": 20261020
+    },
+    "id_006/luz.png": {
+      "sha256": "15b4b374e32f6297df3537b41cba49f9d291577da3041ad395e6252502f6a505",
+      "seed": 20261020
+    },
+    "id_006/oclusion.png": {
+      "sha256": "fcc9f784b3b96daef5d34da0609634f629d5e4de94a07dfb6978c010cfb24a81",
+      "seed": 20261020
+    },
+    "id_007/base.png": {
+      "sha256": "0da8dc8f237d9d4f711de3a0d0974b19fec008f543f837372c7b5deb474a6e44",
+      "seed": 20261021
+    },
+    "id_007/dano.png": {
+      "sha256": "124e7d5824c4484046d5b5c72a96b5f6704da2be3078fd1a076da878add9b62b",
+      "seed": 20261021
+    },
+    "id_007/pose.png": {
+      "sha256": "fa7953040c46c68acd9023b7d53cdec03233b99cb643a3161977f4f141672b4d",
+      "seed": 20261021
+    },
+    "id_007/luz.png": {
+      "sha256": "323be945f8be82e167f7e34421f161243eca7341a41410ea62d1eace4a8a664f",
+      "seed": 20261021
+    },
+    "id_007/oclusion.png": {
+      "sha256": "8f273a27f99cd7f2cdccc951cb84c731d9a83c4541ee330c9c3ce21c7e7f48ff",
+      "seed": 20261021
+    },
+    "id_008/base.png": {
+      "sha256": "47659a95c38f3c18ac18240e12bd1663a85cbe08222e8b873343109e61a55c09",
+      "seed": 20261022
+    },
+    "id_008/dano.png": {
+      "sha256": "17870a39e6c099fbcc5ead4d20ba20b5c81e6c85f034cf3ec275c8f1cb6e1bde",
+      "seed": 20261022
+    },
+    "id_008/pose.png": {
+      "sha256": "e2011b039a0eb48b37265bab12f19adefc67cf5c75211fb8db14d96e23610ea6",
+      "seed": 20261022
+    },
+    "id_008/luz.png": {
+      "sha256": "e3f0e8751d9eb4d78ba717a2e906d37dff13909d819e40d62ab1e36d3935c94c",
+      "seed": 20261022
+    },
+    "id_008/oclusion.png": {
+      "sha256": "18a90332e892826a39fd8c06d93230712c5ee8eee984b6a673ff16343024cf8c",
+      "seed": 20261022
+    },
+    "id_009/base.png": {
+      "sha256": "a952e1f1680e87f23b1383ff6fc7cbed7d1c8efb440429044e3ac36bebf3706b",
+      "seed": 20261023
+    },
+    "id_009/dano.png": {
+      "sha256": "a414b17c6d6985f81b691767d3579fa4086cce6e3c93d57f8a977056b4c4ab20",
+      "seed": 20261023
+    },
+    "id_009/pose.png": {
+      "sha256": "78a21a42f13146115943031162fdcffd670702658a3a50b890ae73977f74d271",
+      "seed": 20261023
+    },
+    "id_009/luz.png": {
+      "sha256": "280130542844bfe77e1424cbd396b4033c7056cfa6bc8c4289cf51cd4c17bae0",
+      "seed": 20261023
+    },
+    "id_009/oclusion.png": {
+      "sha256": "81e44592440a93e9373b51a388abb05c94c813d6b226e85b7a21094842d91c9a",
+      "seed": 20261023
+    },
+    "id_010/base.png": {
+      "sha256": "6fd0951d65bfa25fb35a8af27975ceffd2e84328ce3161413047a8f510eb5d0c",
+      "seed": 20261024
+    },
+    "id_010/dano.png": {
+      "sha256": "fe4034ca7df2506345c872dc801bbd606bad9e273c894c737ad5fbe86644cdf5",
+      "seed": 20261024
+    },
+    "id_010/pose.png": {
+      "sha256": "0cec9a28111c9dcf26170862e0d4956cb23aa2072975f00425e39feb991031ce",
+      "seed": 20261024
+    },
+    "id_010/luz.png": {
+      "sha256": "c34e6fd37e3756603b8dd5cd3862064778a097a4550e729d9d4168e2c0878480",
+      "seed": 20261024
+    },
+    "id_010/oclusion.png": {
+      "sha256": "f1fe7d824da414540b145e88b59c0d6dfb8e113c72116a420d354a3aa8d255ec",
+      "seed": 20261024
+    },
+    "id_011/base.png": {
+      "sha256": "082683feb1f59e2032bdd0c0c4abfab82b4cb22300f7b21f5194741433ae48d2",
+      "seed": 20261025
+    },
+    "id_011/dano.png": {
+      "sha256": "e89adadb99f6a991753a17e468a0fc03bfa8cb1af382baf562c4ca645ec7506c",
+      "seed": 20261025
+    },
+    "id_011/pose.png": {
+      "sha256": "00071ba651b1edfcd2d63c0c17a821c686325add68775ddba63ac207818d8d40",
+      "seed": 20261025
+    },
+    "id_011/luz.png": {
+      "sha256": "493a791930e81b54935e41e8c13fd913b059a7ec902966a3ec29763dfab867c3",
+      "seed": 20261025
+    },
+    "id_011/oclusion.png": {
+      "sha256": "86812d03c79bb88f4c57e33491954c56a81f7932a0fa5804248541be84a7b305",
+      "seed": 20261025
+    },
+    "id_012/base.png": {
+      "sha256": "bbee1286bd0d0f1b6e933b4f522d6e0f7c2d6e7d91bdd3b06e47f8df632bdd9a",
+      "seed": 20261026
+    },
+    "id_012/dano.png": {
+      "sha256": "e7ef86531f5bb57be362c5bac0cde26fd272b94f83090f2d7a95389e770e4a1b",
+      "seed": 20261026
+    },
+    "id_012/pose.png": {
+      "sha256": "b417895f87c20ee454ddee27e0142f46f7b12123eef8773df8f6e8395bcf2523",
+      "seed": 20261026
+    },
+    "id_012/luz.png": {
+      "sha256": "932e75185571e9d48cef454e49007688be027cdeb8e9c81097cdbca37191f224",
+      "seed": 20261026
+    },
+    "id_012/oclusion.png": {
+      "sha256": "201703f48d1691ef2aabfb7555f0d3245317739368b73e5957e2cb1847065304",
+      "seed": 20261026
+    },
+    "id_013/base.png": {
+      "sha256": "d4574ba4c90b0325a14795496fe8356edb9d27203a39784186acf74e029342e2",
+      "seed": 20261027
+    },
+    "id_013/dano.png": {
+      "sha256": "3c3bcb224150534efd692a5b391d4cb9d87769f48c31c78dd20db76e5f52986c",
+      "seed": 20261027
+    },
+    "id_013/pose.png": {
+      "sha256": "c12761965b74795dc318648bacbf351f9369a3fc77882c8327e6eff3739b5738",
+      "seed": 20261027
+    },
+    "id_013/luz.png": {
+      "sha256": "380242cdec8194f09818ddb2992abc0d729f9de1cd048256e7b18cc4c044a8bd",
+      "seed": 20261027
+    },
+    "id_013/oclusion.png": {
+      "sha256": "af92a85f6c050dde76d8d34b8f116a84d1a515fdbc91ec112d6be350e8d26d34",
+      "seed": 20261027
+    },
+    "id_014/base.png": {
+      "sha256": "26efacceb6e1398bd117c185d70fbc8802cd05a04ae86fed40e2f7b68d2de29f",
+      "seed": 20261028
+    },
+    "id_014/dano.png": {
+      "sha256": "8775ef498a1712eb032fee22ef065c124a38425c2024ca64f8d46cfa1c7f184c",
+      "seed": 20261028
+    },
+    "id_014/pose.png": {
+      "sha256": "eca07c4af5b82463a22304dcd27eaf5f356d04146b362d371d92dd6c6e473dcf",
+      "seed": 20261028
+    },
+    "id_014/luz.png": {
+      "sha256": "9323b146a264526c1623c3ddc38da777a9b8060f922370475d0a789f167eef39",
+      "seed": 20261028
+    },
+    "id_014/oclusion.png": {
+      "sha256": "7a02fb01d275a86b64e5b01a6148da368f9b2dc9c58a56d7b82dd1eb81b6f838",
+      "seed": 20261028
+    },
+    "id_015/base.png": {
+      "sha256": "39682d5fc720930163df63af53ecabe7f7533a33b1b68631972997a29cd3096c",
+      "seed": 20261029
+    },
+    "id_015/dano.png": {
+      "sha256": "ce41d81d998ff5d28d78b5ff61864ac3e5a7684db99645402267db2efd8c1e1d",
+      "seed": 20261029
+    },
+    "id_015/pose.png": {
+      "sha256": "cd7db6be7a31b630d4ecd9f70b9fc102a76797fde8abf6bc5a7cdfd09ea4bf11",
+      "seed": 20261029
+    },
+    "id_015/luz.png": {
+      "sha256": "74732a6ed27b106e3c2104dd7fff9af065feeb486ef1e7f203e2da0d8d23d965",
+      "seed": 20261029
+    },
+    "id_015/oclusion.png": {
+      "sha256": "143243fa6f310675143bb977b49ada8f6d9c3a1f25440787ba8647cc3e172db0",
+      "seed": 20261029
+    },
+    "id_016/base.png": {
+      "sha256": "5286e5081c991a06308eb2317069e854b9d6e15f55841ff8e9b257610ad45932",
+      "seed": 20261030
+    },
+    "id_016/dano.png": {
+      "sha256": "137f08bd550d098b34c4bf2be1eafba9cd269fa5e23e81cb8611a79cc7644d3f",
+      "seed": 20261030
+    },
+    "id_016/pose.png": {
+      "sha256": "7070abff9668a2e917a58a7c392d825a948bdc53a8a6fa48c9653559995547f2",
+      "seed": 20261030
+    },
+    "id_016/luz.png": {
+      "sha256": "b95efca649dbf98e2b26f6af8ced22a7f31e609a91fe28cd1ea7d0f4d7a4cac4",
+      "seed": 20261030
+    },
+    "id_016/oclusion.png": {
+      "sha256": "c8919ec18b1b5405774dc4493ed552186e9db527ca824bcf6754e2da3f3994f0",
+      "seed": 20261030
+    },
+    "id_017/base.png": {
+      "sha256": "dcafc3f40a3e6bbc57afac9c23ef026cb3d4c05ad1bc8b616e21634b98a2a251",
+      "seed": 20261031
+    },
+    "id_017/dano.png": {
+      "sha256": "bc0bfb2439f5ad861c8eeb8533cd306b90b7071e8816940f401ec883c877dee3",
+      "seed": 20261031
+    },
+    "id_017/pose.png": {
+      "sha256": "c8df18cdc349a6660268ec4f1d77ffece7779f95b720f1ef26ced7fb0923830b",
+      "seed": 20261031
+    },
+    "id_017/luz.png": {
+      "sha256": "13a92050f335f22b2f9597a47eea4e9b42ae519fc3670d1fd851b44b0e05bdc3",
+      "seed": 20261031
+    },
+    "id_017/oclusion.png": {
+      "sha256": "bae24901c3bfce2b7bbdbfb5efaf65df8fa29627eb1ef08d516c1ab0b827a38e",
+      "seed": 20261031
+    },
+    "id_018/base.png": {
+      "sha256": "e2a715e16bc961ee913a6264e1f8445aef89d102de99ce2b1ea23a33759a96e0",
+      "seed": 20261032
+    },
+    "id_018/dano.png": {
+      "sha256": "327781e9f22d4042c55c626c45c42098ebf008a0104d6be90f2d7d72f502e113",
+      "seed": 20261032
+    },
+    "id_018/pose.png": {
+      "sha256": "99bcb36480b3a35ae4ba29f44173aeda236f4c28dd9ce8bfe7bf7cf8731f1bec",
+      "seed": 20261032
+    },
+    "id_018/luz.png": {
+      "sha256": "15e61856d9085e4215272a1b9d2106aaf6d15d6b0c3d7ff1315f3df31816726d",
+      "seed": 20261032
+    },
+    "id_018/oclusion.png": {
+      "sha256": "b910be18edeb7a3b90e4049c8dc650df383126bebb59ef9df5606ef14c747fb7",
+      "seed": 20261032
+    },
+    "id_019/base.png": {
+      "sha256": "f81528cb989ce3601dcbc3b6e5c435f159b0de52596479d909a316a980f539b2",
+      "seed": 20261033
+    },
+    "id_019/dano.png": {
+      "sha256": "0db795e04f69c3cd39cfa88f6568d558b94810ecf20221505b120056ac524f9a",
+      "seed": 20261033
+    },
+    "id_019/pose.png": {
+      "sha256": "c5f5c72140eb1c11ba9bbd016a47fb314daddc21a5d584272e589f2e7d7d66ff",
+      "seed": 20261033
+    },
+    "id_019/luz.png": {
+      "sha256": "782a706d1b458e7cd83ab934d5927b9e56a146ce7542786aa418d138e3f492d1",
+      "seed": 20261033
+    },
+    "id_019/oclusion.png": {
+      "sha256": "9f2c4e20c15d15e6522dbe88ff2e7c4d2e5d26d87326bc739f371e2dc5aa259a",
+      "seed": 20261033
+    },
+    "id_020/base.png": {
+      "sha256": "39120a2348e66730abcd93a1121762429a32a5d997de770656702341aca7a525",
+      "seed": 20261034
+    },
+    "id_020/dano.png": {
+      "sha256": "042d30d79e73dd32b38db0deb9e14d690b64772917b61b0c00249961405e700e",
+      "seed": 20261034
+    },
+    "id_020/pose.png": {
+      "sha256": "3faf9b3e28a2ef3aea760245c40c35150b2080d83562cad307ea4c90799a02dc",
+      "seed": 20261034
+    },
+    "id_020/luz.png": {
+      "sha256": "17222f3cb878a0b3c431f1dbeb9386a94476dd0ced79ed63251607a6f5a4c587",
+      "seed": 20261034
+    },
+    "id_020/oclusion.png": {
+      "sha256": "a6b23fc7dbc85e529f5ea51dd4a84eb718f8da81c26d872af8af1f4c70d2bdfa",
+      "seed": 20261034
+    }
+  }
+}
