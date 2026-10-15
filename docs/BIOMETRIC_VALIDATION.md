@@ -24,3 +24,21 @@ vinculantes en condiciones de retrato (cara dominante en cuadro).
 "Similitud coseno >= umbral provisional en condiciones de medicion estables,
 con pesos custodiados y pipeline alineado". NO es garantia biometrica
 concluyente (H-03 del auditor, aceptado).
+
+## Medicion real (2026-10-15, evidence/benchmark_corpus.json)
+
+Corpus procedural n=93 pares (80 mismo / 13 distinto), FaceNet TFLite custodiado:
+
+| Metrica | Valor | IC95 Wilson |
+|---|---|---|
+| TAR @ 0.65 | 0.625 | [0.52, 0.72] |
+| FAR @ 0.65 | 0.4615 | [0.23, 0.71] |
+| cos mismo (media) | 0.7224 | — |
+| cos distinto (max) | 0.9292 | — |
+
+Conclusion medida: las caras parametricas son out-of-distribution para
+FaceNet; las distribuciones mismo/distinto se solapan. El umbral 0.65 NO es
+transferible a entradas fuera de distribucion (confirma H-03). Para claims
+biometricos: corpus fotorealista (StyleGAN o fotos reales consentidas).
+Lo que SI queda demostrado: el pipeline de medicion completo corre a escala
+con intervalos de confianza — la maquinaria estadistica es sound.
