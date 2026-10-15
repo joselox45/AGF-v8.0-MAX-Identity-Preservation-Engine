@@ -33,3 +33,13 @@ weights_sha256 54660297… verificado) aplicado a las SALIDAS de cada método.
 PROTOCOLO SPECIFIED. Ejecución pendiente (requiere 20 identidades
 consentidas + GPUs para los métodos base). Hasta entonces, el claim
 comparativo del proyecto es **NO DETERMINED** por diseño.
+
+## Resultado real — corpus procedural (2026-10-15)
+
+| Método | Verificador | n pares | TAR@0.65 | FAR@0.65 | Nota |
+|---|---|---|---|---|---|
+| AGF verify_image + FaceNet | común | 93 (80 same/13 diff) | 0.625 | 0.4615 | corpus procedural = OOD; valida pipeline, no calidad |
+| AGF verify_image + FaceNet | común | 1 (foto real) | 1.0 | — | L3 SUPPORTED 0.931, conditions de retrato |
+
+Regla metodologica confirmada: comparar metodos exige corpus fotorealista
+mismo/distinto con etiquetas; el corpus procedural solo audita la maquinaria.
