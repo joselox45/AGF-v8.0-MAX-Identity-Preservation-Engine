@@ -3,9 +3,10 @@
 AGF — Attestation independiente (APCE).
 Un tercero verifica un archivo de evidencia y lo firma con SU clave Ed25519.
 Uso:
-  python tools/attest.py evidence/t21_tflite.json [--seed HEX64]
+  python tools/attest.py evidence/t22.json [--seed HEX64] [--signer HANDLE]
 Emite evidence/attestation_<archivo>.json con veredicto ATTESTED/REJECTED.
 Requiere: pkg install python-cryptography
+F-03 (auditoria 13): weights_sha256 verificado contra tabla de hashes fijados.
 """
 import argparse, hashlib, json, os, sys
 from datetime import datetime, timezone
@@ -14,8 +15,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("evidence_file")
 ap.add_argument("--seed", default=None, help="64 hex chars; si omite, genera")
 ap.add_argument("--signer", default="anon",
-                help="identidad del attestor (handle/nombre) — sin esto la "
-                     "firma no dice QUIEN atesto (auditoria 9, 4.5)")
+                help="identidad del attestor (handle/nombre)")
 a = ap.parse_args()
 
 try:
@@ -37,7 +37,20 @@ def chk(name, ok, detail=""):
     checks.append({"check": name, "ok": bool(ok), "detail": detail})
 
 chk("json_parseable", True)
-chk("has_weights_sha256", "weights_sha256" in json.dumps(ev))
+wjson = json.dumps(ev)
+chk("has_weights_sha256", "weights_sha256" in wjson)
+PINNED = {
+    "54660297ebad23b7106a8ccd05f2f2f616b3d39bf7d7e82e148cf8ed7e27ae1a": "facenet.tflite",
+    "700ea787ab479a13ddf9c8225215569f88065748aa2b8f2b384735c5e6521bef": "arcface_digidow.tflite",
+}
+import re as _re
+m = _re.search(r'"weights_sha256"\s*:\s*"([0-9a-f]{64})"', wjson)
+if m:
+    checks.append({"check": "weights_hash_pinned", "ok": m.group(1) in PINNED,
+                   "detail": PINNED.get(m.group(1), "hash NO fijado")})
+else:
+    checks.append({"check": "weights_hash_pinned", "ok": False,
+                   "detail": "weights_sha256 no parseable"})
 chk("has_evidence_hash", "evidence_hash" in json.dumps(ev))
 ver = ev.get("verification", {})
 chk("cosine_present", "cosine" in ver, f"cosine={ver.get('cosine')}")
