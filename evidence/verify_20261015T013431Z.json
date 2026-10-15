@@ -1,0 +1,25 @@
+{
+  "verdict": {
+    "L1_formal": "PASS",
+    "L2_biometric": "PASS",
+    "L3_identity": "NOT_DETERMINED",
+    "cosine": 0.896514,
+    "threshold": 0.65,
+    "reasons": [
+      "L3: identidad NO DETERMINADA; falta: discriminacion cruzada (par distinto-sujeto)"
+    ]
+  },
+  "inputs": {
+    "subject_label": "same",
+    "prompt_sha256": "sin_kernel_peticion_libre_2026-10-14",
+    "ref_sha256": "43cc07320a728ce1ff7ebd711e92c23df096130820c0ee0dee078e7c2252a911",
+    "candidate_sha256": "0baf9f084cffa1ae2457541caf9b358b0d0e6a8fb76f6d3907228e6050f3d7b3",
+    "weights_sha256": "54660297ebad23b7106a8ccd05f2f2f616b3d39bf7d7e82e148cf8ed7e27ae1a",
+    "model_id": "facenet:tflite:54660297ebad23b7",
+    "pipeline": "aligned"
+  },
+  "_meta": {
+    "ts": "2026-10-15T01:34:31.087541+00:00",
+    "host": "termux"
+  }
+}
