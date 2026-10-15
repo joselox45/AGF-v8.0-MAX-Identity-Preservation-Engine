@@ -87,7 +87,7 @@ class TestP0Evidence(unittest.TestCase):
     def test_hash_match_accepted(self):
         os.makedirs("evidence", exist_ok=True)
         data = b'{"real": true}'
-        open("evidence/T01.json", "wb").write(data)
+        open(os.path.join(self.td, "evidence", "T01.json"), "wb").write(data)
         digest = hashlib.sha256(data).hexdigest()
         try:
             v = self.r.evaluate([{"test_id": "T01", "status": "PASS",

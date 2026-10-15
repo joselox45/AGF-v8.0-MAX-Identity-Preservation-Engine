@@ -42,5 +42,6 @@
   "ts": "2026-10-15T00:49:00.889173+00:00",
   "verdict": "ATTESTED",
   "attestor_ed25519": "79037572fbdde5c9012c859dd2fc9df75d2e6d1e8fff6c0ebc73a215649c06d6",
-  "signature": "61818fd2ae19480b098e8795198777d629abf521711089dadcffecc065668e8782b41165206ba05925355d7d83024ecae4cc13977ed087787411143d5aca7304"
+  "signature": "61818fd2ae19480b098e8795198777d629abf521711089dadcffecc065668e8782b41165206ba05925355d7d83024ecae4cc13977ed087787411143d5aca7304",
+  "_agf_review": "self-attestation (signer=joselox45, clave efimera) \u2014 demuestra el protocolo; attestation INDEPENDIENTE requiere tercero con clave registrada fuera del repo (ATTESTATION_CONTRACT.md)"
 }
