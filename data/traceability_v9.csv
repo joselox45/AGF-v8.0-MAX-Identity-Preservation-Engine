@@ -11,3 +11,4 @@ id,requisito,fuente,prueba,criterio,estado,evidencia,razon
 T29,Taxonomia de estados de evidencia,docs/ATTESTATION_AND_BENCHMARK.md,tests/test_t29_t30_attest.py::TestTaxonomy::test_all_six_states,6 estados; conformidad solo VALID/INDEPENDENT,NOT_RUN,,
 T30,Detector facial + benchmark robustez,docs/ATTESTATION_AND_BENCHMARK.md,tools/bio_benchmark.py,TAR/FAR @ umbral; BLOCKED sin modelos,NOT_RUN,,
 T31,Attestation independiente Ed25519,docs/ATTESTATION_AND_BENCHMARK.md,tests/test_t29_t30_attest.py::TestAttestation::test_roundtrip,ATTESTED con firma verificable por terceros,NOT_RUN,,
+T32,Kernel v3 IDENTITY_CARD,src/identity_card.py,tests/test_identity_card.py 10/10,card roundtrip + control F + RECIBO + metricas + R7,NOT_RUN,,
