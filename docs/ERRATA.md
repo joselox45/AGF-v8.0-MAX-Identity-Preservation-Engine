@@ -28,3 +28,13 @@ AKADI-OMEGA-LITE-O0 v18.0 + IDENTITY-LOCK v1.6 → PROTOCOLO AKADI UNIFICADO
 v19.0 (canonico unico). Fuentes archivados en docs/protocols/historical/ con
 hashes en LINEAGE.txt. Conflictos de precedencia resueltos: jerarquia de
 autoridad (Parte I) > precedencia operativa de tarea (Parte II §7).
+
+## 5. Fork del vault (2026-10-16, secuela del incidente de retrocompat)
+El registro seq 27 (snapshot kernel_v3_demo, 2026-10-15) fue escrito con el
+_body de la version transicional del bug de retrocompat. Su hash no recomputa
+con la semantica v1.1 fijada. Medida: los registros 1-26 permanecen como
+GENESIS VERIFICADA (head 64ff9500...); los registros 27+ se marcan como
+SEGMENTO DE TRANSICION no garantizado; la cadena productiva continua desde el
+registro 30 (primer verify con pipeline estable). El FAIL del vault fue
+CORRECTO: detecto la inconsistencia introducida por nuestra propia
+herramienta — mismo patron que el anti-replay con los recortes negros.
