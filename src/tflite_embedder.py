@@ -1,10 +1,9 @@
 """
-AGF v9.0 — TFLiteFaceEmbedder (cierre T21/T22 en Termux)
-=========================================================
-Backend TFLite para embedding facial real. Mismo contrato que
-OnnxFaceEmbedder (EmbeddingResult + VectorComparator), mismo
-fail-closed: sin interprete o sin modelo -> BLOCKED, nunca PASS
-fabricado. Compatibe con tflite-runtime y tensorflow-lite.
+AGF v9.0 — TFLiteFaceEmbedder (cierre T21/T22 en Termux).
+normalize: 'arcface' -> (x-127.5)/128 | 'raw' -> sin escalar |
+'div255' -> x/255 (digidow arcface). bool legacy mapeado.
+Stability: threads=1 (determinismo XNNPACK).
+Anti-replay (auditoria 9): similitud extrema != fraude probado.
 """
 
 from __future__ import annotations
@@ -35,30 +34,29 @@ class EmbeddingResult:
 
 
 class TFLiteFaceEmbedder:
-    """ArcFace (512-d) / FaceNet (128-d) via TFLite."""
-
     MODEL_SPECS = {
         "arcface": {"input_size": (112, 112), "output_dim": 512},
         "facenet": {"input_size": (160, 160), "output_dim": 128},
     }
 
     def __init__(self, model_kind: str, model_bytes: Optional[bytes] = None,
-                 normalize: bool = True):
-        """normalize=True: entrada (x-127.5)/128 (ArcFace ONNX estandar).
-        normalize=False: el modelo incluye su propia capa de escalado
-        (p.ej. facenet.tflite derivado de deepface) -> NO normalizar."""
+                 normalize: str = "arcface", threads: int = 1):
+        if isinstance(normalize, bool):  # compat hacia atras
+            normalize = "arcface" if normalize else "raw"
+        if normalize not in ("arcface", "raw", "div255"):
+            raise ValueError("normalize debe ser arcface|raw|div255")
         if model_kind not in self.MODEL_SPECS:
             raise ValueError(f"model_kind debe ser uno de {list(self.MODEL_SPECS)}")
         self.model_kind = model_kind
         self.spec = self.MODEL_SPECS[model_kind]
         self.normalize = normalize
+        self._threads = threads
         self.model_id = f"{model_kind}:tflite:unknown-weights"
         self._interp = None
         self._in_idx = self._out_idx = None
         if model_bytes:
             self._load(model_bytes)
 
-    # -- carga ----------------------------------------------------------
     def _get_interpreter_class(self):
         try:
             from tflite_runtime.interpreter import Interpreter  # type: ignore
@@ -75,14 +73,13 @@ class TFLiteFaceEmbedder:
         Interpreter = self._get_interpreter_class()
         if Interpreter is None:
             self._interp = None
-            self.reason = "sin tflite_runtime ni tensorflow.lite"
             return
         import tempfile, os
         try:
             with tempfile.NamedTemporaryFile(suffix=".tflite", delete=False) as f:
                 f.write(model_bytes)
                 path = f.name
-            self._interp = Interpreter(model_path=path)
+            self._interp = Interpreter(model_path=path, num_threads=self._threads)
             os.unlink(path)
             self._interp.allocate_tensors()
             self._in_idx = self._interp.get_input_details()[0]["index"]
@@ -90,15 +87,13 @@ class TFLiteFaceEmbedder:
             self.model_id = (f"{self.model_kind}:tflite:"
                              + hashlib.sha256(model_bytes).hexdigest()[:16])
         except Exception:
-            self._interp = None  # modelo invalido -> fail-closed
+            self._interp = None
 
-    # -- inferencia ------------------------------------------------------
     def embed(self, rgb_pixels: Optional[Sequence] = None,
               bbox: Optional[tuple] = None) -> EmbeddingResult:
         if self._interp is None or rgb_pixels is None:
-            return EmbeddingResult(
-                EmbeddingStatus.BLOCKED, self.model_id,
-                reason="sin interprete TFLite o sin píxeles; fail-closed")
+            return EmbeddingResult(EmbeddingStatus.BLOCKED, self.model_id,
+                                   reason="sin interprete TFLite o sin pixeles; fail-closed")
         try:
             import numpy as np  # type: ignore
             arr = np.asarray(rgb_pixels, dtype=np.float32)
@@ -107,8 +102,10 @@ class TFLiteFaceEmbedder:
                 arr = arr[y1:y2, x1:x2]
             h, w = self.spec["input_size"]
             arr = self._resize_np(arr, (h, w))
-            if self.normalize:
+            if self.normalize == "arcface":
                 arr = (arr - 127.5) / 128.0
+            elif self.normalize == "div255":
+                arr = arr / 255.0
             arr = np.expand_dims(arr, axis=0)  # NHWC
             self._interp.set_tensor(self._in_idx, arr)
             self._interp.invoke()
@@ -125,8 +122,7 @@ class TFLiteFaceEmbedder:
             return EmbeddingResult(EmbeddingStatus.BLOCKED, self.model_id,
                                    reason="numpy no disponible")
         except Exception as e:
-            return EmbeddingResult(EmbeddingStatus.FAIL, self.model_id,
-                                   reason=str(e))
+            return EmbeddingResult(EmbeddingStatus.FAIL, self.model_id, reason=str(e))
 
     @staticmethod
     def _resize_np(arr, size_hw):
@@ -137,7 +133,6 @@ class TFLiteFaceEmbedder:
         return arr[ys][:, xs]
 
 
-# -- comparador (mismo contrato que v9.0) ---------------------------------
 class VectorComparator:
     COSINE_IDENTICAL_TOLERANCE = 0.99999
 
