@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 .DS_Store
 out/
+facenet.tflite
+arcface_digidow.tflite
+blaze_face_short_range.tflite
