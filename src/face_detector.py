@@ -1,7 +1,11 @@
 """
 AGF T21-ALIGN — TFLiteFaceDetector con decodificador BlazeFace real.
-Requiere face_detection_short_range.tflite (MediaPipe, 128x128).
-Fail-closed: sin modelo -> BLOCKED.
+Box coder SSD con scales (x/y/w/h_scale = 128):
+  centro  = anchor_centro + raw_offset / 128
+  tamano  = anchor_tamano * exp(raw_size / 128)
+  keypoint= anchor_centro + raw_kp / 128     (sin multiplicar por anchor)
+Salidas: regression (1,896,16) = 4 box + 12 kp · classification (1,896,1).
+Stability: threads=1 (determinismo) + select='largest' (mayor area).
 """
 
 from __future__ import annotations
@@ -22,7 +26,13 @@ class DetectionResult:
 class TFLiteFaceDetector:
     INPUT_SIZE = 128
 
-    def __init__(self, model_bytes: Optional[bytes] = None):
+    def __init__(self, model_bytes: Optional[bytes] = None,
+                 threads: int = 1, select: str = "largest"):
+        # threads=1: determinismo XNNPACK. select='largest': en escenas
+        # multirrostro se elige la cara de MAYOR AREA, no la de mayor score.
+        assert select in ("score", "largest")
+        self._threads = threads
+        self._select = select
         self._interp = None
         self.anchors = generate_anchors()
         if model_bytes:
@@ -42,7 +52,7 @@ class TFLiteFaceDetector:
             with tempfile.NamedTemporaryFile(suffix=".tflite", delete=False) as f:
                 f.write(model_bytes)
                 path = f.name
-            self._interp = Interpreter(model_path=path)
+            self._interp = Interpreter(model_path=path, num_threads=self._threads)
             os.unlink(path)
             self._interp.allocate_tensors()
             outs = sorted(self._interp.get_output_details(),
@@ -74,6 +84,11 @@ class TFLiteFaceDetector:
                           input_size=self.INPUT_SIZE,
                           score_thresh=score_threshold)
             dets = nms(dets)
+            if self._select == "largest" and len(dets) > 1:
+                def _area(d):
+                    x1, y1, x2, y2 = d.box
+                    return max(0.0, x2 - x1) * max(0.0, y2 - y1)
+                dets = [max(dets, key=_area)]
             sx = orig_w / self.INPUT_SIZE
             sy = orig_h / self.INPUT_SIZE
             for d in dets:
