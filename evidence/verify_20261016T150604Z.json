@@ -1,0 +1,25 @@
+{
+  "verdict": {
+    "L1_formal": "PASS",
+    "L2_biometric": "PASS",
+    "L3_identity": "SUPPORTED",
+    "cosine": 0.944837,
+    "threshold": 0.65,
+    "reasons": [
+      "L3: L1 PASS + L2 PASS + procedencia declarada + discriminacion cruzada -> identidad SUPPORTED"
+    ]
+  },
+  "inputs": {
+    "subject_label": "same",
+    "prompt_sha256": "ed4877dbd329238a",
+    "ref_sha256": "43cc07320a728ce1ff7ebd711e92c23df096130820c0ee0dee078e7c2252a911",
+    "candidate_sha256": "4ae36c18ae493a7cb045f310af4863dd8d82af3077893837352f4cc9ee3d11cc",
+    "weights_sha256": "54660297ebad23b7106a8ccd05f2f2f616b3d39bf7d7e82e148cf8ed7e27ae1a",
+    "model_id": "facenet:tflite:54660297ebad23b7",
+    "pipeline": "aligned:stable-median-N3"
+  },
+  "_meta": {
+    "ts": "2026-10-16T15:06:04.416846+00:00",
+    "host": "termux"
+  }
+}
