@@ -15,3 +15,11 @@ el CANAL transmite*. Todo lo demás es implementación.
 SPECIFIED → IMPLEMENTED → TESTED → OPERATING_EFFECTIVE → INDEPENDENTLY_ATTESTED
 Ningún peldaño implica el siguiente. **OPERATIONAL_DEGRADED**: componente
 operativo con función reducida declarada (ver mapping).
+
+## Frase rectora (de la investigacion de sesgos de juez LLM)
+
+> "Una respuesta es una muestra, no un veredicto."
+
+En AGF: todo lo que declara la ventana (RECIBO, provenance, estimaciones
+visuales) es MUESTRA. El VEREDICTO exige evidencia encadenada y, para L3,
+biometria custodiada + discriminacion cruzada.
