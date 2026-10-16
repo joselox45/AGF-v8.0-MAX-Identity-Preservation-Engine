@@ -10,7 +10,7 @@ class FakeTensor:
 
 class FakeInterp:
     """Simula Interpreter: devuelve vector fijo L2-normalizable."""
-    def __init__(self, model_path=None, model_content=None):
+    def __init__(self, model_path=None, model_content=None, num_threads=1):
         self._tensors = {}
     def allocate_tensors(self): pass
     def get_input_details(self): return [{"index": 0}]
