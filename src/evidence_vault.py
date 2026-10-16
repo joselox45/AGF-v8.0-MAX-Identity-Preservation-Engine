@@ -40,9 +40,10 @@ BODY_KEYS = ("seq", "evidence_file", "evidence_sha256", "verdict_l3",
 
 
 def _body(rec: dict) -> bytes:
-    """Cuerpo hash: solo campos presentes y no-None (retrocompatible)."""
-    d = {k: rec[k] for k in BODY_KEYS
-         if k in rec and rec[k] is not None}
+    """Cuerpo hash: campos PRESENTES en el registro. v1.0 incluia nulos
+    explicitos en el hash; v1.1 solo anade 'metrics' cuando existe.
+    Retrocompatible con los 26 registros genesis reales."""
+    d = {k: rec[k] for k in BODY_KEYS if k in rec}
     return json.dumps(d, sort_keys=True).encode()
 
 
