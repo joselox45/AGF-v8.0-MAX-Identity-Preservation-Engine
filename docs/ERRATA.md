@@ -38,3 +38,7 @@ SEGMENTO DE TRANSICION no garantizado; la cadena productiva continua desde el
 registro 30 (primer verify con pipeline estable). El FAIL del vault fue
 CORRECTO: detecto la inconsistencia introducida por nuestra propia
 herramienta — mismo patron que el anti-replay con los recortes negros.
+Actualizacion: creado evidence/vault_v2.jsonl — genesis = veredicto 0.944837
+(kernel v3 Meta AI, pipeline estable, 2026-10-16). v1 archivado como
+vault_v1_historical.jsonl (registros 1-26 genesis verificada; 27-31 transicion).
+La cadena productiva es v2. tools/vault.py usa AGF_VAULT o v2 por defecto.

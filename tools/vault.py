@@ -12,7 +12,7 @@ import json, os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 from evidence_vault import EvidenceVault
 
-V = EvidenceVault()
+V = EvidenceVault(os.environ.get("AGF_VAULT", "evidence/vault_v2.jsonl"))
 cmd = sys.argv[1] if len(sys.argv) > 1 else "metrics"
 
 if cmd == "genesis":
