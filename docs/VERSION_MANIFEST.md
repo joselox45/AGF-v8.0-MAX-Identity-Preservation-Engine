@@ -15,3 +15,6 @@ Ninguna prueba de un componente demuestra el sistema completo. Cada afirmacion
 debe citar componente + version + evidencia. Las versiones de codigo heredadas
 (v0.1 en headers) se actualizan al siguiente cambio funcional; no afectan
 conducta. APCE G6: nada se auto-promueve a OPERATING_EFFECTIVE.
+
+| Protocolo AKADI-UNIFICADO | v19.0 | canonico UNICO (supersede) | docs/protocols/ |
+|   (fuentes: O0 v18.0 + IL v1.6) | | archivados en historical/ con sha256 | |
