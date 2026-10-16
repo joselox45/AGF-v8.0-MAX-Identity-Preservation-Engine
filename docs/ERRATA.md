@@ -22,3 +22,9 @@ Los booleanos provenance_declared/cross_person_tested son afirmaciones del
 operador; los JSON no etiquetan sujeto mismo/distinto (mejora en v2.2 del
 verificador). FAR no medida; umbral 0.65 comun a ArcFace/FaceNet sin
 derivacion empirica documentada (roadmap).
+
+## 4. Fusión de protocolos (2026-10-16)
+AKADI-OMEGA-LITE-O0 v18.0 + IDENTITY-LOCK v1.6 → PROTOCOLO AKADI UNIFICADO
+v19.0 (canonico unico). Fuentes archivados en docs/protocols/historical/ con
+hashes en LINEAGE.txt. Conflictos de precedencia resueltos: jerarquia de
+autoridad (Parte I) > precedencia operativa de tarea (Parte II §7).
