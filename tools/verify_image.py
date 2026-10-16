@@ -27,7 +27,7 @@ a = ap.parse_args()
 import numpy as np
 from PIL import Image
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-from tflite_embedder import TFLiteFaceEmbedder, VectorComparator
+from tflite_embedder import TFLiteFaceEmbedder, VectorComparator, EmbeddingStatus
 from verdict_layers import VerdictLayers
 
 norm = {"raw": "raw", "norm": "arcface", "div255": "div255"}[a.norm]
@@ -77,9 +77,9 @@ if vr is None or vc is None:
                          "reason": "embedding no disponible (N=" + str(EMB_RUNS) + ")"}))
 class _R: pass
 _r, _c = _R(), _R()
-_r.status = type("S", (), {"value": "PASS"})(); _r.vector = vr
+_r.status = EmbeddingStatus.PASS; _r.vector = vr
 _r.model_id = emb.model_id; _r.reason = "stable-median"
-_c.status = _r.status; _c.vector = vc; _c.model_id = emb.model_id; _c.reason = "stable-median"
+_c.status = EmbeddingStatus.PASS; _c.vector = vc; _c.model_id = emb.model_id; _c.reason = "stable-median"
 comp = VectorComparator(threshold=0.65)
 v = comp.verify(_r, _c)
 
