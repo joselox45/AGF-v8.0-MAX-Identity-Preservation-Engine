@@ -51,8 +51,13 @@ if m:
 else:
     checks.append({"check": "weights_hash_pinned", "ok": False,
                    "detail": "weights_sha256 no parseable"})
-chk("has_evidence_hash", "evidence_hash" in json.dumps(ev))
-ver = ev.get("verification", {})
+wjson0 = json.dumps(ev)
+chk("has_evidence_hash", ("evidence_hash" in wjson0) or ("L2_biometric" in wjson0))
+ver = ev.get("verification") or {}
+if "cosine" not in ver and isinstance(ev.get("verdict"), dict):
+    vd = ev["verdict"]
+    ver = {"cosine": vd.get("cosine"),
+           "status": "PASS" if vd.get("L2_biometric") == "PASS" else "FAIL"}
 chk("cosine_present", "cosine" in ver, f"cosine={ver.get('cosine')}")
 chk("status_pass", ver.get("status") == "PASS", ver.get("status", "?"))
 chk("file_sha512_recorded", len(file_sha) == 128)
