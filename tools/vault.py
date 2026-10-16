@@ -35,5 +35,10 @@ elif cmd == "verify":
     print(json.dumps(V.verify(), indent=1, ensure_ascii=False))
 elif cmd == "metrics":
     print(json.dumps(V.metrics(), indent=2, ensure_ascii=False))
+elif cmd == "metrics-append":
+    rates = json.load(open(sys.argv[2]))
+    r = V.append_metrics(rates, source=sys.argv[3] if len(sys.argv) > 3 else "kernel_v3")
+    print(json.dumps(r.to_dict(), ensure_ascii=False, indent=1))
+    print(json.dumps(V.verify(), ensure_ascii=False))
 else:
     print(__doc__); sys.exit(2)
