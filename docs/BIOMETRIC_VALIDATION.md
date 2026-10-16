@@ -42,3 +42,11 @@ transferible a entradas fuera de distribucion (confirma H-03). Para claims
 biometricos: corpus fotorealista (StyleGAN o fotos reales consentidas).
 Lo que SI queda demostrado: el pipeline de medicion completo corre a escala
 con intervalos de confianza — la maquinaria estadistica es sound.
+
+## Valor de referencia ESTABLE (2026-10-16, pipeline median-N3 + threads=1 + cara mayor area)
+Par ChatGPT-control (182345.jpg vs generada): cosine **0.815868**, reproducible
+bit a bit en dos corridas (determinismo verificado). El valor single-shot
+historico (0.896514) era una muestra con varianza ascendente; el estimador
+robusto ronda 0.08 por debajo. Veredictos previos (L3 SUPPORTED) se mantienen
+(ambos >> umbral 0.65). Regla: citar SIEMPRE el valor stable-median para
+nuevas corridas; los historicos single-shot quedan como referencia del metodo anterior.
