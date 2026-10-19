@@ -1,0 +1,374 @@
+{
+  "corpus": "agf-corpus-v2",
+  "tipo": "fotorealista-generado-via-CANAL",
+  "generador": "varios",
+  "operador_fecha": "2026-10-19",
+  "n_ids": 9,
+  "claims_habilitados": "calibracion piloto (8 ids disjuntos + Fv2-09 descartable)",
+  "limitacion": "corpus PARCIAL (9/20). Fv2-06 upscaled desde grid arena 440x592->624x840. Fv2-05 gafas en las 4. Identidades son ground truth por construccion.",
+  "ids": {
+    "Fv2-01": {
+      "seed_card": "34 anos, mujer latina, ojos marron oscuro, cabello negro ondulado largo, lunar en mejilla izquierda",
+      "variantes": {}
+    },
+    "Fv2-03": {
+      "seed_card": "27 anos, mujer asiatica, marron claro, negro liso con flequillo, pecas en puente de la nariz",
+      "variantes": {}
+    },
+    "Fv2-04": {
+      "seed_card": "61 anos, hombre afro, marron muy oscuro, canoso corto rizado, barba entrecana",
+      "variantes": {}
+    },
+    "Fv2-05": {
+      "seed_card": "41 anos, mujer caucasica, ojos verde, rubio cobrizo media melena, GAFAS en las 4 variantes (desviacion de prompt aceptada)",
+      "variantes": {}
+    },
+    "Fv2-06": {
+      "seed_card": "45 anos, hombre latino, marron, castano corto peinado lateral, 3 lunares en mejilla derecha",
+      "variantes": {}
+    },
+    "Fv2-07": {
+      "seed_card": "29 anos, mujer afro, marron dorado, trenzas medianas, pendiente dorado oreja izquierda",
+      "variantes": {}
+    },
+    "Fv2-08": {
+      "seed_card": "55 anos, mujer caucasica, ojos azul, plata corto pixie, arruga marcada entre cejas",
+      "variantes": {}
+    },
+    "Fv2-09": {
+      "seed_card": "REAL_GENERADO: hombre ~30-35, castano claro lateral, orejas prominentes, lunar mejilla izquierda (prompt Fv2-06 en arena, modelo anonimo -> divergencia registrada)",
+      "variantes": {}
+    },
+    "Fv2-18": {
+      "seed_card": "63 anos, hombre caucasico, ojos azul, CALVO con canas (desviacion: ficha decia blanco corto), marca en menton",
+      "variantes": {}
+    }
+  },
+  "files": {
+    "Fv2-01/base.png": {
+      "sha256": "ff7d69ed0321df2d1073f87cea9c65562cc150af175735c87b972b6eea05de42",
+      "size": [
+        1600,
+        1600
+      ],
+      "prompt": null,
+      "generador": "Meta AI"
+    },
+    "Fv2-01/luz.png": {
+      "sha256": "c0b741a2c3f4dd2054446d4df91025a3b576282492ba5a0f2b5217b4cc346810",
+      "size": [
+        1600,
+        1600
+      ],
+      "prompt": null,
+      "generador": "Meta AI"
+    },
+    "Fv2-01/oclusion.png": {
+      "sha256": "542e4c0f92c325cd296280d6f7a7945313cd45b38c6fd5e7e849f69c626e2383",
+      "size": [
+        1600,
+        1600
+      ],
+      "prompt": null,
+      "generador": "Meta AI"
+    },
+    "Fv2-01/pose.png": {
+      "sha256": "c6ae784adcbd5c99effd16ba9d663eab718b1b23eeedcb9da2d34b2fcbfdbf3b",
+      "size": [
+        1600,
+        1600
+      ],
+      "prompt": null,
+      "generador": "Meta AI"
+    },
+    "Fv2-03/base.png": {
+      "sha256": "1e4f0af51e055ffb06d33b047abadca98d05500054bcb344a2e7530d56c17e9d",
+      "size": [
+        1376,
+        726
+      ],
+      "prompt": null,
+      "generador": "Gemini"
+    },
+    "Fv2-03/luz.png": {
+      "sha256": "4465a3846cd5415c40498f39ffc703793a11377ec5f7428e5e1075f534a1616c",
+      "size": [
+        1376,
+        726
+      ],
+      "prompt": null,
+      "generador": "Gemini"
+    },
+    "Fv2-03/oclusion.png": {
+      "sha256": "1cd8d29fe99d4a3ad543c16233e560f134454234aeba03b9b3af21d7a4856585",
+      "size": [
+        1376,
+        726
+      ],
+      "prompt": null,
+      "generador": "Gemini"
+    },
+    "Fv2-03/pose.png": {
+      "sha256": "f1ab8becf2f4b14f842b172706b479dca5682f2c92b97d918bc1ad3ed1e8a447",
+      "size": [
+        1376,
+        726
+      ],
+      "prompt": null,
+      "generador": "Gemini"
+    },
+    "Fv2-04/base.png": {
+      "sha256": "f1ac15b3eab62f0fe85acddc2968c2c52fa51efee4c0a1892ffdce7119760360",
+      "size": [
+        784,
+        1168
+      ],
+      "prompt": null,
+      "generador": "Grok"
+    },
+    "Fv2-04/luz.png": {
+      "sha256": "2b95580bea1489045188b5fc0ea536df5d5a5ce6d348c6e4d461568736f574cb",
+      "size": [
+        784,
+        1168
+      ],
+      "prompt": null,
+      "generador": "Grok"
+    },
+    "Fv2-04/oclusion.png": {
+      "sha256": "07bb09b3fc438370fceaedf4ce23b5d3761745b46e35f02013e56ebac431945a",
+      "size": [
+        784,
+        1168
+      ],
+      "prompt": null,
+      "generador": "Grok"
+    },
+    "Fv2-04/pose.png": {
+      "sha256": "43bad2cb695ef9704647276d12f9d70b42c9a2869e18c9fb79ca3705826c8c44",
+      "size": [
+        784,
+        1168
+      ],
+      "prompt": null,
+      "generador": "Grok"
+    },
+    "Fv2-05/base.png": {
+      "sha256": "3438c88cb336d40b86c6f15a25f85e492ddda3f5013f7e06fd8179e4d94d1f6a",
+      "size": [
+        627,
+        627
+      ],
+      "prompt": null,
+      "generador": "ChatGPT"
+    },
+    "Fv2-05/luz.png": {
+      "sha256": "ff6513d07e3ee751f2a0d881e15fff838eac43b32c9ff300388fabe482e12b34",
+      "size": [
+        627,
+        627
+      ],
+      "prompt": null,
+      "generador": "ChatGPT"
+    },
+    "Fv2-05/oclusion.png": {
+      "sha256": "ebb476ae3b6ccba6738d6a043d624b7fc3d8f6004e39330c86bfd40e2354c271",
+      "size": [
+        627,
+        627
+      ],
+      "prompt": null,
+      "generador": "ChatGPT"
+    },
+    "Fv2-05/pose.png": {
+      "sha256": "6ac6dd54c9b745e36866eb9b9fff30261b73e3f76809c4b3c37bbd4bd9d3cfc9",
+      "size": [
+        627,
+        627
+      ],
+      "prompt": null,
+      "generador": "ChatGPT"
+    },
+    "Fv2-06/base.png": {
+      "sha256": "e77a76771b9a6df70799ec305c0e4481b6fd7ba8d0e04d39a14cd61b7a42993c",
+      "size": [
+        624,
+        840
+      ],
+      "prompt": null,
+      "generador": "Arena AI (modelo no revelado)"
+    },
+    "Fv2-06/luz.png": {
+      "sha256": "6640d5f246c3f8678fa7b03313b6b5b3ec2c5ff9daca5fe8855bad721c4652bf",
+      "size": [
+        624,
+        840
+      ],
+      "prompt": null,
+      "generador": "Arena AI (modelo no revelado)"
+    },
+    "Fv2-06/oclusion.png": {
+      "sha256": "324b5309f49771154a54b42dd0ecb0cf45bb0792ecabc3538993b4b96670b41a",
+      "size": [
+        624,
+        840
+      ],
+      "prompt": null,
+      "generador": "Arena AI (modelo no revelado)"
+    },
+    "Fv2-06/pose.png": {
+      "sha256": "f195f8e55f76db1180b9470d6ae4433b5be20ffe7630d370029ac168499a049d",
+      "size": [
+        624,
+        840
+      ],
+      "prompt": null,
+      "generador": "Arena AI (modelo no revelado)"
+    },
+    "Fv2-07/base.png": {
+      "sha256": "df8f71a0d28bb0ae716e1c032ebace2d1314c09ca3c3e958655b3470f0bb3665",
+      "size": [
+        512,
+        768
+      ],
+      "prompt": null,
+      "generador": "Microsoft Copilot"
+    },
+    "Fv2-07/luz.png": {
+      "sha256": "03b7ca9203c5bcc3acd3b6cbcd52a0550b70e8d79ab7c847bdbf7a0009fff7b5",
+      "size": [
+        512,
+        768
+      ],
+      "prompt": null,
+      "generador": "Microsoft Copilot"
+    },
+    "Fv2-07/oclusion.png": {
+      "sha256": "3b19d9cba802c8762e3b2ea91b593eb4a23cfbe600223576f1bcc4dca5062935",
+      "size": [
+        512,
+        768
+      ],
+      "prompt": null,
+      "generador": "Microsoft Copilot"
+    },
+    "Fv2-07/pose.png": {
+      "sha256": "f1d2b3f803404489f2040b4852a1b2d2763639efe73e3d71f2a8ea39e8966473",
+      "size": [
+        512,
+        768
+      ],
+      "prompt": null,
+      "generador": "Microsoft Copilot"
+    },
+    "Fv2-08/base.png": {
+      "sha256": "635c320cfc134ab887598e8d19d264ae29b31a0f8c8f1bf94bfc3d73f848571e",
+      "size": [
+        2048,
+        1884
+      ],
+      "prompt": null,
+      "generador": "Dola AI (Seedream-5.0 pro)"
+    },
+    "Fv2-08/luz.png": {
+      "sha256": "4fbbe657deaffc3a3054c503c23852112d2f4f094785297c5266637186e3ef09",
+      "size": [
+        2048,
+        1884
+      ],
+      "prompt": null,
+      "generador": "Dola AI (Seedream-5.0 pro)"
+    },
+    "Fv2-08/oclusion.png": {
+      "sha256": "a4ff7dcb3f67c5dac5956d9a95807b7a06a9df9802f14d54be084ba47f11d9ea",
+      "size": [
+        2048,
+        1884
+      ],
+      "prompt": null,
+      "generador": "Dola AI (Seedream-5.0 pro)"
+    },
+    "Fv2-08/pose.png": {
+      "sha256": "945767ab47c6cb51c39673fcc7e59f41863d21a37a4a880e15f8baed487edb2f",
+      "size": [
+        2048,
+        1884
+      ],
+      "prompt": null,
+      "generador": "Dola AI (Seedream-5.0 pro)"
+    },
+    "Fv2-09/base.png": {
+      "sha256": "5e18c27b6541a028b92377092fb96a3e93458f9fd46ec0388e253a115011e88f",
+      "size": [
+        1024,
+        1024
+      ],
+      "prompt": null,
+      "generador": "Arena AI (modelo no revelado)"
+    },
+    "Fv2-09/luz.png": {
+      "sha256": "6d3923301ecdf4119aac84b3dfcf265af3f7fb282a11132ec814f63b7f847081",
+      "size": [
+        1024,
+        1024
+      ],
+      "prompt": null,
+      "generador": "Arena AI (modelo no revelado)"
+    },
+    "Fv2-09/oclusion.png": {
+      "sha256": "8b215a79d7eca8cf3842171bfd871c7f947c90c0c36457ffe4604e76e6c9b8b3",
+      "size": [
+        1024,
+        1024
+      ],
+      "prompt": null,
+      "generador": "Arena AI (modelo no revelado)"
+    },
+    "Fv2-09/pose.png": {
+      "sha256": "6fd683e628e8c1f91438faca7258b95e215aeda170c0cf62fbb6b46322b95953",
+      "size": [
+        1024,
+        1024
+      ],
+      "prompt": null,
+      "generador": "Arena AI (modelo no revelado)"
+    },
+    "Fv2-18/base.png": {
+      "sha256": "2a3b3b1792d52b740d113e1f981d85446159ecfa978973ea1050a417628ddeb6",
+      "size": [
+        1600,
+        1600
+      ],
+      "prompt": null,
+      "generador": "Meta AI"
+    },
+    "Fv2-18/luz.png": {
+      "sha256": "3bd3a89c966c0f4fb9af41fa953b79512ca9957648ee647c69c87d696cc056cf",
+      "size": [
+        1600,
+        1600
+      ],
+      "prompt": null,
+      "generador": "Meta AI"
+    },
+    "Fv2-18/oclusion.png": {
+      "sha256": "c81a7017f7519b6bd017cbdd5039ef92a5454fa1b41bf723b58fcefceaecb3bc",
+      "size": [
+        1600,
+        1600
+      ],
+      "prompt": null,
+      "generador": "Meta AI"
+    },
+    "Fv2-18/pose.png": {
+      "sha256": "08c58cd0537e01c28336d0b3628b9df4bc02b7144592acc18e5343ff8fd66d3f",
+      "size": [
+        1600,
+        1600
+      ],
+      "prompt": null,
+      "generador": "Meta AI"
+    }
+  },
+  "created_utc": "2026-10-19T12:38:38.374162+00:00"
+}

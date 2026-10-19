@@ -1,0 +1,47 @@
+{
+  "corpus": "agf-corpus-v2",
+  "tipo": "fotorealista-generado-via-CANAL",
+  "generador": "varios",
+  "operador_fecha": "2026-10-19",
+  "n_ids": 9,
+  "claims_habilitados": "calibracion piloto (8 ids disjuntos + Fv2-09 descartable)",
+  "limitacion": "corpus PARCIAL (9/20). Fv2-06 upscaled desde grid arena 440x592->624x840. Fv2-05 gafas en las 4. Identidades son ground truth por construccion.",
+  "ids": {
+    "Fv2-01": {
+      "seed_card": "34 anos, mujer latina, ojos marron oscuro, cabello negro ondulado largo, lunar en mejilla izquierda",
+      "variantes": {}
+    },
+    "Fv2-03": {
+      "seed_card": "27 anos, mujer asiatica, marron claro, negro liso con flequillo, pecas en puente de la nariz",
+      "variantes": {}
+    },
+    "Fv2-04": {
+      "seed_card": "61 anos, hombre afro, marron muy oscuro, canoso corto rizado, barba entrecana",
+      "variantes": {}
+    },
+    "Fv2-05": {
+      "seed_card": "41 anos, mujer caucasica, ojos verde, rubio cobrizo media melena, GAFAS en las 4 variantes (desviacion de prompt aceptada)",
+      "variantes": {}
+    },
+    "Fv2-06": {
+      "seed_card": "45 anos, hombre latino, marron, castano corto peinado lateral, 3 lunares en mejilla derecha",
+      "variantes": {}
+    },
+    "Fv2-07": {
+      "seed_card": "29 anos, mujer afro, marron dorado, trenzas medianas, pendiente dorado oreja izquierda",
+      "variantes": {}
+    },
+    "Fv2-08": {
+      "seed_card": "55 anos, mujer caucasica, ojos azul, plata corto pixie, arruga marcada entre cejas",
+      "variantes": {}
+    },
+    "Fv2-09": {
+      "seed_card": "REAL_GENERADO: hombre ~30-35, castano claro lateral, orejas prominentes, lunar mejilla izquierda (prompt Fv2-06 en arena, modelo anonimo -> divergencia registrada)",
+      "variantes": {}
+    },
+    "Fv2-18": {
+      "seed_card": "63 anos, hombre caucasico, ojos azul, CALVO con canas (desviacion: ficha decia blanco corto), marca en menton",
+      "variantes": {}
+    }
+  }
+}

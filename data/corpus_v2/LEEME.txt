@@ -1,0 +1,14 @@
+CORPUS v2 - RECUPERACION (2026-10-19)
+Las imagenes originales en /sdcard/Download fueron eliminadas; estas 36 (9 IDs x 4)
+se reconstruyeron desde los uploads de la sesion 2026-10-17/18 (unico backup existente).
+
+INSTALACION (en Termux, desde el repo):
+  unzip /sdcard/Download/AGF_corpus_v2_recuperado.zip -d data/corpus_v2/
+  python tools/corpus_v2_intake.py --generador "varios" --fecha 2026-10-19
+
+LUEGO: calibracion piloto (ambos modos de alineacion):
+  AGF_ALIGN=112 python tools/calibrate_threshold.py facenet.tflite facenet norm blaze_face_short_range.tflite --corpus v2 --vault
+  AGF_ALIGN=160 python tools/calibrate_threshold.py facenet.tflite facenet norm blaze_face_short_range.tflite --corpus v2 --vault
+
+NOTA: calibrate_threshold.py debe respetar AGF_ALIGN; si su prep tiene 112 fijo,
+aplicar el micro-parche: align_face(img, kps, int(os.environ.get("AGF_ALIGN","112")))

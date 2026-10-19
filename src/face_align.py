@@ -49,7 +49,12 @@ def align_face(pil_img, keypoints, out_size=112):
     original). Usa ojo izq(kp1), ojo der(kp0), nariz(kp2) -> template 3pt.
     Devuelve PIL.Image alineada out_size x out_size."""
     src = [keypoints[1], keypoints[0], keypoints[2]]
-    dst = TEMPLATE[:3]
+    # FIX (2026-10-18): TEMPLATE es absoluto en px de canvas 112; escalarlo al
+    # out_size pedido. Sin esto, out_size != 112 deformaba el crop (banda negra).
+    k = out_size / 112.0
+    dst = [(x * k, y * k) for x, y in TEMPLATE[:3]]
+    k = out_size / 112.0  # FIX 2026-10-18: template absoluto 112px -> escalar
+    dst = [(x * k, y * k) for x, y in dst]
     fwd = estimate_similarity(src, dst)
     inv = _invert_affine(fwd)
     (ia, ib, ic), (id_, ie, if_) = inv

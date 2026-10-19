@@ -1,10 +1,11 @@
 """
-AGF T21-ALIGN — TFLiteFaceDetector con decodificador BlazeFace real.
-Box coder SSD con scales (x/y/w/h_scale = 128):
-  centro  = anchor_centro + raw_offset / 128
-  tamano  = anchor_tamano * exp(raw_size / 128)
-  keypoint= anchor_centro + raw_kp / 128     (sin multiplicar por anchor)
-Salidas: regression (1,896,16) = 4 box + 12 kp · classification (1,896,1).
+AGF T21-ALIGN — TFLiteFaceDetector con decodificador BlazeFace CORREGIDO.
+Spec oficial MediaPipe (face_detection_short_range.pbtxt / face_detection.pbtxt):
+  letterbox keep-aspect 128x128, input float [-1,1]
+  anchors: 4 capas strides [8,16,16,16], fixed_anchor_size=true
+  decode: offsets/tamanos absolutos /128, SIN exponencial
+  proyeccion inversa del letterbox a pixeles de la imagen original
+Salidas: regression (1,896,16) + classification (1,896,1).
 Stability: threads=1 (determinismo) + select='largest' (mayor area).
 """
 
@@ -70,12 +71,20 @@ class TFLiteFaceDetector:
                                    "sin detector TFLite o sin pixeles; fail-closed")
         try:
             import numpy as np  # type: ignore
-            arr = np.asarray(rgb_pixels, dtype=np.float32)
+            # CORREGIDO: letterbox keep-aspect (no estirar) + rango [-1,1]
+            from PIL import Image as _Im
+            arr = np.clip(np.asarray(rgb_pixels, dtype=np.float32), 0, 255).astype(np.uint8)
             orig_h, orig_w = arr.shape[:2]
-            h = w = self.INPUT_SIZE
-            ys = (np.arange(h) * (orig_h / h)).astype(int).clip(0, orig_h - 1)
-            xs = (np.arange(w) * (orig_w / w)).astype(int).clip(0, orig_w - 1)
-            inp = arr[ys][:, xs] / 255.0
+            s = self.INPUT_SIZE / float(max(orig_w, orig_h))
+            nw = max(1, int(round(orig_w * s)))
+            nh = max(1, int(round(orig_h * s)))
+            resized = np.asarray(_Im.fromarray(arr).resize((nw, nh), _Im.BILINEAR),
+                                 dtype=np.float32)
+            pad_x = (self.INPUT_SIZE - nw) // 2
+            pad_y = (self.INPUT_SIZE - nh) // 2
+            canvas = np.zeros((self.INPUT_SIZE, self.INPUT_SIZE, 3), np.float32)
+            canvas[pad_y:pad_y + nh, pad_x:pad_x + nw] = resized
+            inp = canvas / 127.5 - 1.0
             self._interp.set_tensor(self._in_idx, np.expand_dims(inp, 0))
             self._interp.invoke()
             reg = self._interp.get_tensor(self._reg_idx).reshape(896, 16)
@@ -89,12 +98,23 @@ class TFLiteFaceDetector:
                     x1, y1, x2, y2 = d.box
                     return max(0.0, x2 - x1) * max(0.0, y2 - y1)
                 dets = [max(dets, key=_area)]
-            sx = orig_w / self.INPUT_SIZE
-            sy = orig_h / self.INPUT_SIZE
+            # box: (ymin, xmin, ymax, xmax), normalizada en espacio letterbox.
+            # Proyectar a pixeles originales conservando el orden y/x del contrato.
             for d in dets:
-                x1, y1, x2, y2 = d.box
-                d.box = (x1 * sx, y1 * sy, x2 * sx, y2 * sy)
-                d.keypoints = [(kx * sx, ky * sy) for kx, ky in d.keypoints]
+                ymin, xmin, ymax, xmax = d.box
+                pymin = (ymin * self.INPUT_SIZE - pad_y) / s
+                pxmin = (xmin * self.INPUT_SIZE - pad_x) / s
+                pymax = (ymax * self.INPUT_SIZE - pad_y) / s
+                pxmax = (xmax * self.INPUT_SIZE - pad_x) / s
+                d.box = (
+                    min(pymin, pymax),
+                    min(pxmin, pxmax),
+                    max(pymin, pymax),
+                    max(pxmin, pxmax),
+                )
+                d.keypoints = [((kx * self.INPUT_SIZE - pad_x) / s,
+                                (ky * self.INPUT_SIZE - pad_y) / s)
+                               for kx, ky in d.keypoints]
             return DetectionResult("PASS", dets, f"{len(dets)} rostro(s)")
         except Exception as e:
             return DetectionResult("FAIL", None, str(e))

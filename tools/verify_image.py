@@ -48,6 +48,9 @@ if a.detector:
 
 EMB_RUNS = int(os.environ.get("AGF_EMB_RUNS", "3"))
 
+# H4 (2026-10-18): alinear al input_size del modelo (FaceNet 160 / ArcFace 112)
+ALIGN = int(os.environ.get("AGF_ALIGN", "160"))  # 112=linea base v1; 160=nuevo. La calibracion corpus_v2 decide con datos.
+
 def embed_stable(pixels):
     # Mediana de N=3 embeddings por imagen: suprime varianza del runtime.
     vecs = []
@@ -63,15 +66,22 @@ def embed_stable(pixels):
             for i in range(len(vecs[0]))]
 
 def prep(path):
+    # H3 (2026-10-18): FAIL-CLOSED - sin cara detectada NO hay fallback a
+    # imagen completa (contaminaba embeddings). Devuelve None -> BLOCKED.
     img = Image.open(path).convert("RGB")
-    if det is not None:
-        r = det.detect(np.asarray(img).tolist())
-        if r.status == "PASS" and r.detections:
-            return np.asarray(align_face(img, r.detections[0].keypoints, 112))
-    return np.asarray(img)
+    if det is None:
+        return np.asarray(img)
+    r = det.detect(np.asarray(img).tolist())
+    if r.status == "PASS" and r.detections:
+        return np.asarray(align_face(img, r.detections[0].keypoints, ALIGN))
+    return None
 
-vr = embed_stable(prep(a.ref).tolist())
-vc = embed_stable(prep(a.candidate).tolist())
+_pref, _pcand = prep(a.ref), prep(a.candidate)
+if _pref is None or _pcand is None:
+    sys.exit(json.dumps({"status": "BLOCKED", "layer": "L1",
+                         "reason": "sin cara detectada; fail-closed: sin fallback a imagen completa"}))
+vr = embed_stable(_pref.tolist())
+vc = embed_stable(_pcand.tolist())
 if vr is None or vc is None:
     sys.exit(json.dumps({"status": "BLOCKED", "layer": "L2",
                          "reason": "embedding no disponible (N=" + str(EMB_RUNS) + ")"}))
