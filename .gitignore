@@ -5,3 +5,8 @@ out/
 facenet.tflite
 arcface_digidow.tflite
 blaze_face_short_range.tflite
+evidence/base0_lock/
+*.tflite
+__pycache__/
+*.pyc
+data/corpus_v2/Fv2-*/

@@ -1,0 +1,393 @@
+{
+  "status": "PASS",
+  "tipo": "CALIBRACION_UMBRAL",
+  "created_utc": "20261019T124522Z",
+  "summary": {
+    "corpus": {
+      "name": "agf-corpus-v2",
+      "n_ids": 9,
+      "modelo_base": "fotorealista-multi-generador",
+      "limitacion": "procedural-parametrico: pipeline-validation ONLY, no fotorealista",
+      "custodia_sha256": "VERIFIED"
+    },
+    "modelo": {
+      "embedder": "facenet:tflite:54660297ebad23b7",
+      "kind": "facenet",
+      "normalize": "norm",
+      "detector_sha256": "b4578f35940bf5a1a655214a1cce5cab13eba73c1297cd78e1a04c2380b0152f",
+      "emb_runs_mediana": 3,
+      "threads": 1
+    },
+    "n_genuine": 27,
+    "n_impostor": 36,
+    "umbral_actual_0.65": {
+      "threshold": 0.65,
+      "TAR": 0.8519,
+      "FAR": 0.5556,
+      "n_genuine": 27,
+      "n_impostor": 36,
+      "TAR_ci95": [
+        0.6752,
+        0.9408
+      ],
+      "FAR_ci95": [
+        0.3958,
+        0.7046
+      ]
+    },
+    "umbral_youden": {
+      "threshold": 0.7,
+      "J": 0.4167,
+      "TAR": 0.7778,
+      "FAR": 0.3611,
+      "n_genuine": 27,
+      "n_impostor": 36,
+      "TAR_ci95": [
+        0.5924,
+        0.8939
+      ],
+      "FAR_ci95": [
+        0.2248,
+        0.5242
+      ]
+    },
+    "umbral_eer": {
+      "threshold": 0.72,
+      "TAR": 0.6667,
+      "FAR": 0.3056,
+      "dist": 0.0278,
+      "n_genuine": 27,
+      "n_impostor": 36,
+      "TAR_ci95": [
+        0.4782,
+        0.8136
+      ],
+      "FAR_ci95": [
+        0.18,
+        0.4686
+      ]
+    },
+    "recomendacion": {
+      "threshold": 0.7,
+      "criterio": "youden_j",
+      "NOTA": "valido solo para este corpus; recalibrar con corpus fotorealista (roadmap #5)"
+    }
+  },
+  "scores": [
+    {
+      "pair": "Fv2-01/base vs Fv2-01/luz",
+      "label": "genuine",
+      "cosine": 0.732057
+    },
+    {
+      "pair": "Fv2-01/base vs Fv2-01/oclusion",
+      "label": "genuine",
+      "cosine": 0.705317
+    },
+    {
+      "pair": "Fv2-01/base vs Fv2-01/pose",
+      "label": "genuine",
+      "cosine": 0.717048
+    },
+    {
+      "pair": "Fv2-03/base vs Fv2-03/luz",
+      "label": "genuine",
+      "cosine": 0.799269
+    },
+    {
+      "pair": "Fv2-03/base vs Fv2-03/oclusion",
+      "label": "genuine",
+      "cosine": 0.870528
+    },
+    {
+      "pair": "Fv2-03/base vs Fv2-03/pose",
+      "label": "genuine",
+      "cosine": 0.473587
+    },
+    {
+      "pair": "Fv2-04/base vs Fv2-04/luz",
+      "label": "genuine",
+      "cosine": 0.935518
+    },
+    {
+      "pair": "Fv2-04/base vs Fv2-04/oclusion",
+      "label": "genuine",
+      "cosine": 0.573436
+    },
+    {
+      "pair": "Fv2-04/base vs Fv2-04/pose",
+      "label": "genuine",
+      "cosine": 0.626537
+    },
+    {
+      "pair": "Fv2-05/base vs Fv2-05/luz",
+      "label": "genuine",
+      "cosine": 0.879619
+    },
+    {
+      "pair": "Fv2-05/base vs Fv2-05/oclusion",
+      "label": "genuine",
+      "cosine": 0.83316
+    },
+    {
+      "pair": "Fv2-05/base vs Fv2-05/pose",
+      "label": "genuine",
+      "cosine": 0.761279
+    },
+    {
+      "pair": "Fv2-06/base vs Fv2-06/luz",
+      "label": "genuine",
+      "cosine": 0.943568
+    },
+    {
+      "pair": "Fv2-06/base vs Fv2-06/oclusion",
+      "label": "genuine",
+      "cosine": 0.740442
+    },
+    {
+      "pair": "Fv2-06/base vs Fv2-06/pose",
+      "label": "genuine",
+      "cosine": 0.760452
+    },
+    {
+      "pair": "Fv2-07/base vs Fv2-07/luz",
+      "label": "genuine",
+      "cosine": 0.839128
+    },
+    {
+      "pair": "Fv2-07/base vs Fv2-07/oclusion",
+      "label": "genuine",
+      "cosine": 0.681348
+    },
+    {
+      "pair": "Fv2-07/base vs Fv2-07/pose",
+      "label": "genuine",
+      "cosine": 0.690204
+    },
+    {
+      "pair": "Fv2-08/base vs Fv2-08/luz",
+      "label": "genuine",
+      "cosine": 0.747579
+    },
+    {
+      "pair": "Fv2-08/base vs Fv2-08/oclusion",
+      "label": "genuine",
+      "cosine": 0.562805
+    },
+    {
+      "pair": "Fv2-08/base vs Fv2-08/pose",
+      "label": "genuine",
+      "cosine": 0.71904
+    },
+    {
+      "pair": "Fv2-09/base vs Fv2-09/luz",
+      "label": "genuine",
+      "cosine": 0.826538
+    },
+    {
+      "pair": "Fv2-09/base vs Fv2-09/oclusion",
+      "label": "genuine",
+      "cosine": 0.877171
+    },
+    {
+      "pair": "Fv2-09/base vs Fv2-09/pose",
+      "label": "genuine",
+      "cosine": 0.779917
+    },
+    {
+      "pair": "Fv2-18/base vs Fv2-18/luz",
+      "label": "genuine",
+      "cosine": 0.909202
+    },
+    {
+      "pair": "Fv2-18/base vs Fv2-18/oclusion",
+      "label": "genuine",
+      "cosine": 0.722682
+    },
+    {
+      "pair": "Fv2-18/base vs Fv2-18/pose",
+      "label": "genuine",
+      "cosine": 0.772907
+    },
+    {
+      "pair": "Fv2-01/base vs Fv2-03/base",
+      "label": "impostor",
+      "cosine": 0.803587
+    },
+    {
+      "pair": "Fv2-01/base vs Fv2-04/base",
+      "label": "impostor",
+      "cosine": 0.669112
+    },
+    {
+      "pair": "Fv2-01/base vs Fv2-05/base",
+      "label": "impostor",
+      "cosine": 0.482695
+    },
+    {
+      "pair": "Fv2-01/base vs Fv2-06/base",
+      "label": "impostor",
+      "cosine": 0.641377
+    },
+    {
+      "pair": "Fv2-01/base vs Fv2-07/base",
+      "label": "impostor",
+      "cosine": 0.785013
+    },
+    {
+      "pair": "Fv2-01/base vs Fv2-08/base",
+      "label": "impostor",
+      "cosine": 0.608483
+    },
+    {
+      "pair": "Fv2-01/base vs Fv2-09/base",
+      "label": "impostor",
+      "cosine": 0.683011
+    },
+    {
+      "pair": "Fv2-01/base vs Fv2-18/base",
+      "label": "impostor",
+      "cosine": 0.627773
+    },
+    {
+      "pair": "Fv2-03/base vs Fv2-04/base",
+      "label": "impostor",
+      "cosine": 0.370247
+    },
+    {
+      "pair": "Fv2-03/base vs Fv2-05/base",
+      "label": "impostor",
+      "cosine": 0.241832
+    },
+    {
+      "pair": "Fv2-03/base vs Fv2-06/base",
+      "label": "impostor",
+      "cosine": 0.418572
+    },
+    {
+      "pair": "Fv2-03/base vs Fv2-07/base",
+      "label": "impostor",
+      "cosine": 0.644389
+    },
+    {
+      "pair": "Fv2-03/base vs Fv2-08/base",
+      "label": "impostor",
+      "cosine": 0.391905
+    },
+    {
+      "pair": "Fv2-03/base vs Fv2-09/base",
+      "label": "impostor",
+      "cosine": 0.41958
+    },
+    {
+      "pair": "Fv2-03/base vs Fv2-18/base",
+      "label": "impostor",
+      "cosine": 0.310215
+    },
+    {
+      "pair": "Fv2-04/base vs Fv2-05/base",
+      "label": "impostor",
+      "cosine": 0.563819
+    },
+    {
+      "pair": "Fv2-04/base vs Fv2-06/base",
+      "label": "impostor",
+      "cosine": 0.729964
+    },
+    {
+      "pair": "Fv2-04/base vs Fv2-07/base",
+      "label": "impostor",
+      "cosine": 0.715597
+    },
+    {
+      "pair": "Fv2-04/base vs Fv2-08/base",
+      "label": "impostor",
+      "cosine": 0.692411
+    },
+    {
+      "pair": "Fv2-04/base vs Fv2-09/base",
+      "label": "impostor",
+      "cosine": 0.776149
+    },
+    {
+      "pair": "Fv2-04/base vs Fv2-18/base",
+      "label": "impostor",
+      "cosine": 0.896875
+    },
+    {
+      "pair": "Fv2-05/base vs Fv2-06/base",
+      "label": "impostor",
+      "cosine": 0.523117
+    },
+    {
+      "pair": "Fv2-05/base vs Fv2-07/base",
+      "label": "impostor",
+      "cosine": 0.579222
+    },
+    {
+      "pair": "Fv2-05/base vs Fv2-08/base",
+      "label": "impostor",
+      "cosine": 0.616972
+    },
+    {
+      "pair": "Fv2-05/base vs Fv2-09/base",
+      "label": "impostor",
+      "cosine": 0.65025
+    },
+    {
+      "pair": "Fv2-05/base vs Fv2-18/base",
+      "label": "impostor",
+      "cosine": 0.59783
+    },
+    {
+      "pair": "Fv2-06/base vs Fv2-07/base",
+      "label": "impostor",
+      "cosine": 0.697227
+    },
+    {
+      "pair": "Fv2-06/base vs Fv2-08/base",
+      "label": "impostor",
+      "cosine": 0.804053
+    },
+    {
+      "pair": "Fv2-06/base vs Fv2-09/base",
+      "label": "impostor",
+      "cosine": 0.773981
+    },
+    {
+      "pair": "Fv2-06/base vs Fv2-18/base",
+      "label": "impostor",
+      "cosine": 0.786215
+    },
+    {
+      "pair": "Fv2-07/base vs Fv2-08/base",
+      "label": "impostor",
+      "cosine": 0.693856
+    },
+    {
+      "pair": "Fv2-07/base vs Fv2-09/base",
+      "label": "impostor",
+      "cosine": 0.669513
+    },
+    {
+      "pair": "Fv2-07/base vs Fv2-18/base",
+      "label": "impostor",
+      "cosine": 0.717443
+    },
+    {
+      "pair": "Fv2-08/base vs Fv2-09/base",
+      "label": "impostor",
+      "cosine": 0.741161
+    },
+    {
+      "pair": "Fv2-08/base vs Fv2-18/base",
+      "label": "impostor",
+      "cosine": 0.755273
+    },
+    {
+      "pair": "Fv2-09/base vs Fv2-18/base",
+      "label": "impostor",
+      "cosine": 0.845867
+    }
+  ]
+}

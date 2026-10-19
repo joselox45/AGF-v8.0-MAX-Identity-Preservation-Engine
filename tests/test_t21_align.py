@@ -21,9 +21,13 @@ class TestBlazeFace(unittest.TestCase):
         d = dets[0]
         self.assertGreater(d.score, 0.99)
         a = anchors[100]
-        self.assertAlmostEqual((d.box[0] + d.box[2]) / 2, a.cx * 128, places=2)
+        # box = (ymin, xmin, ymax, xmax), en coordenadas normalizadas.
+        self.assertAlmostEqual((d.box[0] + d.box[2]) / 2, a.cy, places=6)
+        self.assertAlmostEqual((d.box[1] + d.box[3]) / 2, a.cx, places=6)
         self.assertGreater(d.keypoints[1][0], d.keypoints[0][0])
-        self.assertAlmostEqual(d.keypoints[1][0] - d.keypoints[0][0], 1.0, places=2)
+        self.assertAlmostEqual(
+            d.keypoints[1][0] - d.keypoints[0][0], 1.0 / 128.0, places=6
+        )
 
     def test_decode_no_blowup_con_valores_reales(self):
         anchors = generate_anchors()
