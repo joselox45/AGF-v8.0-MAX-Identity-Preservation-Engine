@@ -1,3 +1,25 @@
+## Current status (2026-10-19) — read this first
+
+This repository self-audits. On 2026-10-18 we discovered — via our own
+hash-chained evidence vault — that the face detector (BlazeFace decoder) had
+wrong anchors, wrong input range, and wrong geometry **since the first commit**,
+and that the embedder's input normalization had been misused. **Every biometric
+result before that date is void** (docs/ERRATA.md §7), including results this
+README previously described.
+
+What works today (canonical v3): BlazeFace 2-layer (letterbox 128, [-1,1],
+linear decode) + FaceNet (norm [-1,1]) + 160px alignment + median-of-3 +
+single thread. First honest calibration (docs/ERRATA.md §9, 9 generated
+identities x 4 variants, 8 different generators, chain-of-custody'd):
+threshold 0.79 (Youden, provisional), FAR 0.056 [95% CI 0.015-0.18],
+EER ~ 0.31. Small corpus, wide CIs, no production claims.
+
+Tests: 114/114 passing on canonical v3. The evidence vault
+(`python tools/vault.py verify`) is the source of truth for what was measured,
+when, and with what pipeline.
+
+---
+
 # AGF v8 MAX — Identity Preservation Engine
 
 Motor de preservación de identidad con **ejecución estricta en la ventana de chat**
