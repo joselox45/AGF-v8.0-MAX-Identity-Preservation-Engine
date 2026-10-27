@@ -86,6 +86,12 @@ def at_threshold(rows, t):
 
 def main(a):
     import numpy as np
+    if a.corpus == "v2" and not a.detector:
+        print(json.dumps({
+            "status": "BLOCKED",
+            "reason": "corpus_v2 requiere detector facial explícito"
+        }, ensure_ascii=False))
+        sys.exit(2)
     from PIL import Image
     sys.path.insert(0, os.path.join(REPO, "src"))
     from tflite_embedder import TFLiteFaceEmbedder
@@ -123,15 +129,30 @@ def main(a):
 
     def prep(path):
         img = Image.open(path).convert("RGB")
-        if det is not None:
-            r = det.detect(np.asarray(img).tolist())
-            if r.status == "PASS" and r.detections:
-                return np.asarray(align_face(img, r.detections[0].keypoints, int(os.environ.get("AGF_ALIGN", "160"))))
-        return np.asarray(img)
+        if det is None:
+            return None if a.corpus == "v2" else np.asarray(img)
+        r = det.detect(np.asarray(img).tolist())
+        if r.status == "PASS" and r.detections:
+            return np.asarray(align_face(
+                img, r.detections[0].keypoints,
+                int(os.environ.get("AGF_ALIGN", "160"))
+            ))
+        return None
 
     corpus_dir = os.path.join(REPO, "data", f"corpus_{a.corpus}")
     man = json.load(open(os.path.join(corpus_dir, "manifest.json")))
-    ids = sorted({k.split("/")[0] for k in man["files"]})
+    ids_manifest = sorted({k.split("/")[0] for k in man["files"]})
+    ids_excluidos = []
+    ids = list(ids_manifest)
+    if a.corpus == "v2":
+        ids_excluidos = [i for i in ids if i == "Fv2-09"]
+        ids = [i for i in ids if i != "Fv2-09"]
+    if not ids:
+        print(json.dumps({
+            "status": "BLOCKED",
+            "reason": "no quedan identidades elegibles"
+        }, ensure_ascii=False))
+        sys.exit(2)
 
     # custodia: verificamos sha256 de cada imagen contra el manifest
     custody_fail = []
@@ -140,10 +161,25 @@ def main(a):
         if not os.path.exists(p) or sha256_file(p) != meta["sha256"]:
             custody_fail.append(rel)
 
+    if custody_fail:
+        print(json.dumps({
+            "status": "BLOCKED",
+            "reason": "fallo de custodia SHA-256",
+            "files": custody_fail
+        }, ensure_ascii=False))
+        sys.exit(4)
+
     cache = {}
     def emb_of(rel):
         if rel not in cache:
-            v = embed_stable(prep(os.path.join(corpus_dir, rel)).tolist())
+            pixels = prep(os.path.join(corpus_dir, rel))
+            if pixels is None:
+                print(json.dumps({
+                    "status": "BLOCKED",
+                    "reason": f"sin detección facial válida: {rel}"
+                }, ensure_ascii=False))
+                sys.exit(3)
+            v = embed_stable(pixels.tolist())
             if v is None:
                 out = {"status": "BLOCKED", "layer": "L2",
                        "reason": f"embedding fallo para {rel} (N={EMB_RUNS})"}
@@ -180,15 +216,24 @@ def main(a):
                 "TAR_ci95": wilson_ci(kg, ng), "FAR_ci95": wilson_ci(ki, ni)}
 
     summary = {
-        "corpus": {"name": man["corpus"], "n_ids": len(ids),
-                   "modelo_base": man.get("modelo_base", "fotorealista-multi-generador"),
-                   "limitacion": "procedural-parametrico: pipeline-validation ONLY, no fotorealista",
-                   "custodia_sha256": "VERIFIED" if not custody_fail else f"FALLA: {custody_fail}"},
+        "corpus": {
+            "name": man["corpus"],
+            "n_ids": len(ids),
+            "ids_incluidos": ids,
+            "ids_excluidos": ids_excluidos,
+            "modelo_base": man.get("modelo_base", "no declarado"),
+            "limitacion": man.get("limitacion", "limitacion no declarada en el manifiesto"),
+            "custodia_sha256": "VERIFIED" if not custody_fail else f"FALLA: {custody_fail}"
+        },
         "modelo": {"embedder": emb.model_id, "kind": a.kind, "normalize": a.norm,
                    "detector_sha256": sha256_file(a.detector) if a.detector else None,
                    "emb_runs_mediana": EMB_RUNS, "threads": 1},
         "n_genuine": ng, "n_impostor": ni,
         "umbral_actual_0.65": metric_at(cur),
+        "candidatos_experimentales": {
+            str(t): metric_at(at_threshold(rows, t))
+            for t in (0.65, 0.79, 0.85, 0.90)
+        },
         "umbral_youden": metric_at(best_y),
         "umbral_eer": metric_at(eer),
         "recomendacion": None,
@@ -197,15 +242,31 @@ def main(a):
     summary["recomendacion"] = {
         "threshold": rec["threshold"],
         "criterio": "youden_j" if rec is best_y else "eer",
-        "NOTA": "valido solo para este corpus; recalibrar con corpus fotorealista (roadmap #5)"}
+        "NOTA": (
+            "calibracion piloto sobre corpus v2 parcial; identidades ground truth por construccion; "
+            "no demuestra generalizacion a personas reales ni certifica preservacion biometrica"
+            if a.corpus == "v2" else
+            "valido solo como resultado de este corpus; no asumir rendimiento en datos reales"
+        )
+    }
 
     ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     out_path = a.out or os.path.join(REPO, "evidence", f"calibration_{man['corpus']}_{ts}.json")
-    out = {"status": "PASS", "tipo": "CALIBRACION_UMBRAL", "created_utc": ts,
-           "summary": summary, "scores": pairs}
+    out = {
+        "status": "PASS",
+        "certificacion_identidad": "NOT_CERTIFIED",
+        "significado_status": "PASS indica que el proceso de calibracion termino; no certifica identidad ni generalizacion",
+        "tipo": "CALIBRACION_UMBRAL",
+        "created_utc": ts,
+        "summary": summary,
+        "scores": pairs
+    }
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=2)
-    print(json.dumps({"status": "PASS", "out": out_path,
+    print(json.dumps({"status": "PASS",
+                      "certificacion_identidad": "NOT_CERTIFIED",
+                      "significado_status": "ejecucion completada; no es certificacion biometrica",
+                      "out": out_path,
                       "umbral_actual_0.65": summary["umbral_actual_0.65"],
                       "umbral_youden": summary["umbral_youden"],
                       "umbral_eer": summary["umbral_eer"],

@@ -2,25 +2,28 @@
   "T22": {
     "status": "PASS",
     "model_id": "facenet:tflite:54660297ebad23b7",
-    "evidence_hash": "0f3b8765153a67651ff2113db5916dda994a7e1168f845c6ee064f8d2bfffb50f9171a4aeaab1f31568474e26c4563f35a18fbb65a502435a987801ead32647f",
-    "weights_sha256": "54660297ebad23b7106a8ccd05f2f2f616b3d39bf7d7e82e148cf8ed7e27ae1a"
+    "evidence_hash": "7a359b426e0ffd6c1f168dc7776a7b0f0c74778c1a1a07ddb7103788a868d5011002cabc92c573054d10bae3e7c6c6af17e43afa37fab4c9b1194765f65c54d5",
+    "weights_sha256": "54660297ebad23b7106a8ccd05f2f2f616b3d39bf7d7e82e148cf8ed7e27ae1a",
+    "pipeline": "sin_detector:imagen_completa"
   },
   "T21": {
     "status": "BLOCKED",
-    "reason": "correr este closure con modelo arcface.tflite"
+    "reason": "correr con modelo arcface.tflite"
   },
   "verification": {
     "rule": "FACE_VERIFY_TFLITE",
-    "cosine": 0.967478,
+    "cosine": 0.898106,
     "status": "PASS",
-    "reason": "cosine 0.9675 vs umbral 0.65",
-    "evidence_hash": "9da8503b3cc5da5ec2f34ecf7ac0f0c042edbf0ed6e5453087a1262ca167e8c15276157ad4c4bc91843b1869208b1e5e9373919276392e6e4302ccbb18e2bcf1"
+    "reason": "cosine 0.8981 vs umbral 0.65",
+    "evidence_hash": "ee2eb1a740bd698edeb18768291f99313a2bb3ab78e3db942d85d3ca60ea439518d89f1669b6a2ecf72119ebcf101d8f4e97ed12af70ab61c988519be0550f4f"
   },
   "_meta": {
-    "ts": "2026-10-06T23:57:35.195589+00:00",
+    "ts": "2026-10-27T07:33:08.974378+00:00",
     "kind": "facenet",
     "normalize_mode": "raw",
     "host": "termux",
-    "fail_closed": true
+    "fail_closed": true,
+    "ref_sha256": "5792ca294b8e86c92b486c096c8c167ffa76151ff04d85736f93db197e432b69",
+    "tgt_sha256": "2932b8f074af441697eb2b7d7cb0e6edd68cfc2639fa23104951e416dbda72e0"
   }
 }

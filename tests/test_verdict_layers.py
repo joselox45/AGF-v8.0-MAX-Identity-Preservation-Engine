@@ -33,9 +33,11 @@ class TestLayers(unittest.TestCase):
         v = self.vl.evaluate(**base(biometric_status="FAIL", cosine=0.3))
         self.assertEqual(v.L3_identity, "REFUTED")
 
-    def test_antireplay_falla_biometria(self):
+    def test_antireplay_bloquea_sin_afirmar_fraude(self):
         v = self.vl.evaluate(**base(anti_replay_clean=False))
-        self.assertEqual(v.L2_biometric, "FAIL")
+        self.assertEqual(v.L2_biometric, "BLOCKED")
+        self.assertEqual(v.L3_identity, "NOT_DETERMINED")
+        self.assertTrue(any("no constituye" in r for r in v.reasons))
 
     def test_default_fail_closed(self):
         v = self.vl.evaluate(formal_status="BLOCKED", biometric_status="BLOCKED",

@@ -64,8 +64,11 @@ class VerdictLayers:
 
         # ---- L2: biometria tal cual + anti-replay es condicion
         if not anti_replay_clean:
-            biometric_status = "FAIL"
-            reasons.append("L2: anti-replay disparado (vectores idénticos) -> FAIL")
+            biometric_status = "BLOCKED"
+            reasons.append(
+                "L2: revisión anti-replay requerida -> BLOCKED; "
+                "no constituye por sí sola prueba de fraude"
+            )
         if biometric_status not in BIOMETRIC_STATES:
             biometric_status = "BLOCKED"
             reasons.append("L2: estado biometrico invalido -> BLOCKED")
