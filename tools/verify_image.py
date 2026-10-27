@@ -98,7 +98,7 @@ anti_replay = v["status"] != "FAIL" or "REQUIRES_REVIEW" not in v.get("reason", 
 vl = VerdictLayers().evaluate(
     formal_status=L1,
     biometric_status=v["status"] if v["status"] in ("PASS", "FAIL") else "BLOCKED",
-    cosine=v.get("cosine"), threshold=0.65,
+    cosine=v.get("cosine"), threshold=0.79,
     provenance_declared=a.provenance_declared,
     cross_person_tested=a.cross_tested,
     anti_replay_clean=anti_replay)
