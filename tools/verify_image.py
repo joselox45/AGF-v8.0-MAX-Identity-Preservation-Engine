@@ -90,7 +90,7 @@ _r, _c = _R(), _R()
 _r.status = EmbeddingStatus.PASS; _r.vector = vr
 _r.model_id = emb.model_id; _r.reason = "stable-median"
 _c.status = EmbeddingStatus.PASS; _c.vector = vc; _c.model_id = emb.model_id; _c.reason = "stable-median"
-comp = VectorComparator(threshold=0.65)
+comp = VectorComparator(threshold=0.79)
 v = comp.verify(_r, _c)
 
 L1 = "PASS" if v.get("evidence_hash") else "BLOCKED"
