@@ -36,7 +36,8 @@ class EmbeddingResult:
 class TFLiteFaceEmbedder:
     MODEL_SPECS = {
         "arcface": {"input_size": (112, 112), "output_dim": 512},
-        "facenet": {"input_size": (160, 160), "output_dim": 128},
+        # La salida observada del artefacto custodiado es 512; identidad semantica pendiente de confirmar.
+        "facenet": {"input_size": (160, 160), "output_dim": 512},
     }
 
     def __init__(self, model_kind: str, model_bytes: Optional[bytes] = None,
@@ -82,8 +83,52 @@ class TFLiteFaceEmbedder:
             self._interp = Interpreter(model_path=path, num_threads=self._threads)
             os.unlink(path)
             self._interp.allocate_tensors()
-            self._in_idx = self._interp.get_input_details()[0]["index"]
-            self._out_idx = self._interp.get_output_details()[0]["index"]
+
+            inputs = self._interp.get_input_details()
+            outputs = self._interp.get_output_details()
+
+            if len(inputs) != 1:
+                raise ValueError(
+                    f"contrato incompatible: se esperaba 1 entrada, "
+                    f"observadas {len(inputs)}"
+                )
+            if len(outputs) != 1:
+                raise ValueError(
+                    f"contrato incompatible: se esperaba 1 salida, "
+                    f"observadas {len(outputs)}"
+                )
+
+            expected_input = (1, *self.spec["input_size"], 3)
+            expected_output = (1, self.spec["output_dim"])
+
+            actual_input = tuple(int(x) for x in inputs[0]["shape"])
+            actual_output = tuple(int(x) for x in outputs[0]["shape"])
+
+            if actual_input != expected_input:
+                raise ValueError(
+                    f"forma de entrada incompatible: "
+                    f"{actual_input} != {expected_input}"
+                )
+            if actual_output != expected_output:
+                raise ValueError(
+                    f"forma de salida incompatible: "
+                    f"{actual_output} != {expected_output}"
+                )
+
+            for label, detail in (
+                ("entrada", inputs[0]), ("salida", outputs[0])
+            ):
+                dtype_name = getattr(
+                    detail["dtype"], "__name__", str(detail["dtype"])
+                ).split(".")[-1]
+                if dtype_name != "float32":
+                    raise ValueError(
+                        f"tipo de {label} incompatible: "
+                        f"{dtype_name}; se requiere float32"
+                    )
+
+            self._in_idx = inputs[0]["index"]
+            self._out_idx = outputs[0]["index"]
             self.model_id = (f"{self.model_kind}:tflite:"
                              + hashlib.sha256(model_bytes).hexdigest()[:16])
         except Exception:
@@ -136,7 +181,7 @@ class TFLiteFaceEmbedder:
 class VectorComparator:
     COSINE_IDENTICAL_TOLERANCE = 0.99999
 
-    def __init__(self, threshold: float = 0.65,
+    def __init__(self, threshold: float = 0.79,
                  identical_tolerance: float = COSINE_IDENTICAL_TOLERANCE):
         self.threshold = threshold
         self.identical_tolerance = identical_tolerance

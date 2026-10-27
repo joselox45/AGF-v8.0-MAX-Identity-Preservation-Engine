@@ -242,7 +242,7 @@ class IdentityVerifier:
     RESTORE_ACCEPTABLE = ("RECOVERED", "RECONSTRUCTED")
 
     def __init__(self, embedder: Optional[Embedder] = None,
-                 threshold: float = 0.65):
+                 threshold: float = 0.79):
         self.embedder = embedder
         self.threshold = threshold
 

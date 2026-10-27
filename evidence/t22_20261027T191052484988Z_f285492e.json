@@ -1,0 +1,30 @@
+{
+  "T22": {
+    "status": "PASS",
+    "model_id": "facenet:tflite:54660297ebad23b7",
+    "evidence_hash": "3cf94d22fae640895af1324490ce58a6f305edc224790b9661cddad678845c65263d6632f0b3fde8276b3c493cd78750097d133aeaf2493b609343aa0d2c3caa",
+    "weights_sha256": "54660297ebad23b7106a8ccd05f2f2f616b3d39bf7d7e82e148cf8ed7e27ae1a",
+    "pipeline": "sin_detector:imagen_completa"
+  },
+  "T21": {
+    "status": "BLOCKED",
+    "reason": "correr con modelo arcface.tflite"
+  },
+  "verification": {
+    "rule": "FACE_VERIFY_TFLITE",
+    "cosine": 0.962945,
+    "status": "PASS",
+    "reason": "cosine 0.9629 vs umbral 0.65",
+    "evidence_hash": "14b41858c49a00ff08d1d9b481efd56af7b40477689ac7fd8a4607d5f1a7571ac6546ad75d2d66c4b1f5f73fbe32ba9a774274ce75930fbe360afe29f338898e"
+  },
+  "_meta": {
+    "ts": "2026-10-27T19:10:52.483512+00:00",
+    "kind": "facenet",
+    "normalize_mode": "arcface",
+    "host": "termux",
+    "fail_closed": true,
+    "assurance_level": "FULL_FRAME_NO_DETECTOR",
+    "ref_sha256": "d8027e585174dee27fd030db934db055904427224a8b81580ed77f6356f70b74",
+    "tgt_sha256": "14b345f4ec100169d9f916bced5f202cf9e1706efe49daac0b05e53ef076edf1"
+  }
+}

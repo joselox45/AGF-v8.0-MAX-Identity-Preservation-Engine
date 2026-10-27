@@ -13,8 +13,23 @@ class FakeInterp:
     def __init__(self, model_path=None, model_content=None, num_threads=1):
         self._tensors = {}
     def allocate_tensors(self): pass
-    def get_input_details(self): return [{"index": 0}]
-    def get_output_details(self): return [{"index": 1}]
+    def get_input_details(self):
+        import numpy as np
+        size = 160 if getattr(self, "facenet_test", False) else 112
+        return [{
+            "index": 0,
+            "shape": np.array([1, size, size, 3]),
+            "dtype": np.float32,
+        }]
+
+    def get_output_details(self):
+        import numpy as np
+        dim = getattr(self, "output_dim_test", 512)
+        return [{
+            "index": 1,
+            "shape": np.array([1, dim]),
+            "dtype": np.float32,
+        }]
     def set_tensor(self, idx, val): self._tensors[idx] = val
     def invoke(self): pass
     def get_tensor(self, idx):
@@ -45,6 +60,30 @@ class TestTFLiteEmbedder(unittest.TestCase):
             self.assertEqual(r.status, te.EmbeddingStatus.PASS)
             self.assertAlmostEqual(r.norm, 1.0, places=5)
             self.assertTrue(r.evidence_hash)
+        finally:
+            te.TFLiteFaceEmbedder._get_interpreter_class = orig
+
+    def test_rejects_wrong_output_dimension(self):
+        orig = te.TFLiteFaceEmbedder._get_interpreter_class
+
+        class WrongOutputInterp(FakeInterp):
+            def get_output_details(self):
+                import numpy as np
+                return [{
+                    "index": 1,
+                    "shape": np.array([1, 128]),
+                    "dtype": np.float32,
+                }]
+
+        te.TFLiteFaceEmbedder._get_interpreter_class = (
+            lambda self: WrongOutputInterp
+        )
+        try:
+            e = te.TFLiteFaceEmbedder("arcface", b"fake-model-bytes")
+            self.assertIsNone(
+                e._interp,
+                "el modelo incompatible debe quedar bloqueado"
+            )
         finally:
             te.TFLiteFaceEmbedder._get_interpreter_class = orig
 

@@ -81,6 +81,7 @@ def cmd_doctor(_):
              "PARCIAL (los componentes en False degradan a BLOCKED; nada se fabrica)"
     print(json.dumps({"estado": estado, "ok": f"{n_ok}/{len(checks)}",
                       "checks": checks}, indent=2, ensure_ascii=False))
+    sys.exit(0 if n_ok == len(checks) else 1)
 
 
 # ------------------------------------------------------------------ kernel
@@ -183,6 +184,10 @@ COMMANDS = {
 }
 
 if __name__ == "__main__":
+    if len(sys.argv) == 2 and sys.argv[1] in ("-h", "--help", "help"):
+        print(__doc__)
+        print("comandos:", ", ".join(COMMANDS))
+        sys.exit(0)
     if len(sys.argv) < 2 or sys.argv[1] not in COMMANDS:
         print(__doc__)
         print("comandos:", ", ".join(COMMANDS))

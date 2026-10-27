@@ -58,7 +58,7 @@ class VectorComparator:
 
     COSINE_IDENTICAL_TOLERANCE = 0.99999
 
-    def __init__(self, threshold: float = 0.65,
+    def __init__(self, threshold: float = 0.79,
                  identical_tolerance: float = COSINE_IDENTICAL_TOLERANCE):
         if not 0.0 < threshold < 1.0:
             raise ValueError("threshold debe estar en (0,1)")
