@@ -1,12 +1,15 @@
-__pycache__/
-*.pyc
-.DS_Store
-out/
-facenet.tflite
-arcface_digidow.tflite
-blaze_face_short_range.tflite
-evidence/base0_lock/
+# Ignorar imágenes de prueba
+*.jpg
+*.jpeg
+*.png
+*.webp
+
+# Ignorar modelos pesados
 *.tflite
+
+# Ignorar archivos temporales de Python
 __pycache__/
 *.pyc
-data/corpus_v2/Fv2-*/
+
+# Ignorar archivos de backup locales
+*.bak_*
