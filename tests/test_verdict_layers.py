@@ -6,7 +6,7 @@ from verdict_layers import VerdictLayers, IDENTITY_STATES
 
 def base(**kw):
     d = dict(formal_status="PASS", biometric_status="PASS", cosine=0.9,
-             threshold=0.65, provenance_declared=True, cross_person_tested=True,
+             threshold=0.79, provenance_declared=True, cross_person_tested=True,
              anti_replay_clean=True)
     d.update(kw)
     return d
@@ -41,7 +41,7 @@ class TestLayers(unittest.TestCase):
 
     def test_default_fail_closed(self):
         v = self.vl.evaluate(formal_status="BLOCKED", biometric_status="BLOCKED",
-                             cosine=None, threshold=0.65,
+                             cosine=None, threshold=0.79,
                              provenance_declared=False, cross_person_tested=False)
         self.assertEqual(v.L3_identity, "NOT_DETERMINED")
 
