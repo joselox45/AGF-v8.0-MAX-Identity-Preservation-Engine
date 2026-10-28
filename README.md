@@ -122,3 +122,5 @@ Empieza por docs/GLOSSARY.md: todo el proyecto son 3 conceptos
 | `docs/AGF_T21_T28_APCE_MAPPING.md` | Mapping con evidencia y gaps |
 | `docs/protocols/` | AKADI-OMEGA-LITE-O0 v18.0 (md/pdf/docx) |
 | `docs/GUION_VIDEO_60s.md` | Guion demo para redes |
+
+| `docs/governance/AGENTIC_ENGINEERING_v1.0.txt` | Especificación de Arquitectura Multi-Agente: Extracción, Guardián Biométrico, Generación y Ledger (Fail-Closed). |

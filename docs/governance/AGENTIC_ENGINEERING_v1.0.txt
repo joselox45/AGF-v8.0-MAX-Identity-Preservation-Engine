@@ -1,0 +1,454 @@
+================================================================================
+
+AGENTIC ENGINEERING – PRESERVACIÓN ESTRICTA DE IDENTIDAD
+
+A partir de una imagen de referencia
+
+Versión: 1.0 | Fail-Closed | Listo para implementación
+
+Fecha: 2026-08-03
+
+================================================================================
+
+
+
+1. OBJETIVO PRINCIPAL
+
+--------------------
+
+Diseñar e implementar un sistema multi-agente (Agentic Engineering) que 
+
+garantice la preservación ESTRICTA e INMUTABLE de la identidad biométrica 
+
+y visual de todos los sujetos presentes en una imagen de referencia.
+
+
+
+Ninguna transformación, generación, edición, estilización o re-síntesis 
+
+puede alterar la identidad de los sujetos más allá de un umbral de 
+
+similitud biométrica predefinido y auditable.
+
+
+
+Principio rector: FAIL-CLOSED.
+
+Si no se puede demostrar con evidencia cuantitativa que la identidad se 
+
+mantiene, la operación se bloquea.
+
+
+
+2. DEFINICIÓN DE “IDENTIDAD”
+
+----------------------------
+
+Identidad = combinación de:
+
+  • Embedding facial de alta dimensionalidad (ArcFace / InsightFace / 
+
+    FaceNet512 o superior)
+
+  • Landmarks geométricos 2D/3D normalizados
+
+  • Proporciones faciales (ratios de ratios craniofaciales)
+
+  • Características distintivas (lunares, cicatrices, forma de orejas, 
+
+    estructura ósea visible, etc.) cuando sean detectables
+
+  • Identity Token criptográfico (hash + firma + metadatos)
+
+
+
+Umbral de aceptación recomendado (configurables):
+
+  • Cosine Similarity ≥ 0.93  → ALLOW
+
+  • 0.88 ≤ Cosine Similarity < 0.93 → HOLD (revisión humana)
+
+  • Cosine Similarity < 0.88 → BLOCK
+
+
+
+3. ARQUITECTURA MULTI-AGENTE
+
+----------------------------
+
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+
+│                    IDENTITY PRESERVATION SYSTEM                     │
+
+│                         (Agentic Layer)                             │
+
+└─────────────────────────────────────────────────────────────────────┘
+
+                                  │
+
+          ┌───────────────────────┼───────────────────────┐
+
+          ▼                       ▼                       ▼
+
+┌──────────────────┐   ┌──────────────────┐   ┌──────────────────┐
+
+│ Identity         │   │ Identity Guard   │   │ Generation /     │
+
+│ Extraction       │   │ Agent            │   │ Transformation   │
+
+│ Agent            │   │ (Critic)         │   │ Agent            │
+
+└──────────────────┘   └──────────────────┘   └──────────────────┘
+
+          │                       │                       │
+
+          └───────────────────────┼───────────────────────┘
+
+                                  ▼
+
+                    ┌──────────────────────────┐
+
+                    │ Verification & Audit     │
+
+                    │ Agent + Decision Ledger  │
+
+                    └──────────────────────────┘
+
+                                  │
+
+                    ┌──────────────────────────┐
+
+                    │ Human Escalation Agent   │
+
+                    │ (opcional, cola)         │
+
+                    └──────────────────────────┘
+
+
+
+4. DESCRIPCIÓN DE CADA AGENTE
+
+-----------------------------
+
+
+
+4.1 Identity Extraction Agent
+
+    Responsabilidades:
+
+    - Detectar todos los rostros presentes (retinaface / yolov8-face).
+
+    - Extraer embedding de 512 dimensiones (InsightFace buffalo_l o 
+
+      modelo superior).
+
+    - Extraer 106/468 landmarks y ratios faciales.
+
+    - Generar Identity Token:
+
+          {
+
+            "subject_id": uuid,
+
+            "embedding": [...],          # normalizado L2
+
+            "landmarks_hash": sha256,
+
+            "image_hash": sha256(original),
+
+            "timestamp": iso8601,
+
+            "signature": HMAC-SHA256
+
+          }
+
+    - Almacenar token de forma inmutable (ledger + almacenamiento 
+
+      cifrado).
+
+
+
+4.2 Identity Guard Agent (el más crítico – Critic)
+
+    Responsabilidades:
+
+    - Recibir la imagen generada/editada.
+
+    - Re-extraer embedding y landmarks.
+
+    - Calcular cosine similarity + distancia euclidiana + error de 
+
+      landmarks.
+
+    - Aplicar política fail-closed:
+
+        IF similarity < threshold_high → BLOCK
+
+        IF threshold_low ≤ similarity < threshold_high → HOLD
+
+        ELSE → ALLOW
+
+    - Emitir DecisionRecord con evidencia cuantitativa.
+
+    - Nunca permite “face swap libre” ni reescritura de identidad.
+
+
+
+4.3 Generation / Transformation Agent
+
+    Responsabilidades:
+
+    - Recibir Identity Token + prompt de usuario + imagen de referencia.
+
+    - Utilizar exclusivamente técnicas identity-preserving:
+
+        • InstantID
+
+        • IP-Adapter-FaceID
+
+        • PhotoMaker
+
+        • FaceID + ControlNet
+
+        • PuLID
+
+        • Consistent Character pipelines
+
+    - Prohibido el uso de modelos de face-swap genéricos sin 
+
+      constraint de identidad.
+
+    - Debe devolver la imagen + el Identity Token original sin 
+
+      modificación.
+
+
+
+4.4 Verification & Audit Agent
+
+    Responsabilidades:
+
+    - Verificar integridad del Identity Token (firma + hash chain).
+
+    - Registrar toda decisión en DecisionLedger (mismo diseño que el 
+
+      ledger de gobernanza LLM ya implementado).
+
+    - Generar reporte de auditoría forense.
+
+    - Detectar intentos de bypass (inyección de embeddings, 
+
+      adversarial patches, etc.).
+
+
+
+4.5 Human Escalation Agent
+
+    Responsabilidades:
+
+    - Recibir casos HOLD.
+
+    - Encolar en sistema de revisión humana (Redis / PostgreSQL).
+
+    - Notificar revisores.
+
+    - Registrar resolución (APPROVED / REJECTED) y actualizar ledger.
+
+
+
+5. FLUJO DE EJECUCIÓN (STRICT)
+
+------------------------------
+
+
+
+1. Usuario sube imagen de referencia (o se carga desde almacenamiento).
+
+2. Identity Extraction Agent genera Identity Token(s) por sujeto.
+
+3. Token se firma y se registra en ledger (SESSION_START + 
+
+   IDENTITY_REGISTERED).
+
+4. Usuario solicita transformación / generación.
+
+5. Generation Agent produce candidato usando técnicas 
+
+   identity-preserving.
+
+6. Identity Guard Agent evalúa similitud.
+
+7. Decision:
+
+   - ALLOW  → se entrega imagen + token
+
+   - HOLD   → se escala a humano
+
+   - BLOCK  → se rechaza y se registra motivo
+
+8. Verification & Audit Agent cierra el registro (hash chain).
+
+
+
+6. POLÍTICAS DE SEGURIDAD Y COMPLIANCE
+
+-------------------------------------
+
+• Fail-closed por defecto.
+
+• Toda decisión es auditable e inmutable (hash chain).
+
+• No se permite degradación de identidad aunque el usuario lo pida.
+
+• Soporte multi-sujeto (cada sujeto tiene su propio token).
+
+• Detección de deepfake / identity swap adversario.
+
+• Compatible con requisitos GDPR / HIPAA / regulaciones de identidad 
+
+  digital (cuando se almacenen datos biométricos se requiere 
+
+  consentimiento y cifrado).
+
+
+
+7. STACK TÉCNICO RECOMENDADO
+
+----------------------------
+
+Extracción:
+
+  - insightface (buffalo_l o antelopev2)
+
+  - onnxruntime / tensorrt
+
+  - mediapipe (landmarks)
+
+
+
+Generación:
+
+  - InstantID / IP-Adapter-FaceID / PuLID
+
+  - Diffusers + ControlNet
+
+  - ComfyUI o pipeline personalizado
+
+
+
+Orquestación:
+
+  - LangGraph / CrewAI / AutoGen / custom asyncio agents
+
+  - Redis (cola + cache de tokens)
+
+  - PostgreSQL o SQLite (ledger)
+
+  - Hash chain SHA-256
+
+
+
+Infraestructura:
+
+  - GPU (recomendado A10 / L40S / H100 para producción)
+
+  - API gateway con autenticación
+
+  - Logging estructurado + Prometheus
+
+
+
+8. INTEGRACIÓN CON EL MARCO DE GOBERNANZA EXISTENTE
+
+--------------------------------------------------
+
+Este sistema se integra directamente con:
+
+  • GovernanceOrchestrator
+
+  • DecisionLedger
+
+  • SessionManager
+
+  • HumanEscalationManager
+
+  • PolicyEngine
+
+
+
+Cada decisión de identidad se registra como:
+
+  decision_type = "IDENTITY_ALLOW" | "IDENTITY_HOLD" | "IDENTITY_BLOCK"
+
+
+
+9. MÉTRICAS DE ÉXITO
+
+--------------------
+
+• Tasa de BLOCK falsa (identidad realmente preservada pero bloqueada) 
+
+  < 2 %
+
+• Tasa de ALLOW falsa (identidad alterada pero permitida) = 0 % 
+
+  (objetivo crítico)
+
+• Latencia p95 de verificación < 800 ms (GPU)
+
+• Cobertura de auditoría = 100 %
+
+
+
+10. LIMITACIONES CONOCIDAS
+
+--------------------------
+
+• Imágenes de muy baja resolución o ángulos extremos reducen 
+
+  confianza del embedding.
+
+• Oclusiones graves (máscaras, gafas oscuras, manos) pueden 
+
+  forzar HOLD.
+
+• Cambios extremos de edad / género / etnia no se permiten 
+
+  (violan el principio de preservación estricta).
+
+• El sistema no “inventa” identidad; solo la protege.
+
+
+
+11. PRÓXIMOS PASOS DE IMPLEMENTACIÓN
+
+------------------------------------
+
+1. Implementar Identity Extraction Agent (código Python + InsightFace).
+
+2. Implementar Identity Guard Agent con umbrales configurables.
+
+3. Conectar con pipeline InstantID / IP-Adapter.
+
+4. Integrar DecisionLedger ya existente.
+
+5. Añadir tests de adversario (face-swap attacks, embedding injection).
+
+6. Desplegar en entorno de staging con fail-closed.
+
+
+
+================================================================================
+
+FIN DEL DOCUMENTO
+
+Este archivo constituye la especificación oficial de Agentic Engineering 
+
+para preservación estricta de identidad a partir de imagen de referencia.
+
+Puede ser utilizado directamente como base de implementación.
+
+================================================================================
+
