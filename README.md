@@ -1,126 +1,30 @@
-## Current status (2026-10-19) — read this first
+cd ~/AGF-v8.0-MAX-Identity-Preservation-Engine
+cat << 'EOF' > README.md
+# AGF — Identity Preservation Engine (v8.0-MAX / v9.0-LIMBAL)
 
-This repository self-audits. On 2026-10-18 we discovered — via our own
-hash-chained evidence vault — that the face detector (BlazeFace decoder) had
-wrong anchors, wrong input range, and wrong geometry **since the first commit**,
-and that the embedder's input normalization had been misused. **Every biometric
-result before that date is void** (docs/ERRATA.md §7), including results this
-README previously described.
+**Motor de preservación de identidad con ejecución estricta, decisión adaptativa y gobernanza Fail-Closed.**
 
-What works today (canonical v3): BlazeFace 2-layer (letterbox 128, [-1,1],
-linear decode) + FaceNet (norm [-1,1]) + 160px alignment + median-of-3 +
-single thread. First honest calibration (docs/ERRATA.md §9, 9 generated
-identities x 4 variants, 8 different generators, chain-of-custody'd):
-threshold 0.79 (Youden, provisional), FAR 0.056 [95% CI 0.015-0.18],
-EER ~ 0.31. Small corpus, wide CIs, no production claims.
+> **AVISO DE OPERADOR (FAIL-CLOSED):** Este repositorio es un marco de verificación determinista. Los LLMs (ChatGPT, Gemini, Grok, Meta AI) no pueden ejecutar FaceNet ni validar sus propias salidas; pueden alucinar métricas. La única fuente de verdad es la ejecución local del motor (Termux/PC) y la evidencia criptográfica (SHA-256) generada por el operador.
 
-Tests: 114/114 passing on canonical v3. The evidence vault
-(`python tools/vault.py verify`) is the source of truth for what was measured,
-when, and with what pipeline.
+## Estado Actual (Octubre 2026)
+*   **Motor Canónico v3:** BlazeFace 2-layer + FaceNet 160px + alineación + median-of-3.
+*   **Umbral Estricto:** `0.79` (Youden, provisional) — *Corregido del antiguo 0.65 en la auditoría H-01.*
+*   **Evolución v9.0-LIMBAL:** Transición de procesamiento secuencial a un **Motor de Decisión Adaptativo** (Filtros condicionales y Regla de Aborto).
+*   **Tests:** 114/114 pasando en el pipeline canónico.
 
----
+## Arquitectura y Capas
+El sistema opera en 5 capas de verificación para garantizar la integridad:
 
-# AGF v8 MAX — Identity Preservation Engine
+1.  **Deep Learning (FaceNet TFLite):** Verificación biométrica real (Cosine Similarity).
+2.  **Classical CV (OpenCV/Haar Cascade):** Detección y alineación facial clásica (`tools/forensic_analyzer.py`).
+3.  **Math Vectors (SciPy/NumPy):** Análisis matemático de píxeles (Distancia Euclidiana y Cosine de imagen completa).
+4.  **Anillo Limbal (v9.0):** Motor de decisión que evalúa Pérdida, Incentivo y Evidencia antes de aplicar cualquier filtro (`src/agf_v9_limbal.py`).
+5.  **Restauración Clásica:** Filtros matemáticos sin IA generativa (`tools/classic_restorer.py`).
 
-Motor de preservación de identidad con **ejecución estricta en la ventana de chat**
-de LLMs comerciales opacos (ChatGPT, Gemini, Grok, Meta AI). Sin API, sin plugins,
-sin acceso al modelo.
-
-**Precisión de enforcement (auditoría 2026-10-14):** AGF no puede imponer
-comportamiento al LLM (nadie puede, en caja negra). Lo que hace: (a) instruir
-con un kernel de mínima intervención, (b) exigir reporte de procedencia, y
-(c) **verificar biométricamente la salida del lado del operador y bloquear
-(BLOCKED) lo que no evidencia identidad**. Es observabilidad + decisión
-post-hoc fail-closed, no prevención en el modelo. Ver docs/GLOSSARY.md.
-
-## Uso en 30 segundos (operador)
+## Uso Rápido (30 segundos en Termux)
 
 ```bash
 git clone https://github.com/joselox45/AGF-v8.0-MAX-Identity-Preservation-Engine.git
 cd AGF-v8.0-MAX-Identity-Preservation-Engine
-python agf.py doctor    # autodiagnóstico (9/9 OPERATIVO en Termux)
-python agf.py go        # kernel como artefacto firmado (out/ + sha256)
-                        # opcional: --clipboard (no recomendado: clipboard managers)
-```
-
-1. Abre tu chatbot → adjunta imagen de referencia + objetivo → pega → envía.
-2. Recibes la imagen editada + `[AGF_VERIFICATION_REPORT]` (procedencia forzada).
-3. Verificación biométrica opcional en tu equipo: `python agf.py closure A.jpg B.jpg modelo.tflite facenet raw`
-
-El tercero **no necesita leer el prompt**: `agf.py go` lo entrega listo para pegar.
-
-## Qué garantiza el sistema
-
-- **Fail-closed en el veredicto**: sin evidencia → BLOCKED. Nunca se fabrica
-  un *veredicto* (demostrado en vivo: un PASS dudoso detectado y rechazado —
-  evidence/t21.json). La generación en el LLM sí fabrica píxeles (toda
-  generación lo hace): por eso la fabricación se **acota** (mínima
-  intervención) y se **verifica** post-hoc. No afirmamos zero-fabrication
-  de píxeles; afirmamos zero-fabrication de *aseguramientos*.
-- **Verificación biométrica real**: FaceNet TFLite en Android, cosine 0.9675
-  reproducible byte-a-byte (evidence/t22.json), pesos con SHA-256 verificado.
-- **Procedencia epistemológica**: RECOVERED ≠ RECONSTRUCTED ≠ GENERATED, forzada en código.
-- **Gobernanza APCE v8.1.0 canónica**: governor G1–G6; nada se auto-promueve
-  a OPERATING_EFFECTIVE. Protocolo AKADI-OMEGA-LITE-O0 v18.0 en docs/protocols/.
-- **Evidencia verificable**: cadenas SHA-512, attestation Ed25519 por terceros
-  independientes (tools/attest.py).
-
-## Arquitectura
-
-```
-APCE v8.1.0 CANÓNICO (control plane, G1–G6)
-   └── AGF evaluation plane
-        ├── MTE v1.0 (T01–T20)           docs/MTE.md
-        ├── v9.0 runtime (T21–T31)       embeddings TFLite, evidencia, SPIFFE/DID
-        ├── Chat Runtime v0.2            FSM black-box + Prompt Kernel (auditoría 7.5→9)
-        └── agf.py                       CLI maestra: doctor/kernel/go/closure/benchmark/attest
-   └── BLACK-BOX LLM CHAT WINDOW        (único canal: texto + imágenes)
-```
-
-## Posicionamiento (síntesis de 7 auditorías externas, oct 2026 (9 auditorías))
-
-Este repositorio es un **marco de verificación fail-closed y trazabilidad
-ejecutable sobre LLMs opacos** — no una herramienta plug-and-play de edición
-de imágenes. Para preservación de identidad en producción masiva existen
-caminos más directos (IP-Adapter, InstantID). Para gobernar lo que un LLM
-black-box devuelve, con evidencia firmable y cero veredictos fabricados,
-este es uno de los enfoques más rigurosos publicados. La pila de
-gobernanza (APCE/O0/G1-G6) es deliberada: está diseñada para un nivel de
-aseguramiento que el caso de uso actual aún no exige, y se declara como tal.
-
-## Estado de aseguramiento (mapping v6)
-
-**PRIMER L3 SUPPORTED (2026-10-14):** identidad preservada certificada
-sobre la salida de un LLM comercial opaco — cosine 0.931, FaceNet custodiado,
-tres capas L1/L2/L3 completas (evidence/verify_2026-10-14/). n=1 declarado.
-
-**8/8 controles TESTED** con evidencia real en Termux: T21 ArcFace
-cerrado (cosine 0.8901 con alineación BlazeFace; root cause corregido:
-box coder SSD /128) y T22 FaceNet determinista (0.9675 byte-a-byte).
-Benchmark T30 ejecutado con muestra mínima declarada (TAR n=1, cos 0.9743).
-Nada declarado OPERATING_EFFECTIVE por diseño. Comparación SOTA completa
-y matriz adversarial 8x4: protocolos publicados, ejecución roadmap.
-Detalle: `data/apce_mapping_t21_t28.csv` (mapping v6).
-
-## Licencias
-
-- **Código**: MIT (`LICENSE-CODE`).
-- **Pesos de modelos**: NO distribuidos; términos por modelo en `LICENSE-WEIGHTS.md`.
-- Garantía: ninguna. Ver `NOTICE.md`.
-
-## Documentos clave
-
-Empieza por docs/GLOSSARY.md: todo el proyecto son 3 conceptos
-(GOVERNOR / ENGINE / CANAL), no 8 siglas.
-
-| Doc | Contenido |
-|---|---|
-| `docs/GLOSSARY.md` | 3 conceptos que explican todo |
-| `docs/BENCHMARK_COMPARISON.md` | Protocolo comparativo vs SOTA |
-| `docs/QUICKSTART_TERCEROS.md` | Uso para terceros (2 comandos) |
-| `docs/FRAMEWORK_CHAT_WINDOW.md` | Marco de ejecución en ventana de chat |
-| `docs/AGF_T21_T28_APCE_MAPPING.md` | Mapping con evidencia y gaps |
-| `docs/protocols/` | AKADI-OMEGA-LITE-O0 v18.0 (md/pdf/docx) |
-| `docs/GUION_VIDEO_60s.md` | Guion demo para redes |
-
-| `docs/governance/AGENTIC_ENGINEERING_v1.0.txt` | Especificación de Arquitectura Multi-Agente: Extracción, Guardián Biométrico, Generación y Ledger (Fail-Closed). |
+python agf.py doctor    # Autodiagnóstico (9/9 OPERATIVO)
+python agf.py go        # Genera el Prompt Kernel firmado
