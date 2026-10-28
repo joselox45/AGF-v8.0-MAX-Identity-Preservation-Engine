@@ -1,4 +1,4 @@
-# AGF Chat Runtime - PROMPT KERNEL v0.2 + M7
+# AGF Chat Runtime - PROMPT KERNEL v0.3 + M7
 # Extraido del bundle single-file; mantener sincronizados.
 from dataclasses import dataclass
 from typing import Optional
@@ -6,7 +6,7 @@ from typing import Optional
 
 
 
-KERNEL_VERSION = "AGF_CHAT_RUNTIME v0.2 — PROMPT KERNEL"
+KERNEL_VERSION = "AGF_CHAT_RUNTIME v0.3 — PROMPT KERNEL"
 OPERATIONS = ("RESTORE", "REPAIR", "RECONSTRUCT")
 
 DEFINITIONS = """DEFINITIONS:
@@ -88,7 +88,7 @@ class KernelResult:
 
 
 class PromptKernel:
-    """Fábrica de bloques operacionales v0.2. Un bloque por intento."""
+    """Fábrica de bloques operacionales v0.3. Un bloque por intento."""
 
     def __init__(self, max_retries: int = 2):
         if max_retries < 0:
