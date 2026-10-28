@@ -56,7 +56,7 @@ def cmd_doctor(_):
     def _kernel():
         from prompt_kernel import PromptKernel
         b = PromptKernel().build("REPAIR", "ref", "tgt").prompt_block
-        return "[AGF_OPERATION]" in b and "IDENTITY_PRESERVATION = MAX" in b, "kernel v0.2 OK"
+        return "[AGF_OPERATION]" in b and "IDENTITY_PRESERVATION = MAX" in b, "kernel v0.3 OK"
     check("prompt_kernel", _kernel)
     def _fsm():
         from chat_runtime import ChatRuntime, RuntimeEvent, State
