@@ -162,3 +162,11 @@ class PromptKernel:
                       "Corrige SOLO lo señalado; no alteres el resto."]
         lines += ["", "[/AGF_OPERATION]"]
         return "\n".join(lines)
+
+
+def get_kernel_text():
+    import os
+    path = os.path.join(os.path.dirname(__file__), "kernel_v0.3.txt")
+    if os.path.exists(path):
+        return open(path, "r").read()
+    return "KERNEL v0.3 NO ENCONTRADO"
