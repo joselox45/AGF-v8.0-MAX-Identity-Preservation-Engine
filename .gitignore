@@ -13,3 +13,6 @@ __pycache__/
 
 # Ignorar archivos de backup locales
 *.bak_*
+doctor_audit.txt
+evidence/*.json
+out/
