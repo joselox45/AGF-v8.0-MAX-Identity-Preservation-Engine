@@ -9,3 +9,4 @@ cryptography
 opencv-python-headless
 scikit-image
 PyYAML
+onnxruntime
