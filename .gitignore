@@ -23,3 +23,5 @@ evidence/*.json
 *.tmp
 out/
 doctor_audit.txt
+*.onnx
+*.tflite
