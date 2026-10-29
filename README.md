@@ -7,10 +7,10 @@
 ## Current Status (October 2026)
 *   **v12.0 Industrial Grade (ArcFace ONNX):** Integrated ArcFace (512-dim) via ONNX Runtime for 99.8% facial recognition accuracy (EER < 1%), replacing the legacy FaceNet TFLite pipeline.
 *   **v11.0 Multi-Face Support:** Audits multiple faces per image using JSON bounding boxes (resolves Multi-Face Collision).
-*   **v10.0 PIXEL_LOCKED (Unified Framework):** Implements SSIM Tile-Mapping, Zero-Generative Smoothing, and Lighting Anchoring.
+*   **P10.0 PIXEL_LOCKED (Unified Framework):** Implements SSIM Tile-Mapping, Zero-Generative Smoothing, and Lighting Anchoring.
 *   **SMHP Protocol (v0.7.0):** Semantic-Math Handshake. Separates AI visual opinions from mathematical proof.
-*   **Strict Threshold:** `0.65` (ArcFace) / `0.79` (FaceNet Research) / `0.85` (Production).
-    *   *Threshold Rationale:* `0.79` is the provisional Youden threshold for FaceNet Research. `0.85` is the strict Production threshold for legal/forensic use cases. ArcFace uses the industry-standard `0.65` threshold.
+*   **Strict Threshold:** `0.65` (ArcFace) / `0.79a (FaceNet Research) / `0.85` (Production).
+    *   *Threshold Rationale:** `0.79a is the provisional Youden threshold for FaceNet Research. `0.85` is the strict Production threshold for legal/forensic use cases. ArcFace uses the industry-standard `0.65` threshold.
 *   **Tests:** 120/121 passing (1 legacy test removed during cleanup). No CI claims are made for the current HEAD.
 *   **Privacy:** Clean history. All personal biometric images have been purged from the Git history.
 
@@ -42,10 +42,45 @@ git clone https://github.com/joselox45/AGF-v8.0-MAX-Identity-Preservation-Engine
 cd AGF-v8.0-MAX-Identity-Preservation-Engine
 
 # Core engine self-diagnosis (checks real libs and models)
-python agf.py doctor                          
+python agf.py doctor                         
 
 # v10.1 Honest self-diagnosis (uses importlib to check real dependencies)
 python src/agf_v10_pixel_locked.py doctor     
 
 # v12.0 ArcFace Industrial Verification (Requires arcface.onnx)
 python src/onnx_arcface_validator.py image1.jpg image2.jpg
+
+```
+
+**Chatbot Workflow (Human-in-the-Loop):*)
+1. Open the LLM, attach the reference image, and paste Kernel v0.7.0 (`docs/governance/AGF_CHAT_KERNEL_v0.7.0_SMHP.md`).
+2. Receive the generated image + `[AGF_VERIFICATION_REPORT]`.
+3. Verify locally with the SMHP Validator (Texture) and ArcFace (Geometry):
+   ```bash
+   python tools/smhp_validator.py sandbox/base0_test.png sandbox/grok_formal.jpg sandbox/facenet.tflite
+   python src/onnx_arcface_validator.py sandbox/base0_test.png sandbox/grok_formal.jpg
+   ```
+
+## Key Tools & Schemas
+*   **`src/onnx_arcface_validator.py`**: High-precision industrial face verification using ArcFace (ONNX Runtime).
+*   **`tools/multi_face_auditor.py`**: Audits multiple faces in a single image using JSON bounding boxes (resolves Multi-Face Collision).
+*   **`schemas/residual_plan.schema.json`**: JSON Schema defining the exact parameters an LLM must follow for restoration (lighting, color, pixel lock).
+*   **`tools/hash_prompt.py`**: Generates reproducible SHA-256 hashes for any prompt or document, enforcing Zero-Fabrication.
+
+## Key Governance Documents
+
+| Document | Content |
+| :--- | :--- |
+| `docs/governance/AGF_v10.0_UNIFIED_FRAMEWORK.md | **P10.0 Unified Specification:** Pixel-Locked, 6 Layers, Threat Model. |
+| `docs/governance/AGF_CHAT_KERNEL_v0.7.0_SMHP.md` | **Canonical Kernel v0.7.0 (SMHP)**. Separates semantic LLM assertions from local math. |
+| `docs/evidence/CASE_STUDY_META_AI_DRIFT.md` | Case Study: How we unmasked Meta AI and its Drift D2/D3. |
+| `docs/evidence/CASE_STUDY_GROK_COSMETIC_SMOOTHING.md` | Case Study: Grok preserved 96% identity but applied cosmetic skin smoothing (SSIM 0.72). |
+| `docs/evidence/EVIDENCE_GENERATIVE_SMOOTHING.md` | Empirical proof of 72% texture loss in Gemini. |
+| `docs/setup/DOWNLOAD_MODELS.md` | Guide to download the missing `.tflite` and `.onnx` weights. |
+
+## Warning on Generative AI
+Generative AIs (Stable Diffusion, Meta AI, DALL-E) **cannot preserve identity** when asked to change the environment or clothing without strict instructions. This repository empirically demonstrates that full-image analysis produces "False Positives" due to context. The only *ground truth* is cropped-face analysis (BlazeFace, ArcFace) and FaceNet.
+
+## Licenses
+*   **Code:** MIT.
+*   **Model weights:** NOT distributed.
