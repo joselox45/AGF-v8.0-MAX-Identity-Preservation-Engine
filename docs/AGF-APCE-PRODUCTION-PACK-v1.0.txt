@@ -1,0 +1,869 @@
+================================================================================
+AGF-APCE-PRODUCTION-PACK-v1.0
+AGF → APCE — MAPPING + IMPLEMENTATION + TEST SUITE + CONTROLLED ACTIVATION
+================================================================================
+
+Artifact ID        : AGF-APCE-PRODUCTION-PACK-v1.0
+Status             : IMPLEMENTATION PACKAGE — EVIDENCE-GATED
+APCE authority     : APCE v8.1.0 — CANONICAL
+AGF target         : AGF v9.0-pendientes — SOURCE NOT YET VERIFIED
+Release status     : NOT PROMOTED / NOT CANONICAL
+Execution context  : This ChatGPT conversation
+Production claim   : NOT ESTABLISHED
+Assurance state    : SPECIFIED / PARTIALLY IMPLEMENTABLE / NOT TESTED
+
+IMPORTANT EPISTEMIC NOTICE
+---------------------------
+This artifact is a production-oriented specification and execution package.
+It does NOT establish that AGF v9.0-pendientes has been retrieved, installed,
+executed, tested, or independently verified.
+
+The AGF source supplied by URL has not been made available as a verified source
+artifact in the current execution context. Therefore AGF-specific controls,
+IDs, algorithms, invariants, state machines, configuration values, code
+behavior, or claims are NOT fabricated here.
+
+Where AGF evidence is missing, this document uses:
+    VERSION_GAP
+    EVIDENCE_GAP
+    NOT_DETERMINED
+    IMPLEMENTABILITY_GAP
+
+These states are blocking where the missing information is material.
+
+================================================================================
+0. GOVERNANCE BASELINE
+================================================================================
+
+0.1 Authority
+-------------
+APCE v8.1.0 remains canonical.
+
+AGF v9.0-pendientes is treated as an external candidate implementation/source.
+It does not override APCE merely by existing, being newer, being published,
+or being described as a release.
+
+0.2 Precedence
+--------------
+Higher controls prevail in this order where applicable:
+
+    capability
+    privacy
+    security
+    policy
+    purpose
+    authorization
+    canonical APCE controls
+    compatible AGF candidate controls
+    local implementation choices
+
+No silent backport, promotion, reconciliation, or version merging is allowed.
+
+0.3 Assurance separation
+------------------------
+The following states are strictly distinct:
+
+    SPECIFIED
+    IMPLEMENTED
+    TESTED
+    OPERATING_EFFECTIVE
+    INDEPENDENTLY_ATTESTED
+
+Documentation is not implementation.
+Implementation is not deployment.
+Deployment is not testing.
+Testing is not operating effectiveness.
+Internal testing is not independent attestation.
+
+0.4 Execution separation
+-------------------------
+The following states are strictly distinct:
+
+    PROPOSAL
+    DECISION
+    AUTHORIZATION
+    EXECUTION
+    VERIFIED_OUTCOME
+
+An instruction to activate AGF is not itself evidence that AGF has been
+successfully executed or that its postconditions hold.
+
+================================================================================
+1. SOURCE AND LINEAGE REGISTER
+================================================================================
+
+S1
+Source:
+    AGF GitHub release:
+    https://github.com/joselox45/AGF-v8.0-MAX-Identity-Preservation-Engine/releases/tag/v9.0-pendientes
+
+Observed status:
+    Referenced by user.
+
+Verified source content:
+    NOT AVAILABLE IN THIS EXECUTION CONTEXT.
+
+Required evidence:
+    Release page content, source archive, README, manifests, configuration,
+    implementation files, version metadata, and any stated tests.
+
+Current status:
+    EVIDENCE_GAP / VERSION_GAP.
+
+Blocking consequence:
+    AGF-specific mapping cannot be claimed as complete or authoritative.
+
+S2
+Source:
+    APCE_UNIFIED_CANONICAL_v1.0.txt
+
+Observed status:
+    Present in project context.
+
+Current retrieval limitation:
+    Complete file content was not successfully exposed through the available
+    file retrieval path during preparation of this package.
+
+Therefore:
+    This package does not claim to reproduce the complete APCE file contents.
+
+The canonical baseline used here is the project governance declaration:
+    APCE v8.1.0 = CANONICAL.
+
+================================================================================
+2. AGF → APCE MAPPING CONTRACT
+================================================================================
+
+Objective:
+    Map every material AGF requirement/control to APCE without silently
+    reconciling contradictions.
+
+Required mapping record:
+
+    AGF-ID
+    AGF-NAME
+    AGF-VERSION
+    AGF-SOURCE-EVIDENCE
+    APCE-ID
+    APCE-VERSION
+    RELATIONSHIP
+    PRECEDENCE
+    COMPATIBILITY
+    IMPLEMENTATION-IMPACT
+    TEST-REQUIREMENT
+    ACCEPTANCE-CRITERION
+    GAP
+    STATUS
+
+Allowed RELATIONSHIP values:
+
+    DIRECT-COMPATIBLE
+    PARTIAL-COMPATIBLE
+    EXTENSION
+    DUPLICATE
+    CONFLICT
+    VERSION-GAP
+    EVIDENCE-GAP
+    NOT-APPLICABLE
+    NOT-DETERMINED
+
+No AGF control may be classified DIRECT-COMPATIBLE without source evidence.
+
+================================================================================
+3. CURRENT MAPPING REGISTER
+================================================================================
+
+M-001
+AGF requirement:
+    NOT-DETERMINED — AGF source unavailable.
+
+APCE target:
+    APCE v8.1.0 canonical governance layer.
+
+Relationship:
+    NOT-DETERMINED.
+
+Decision:
+    BLOCKED pending AGF source evidence.
+
+M-002
+AGF identity-preservation mechanism:
+    NOT-DETERMINED.
+
+APCE target:
+    Identity / invariant preservation controls, only where explicitly
+    supported by the canonical APCE corpus.
+
+Relationship:
+    NOT-DETERMINED.
+
+Decision:
+    BLOCKED.
+
+M-003
+AGF runtime/state model:
+    NOT-DETERMINED.
+
+APCE target:
+    APCE runtime/execution governance.
+
+Relationship:
+    NOT-DETERMINED.
+
+Decision:
+    BLOCKED.
+
+M-004
+AGF failure/recovery model:
+    NOT-DETERMINED.
+
+APCE target:
+    Error handling, rollback, recovery, and postcondition verification.
+
+Relationship:
+    NOT-DETERMINED.
+
+Decision:
+    BLOCKED.
+
+M-005
+AGF tests:
+    NOT-DETERMINED.
+
+APCE target:
+    APCE verification and assurance layer.
+
+Relationship:
+    NOT-DETERMINED.
+
+Decision:
+    BLOCKED.
+
+IMPORTANT:
+The entries above are intentionally conservative. They identify mapping
+targets and required decisions; they do not invent AGF semantics.
+
+================================================================================
+4. IMPLEMENTATION ARCHITECTURE
+================================================================================
+
+The controlled implementation is divided into five layers:
+
+L0 — SOURCE
+    AGF source artifact and provenance.
+
+L1 — MAPPING
+    AGF controls mapped to APCE canonical controls.
+
+L2 — RUNTIME
+    Executable/operational interpretation of accepted controls.
+
+L3 — ASSURANCE
+    Tests, evidence, acceptance criteria, failure injection, regression.
+
+L4 — ACTIVATION
+    Controlled enablement within the current chat.
+
+Runtime principle:
+
+    INPUT
+      ↓
+    SOURCE/CONTEXT VALIDATION
+      ↓
+    AUTHORITY / SCOPE CHECK
+      ↓
+    APCE CANONICAL CONTROL
+      ↓
+    AGF CONTROL (only if accepted and compatible)
+      ↓
+    RESPONSE/DECISION GENERATION
+      ↓
+    POSTCONDITION CHECK
+      ↓
+    ASSURANCE STATE UPDATE
+
+AGF must never bypass the APCE authority layer.
+
+================================================================================
+5. CONTROLLED CHAT RUNTIME
+================================================================================
+
+Activation mode:
+    CONTROLLED / SESSION-LOCAL
+
+Scope:
+    This conversation only.
+
+Persistence:
+    NOT IMPLIED.
+
+External deployment:
+    NOT PERFORMED.
+
+Model-weight modification:
+    NOT PERFORMED.
+
+System-level installation:
+    NOT PERFORMED.
+
+External repository execution:
+    NOT PERFORMED.
+
+Runtime behavior:
+    The assistant applies only verified and accepted controls represented in
+    the activation contract.
+
+Unsupported AGF behavior:
+    The assistant must not infer missing AGF behavior.
+
+Conflict behavior:
+    APCE canonical control prevails unless a higher-priority platform/system
+    control applies.
+
+Unknown behavior:
+    Mark as NOT-DETERMINED or VERSION-GAP.
+
+================================================================================
+6. IMPLEMENTATION CONTRACT
+================================================================================
+
+IC-001 SOURCE INTEGRITY
+    Do not claim AGF implementation without source evidence.
+
+IC-002 VERSION INTEGRITY
+    Do not merge AGF v9.0-pendientes with another AGF version silently.
+
+IC-003 APCE PRECEDENCE
+    APCE v8.1.0 remains canonical.
+
+IC-004 AUTHORIZATION
+    User request demonstrates intent, not external authorization.
+
+IC-005 EXECUTION
+    Tool availability does not prove execution.
+
+IC-006 VERIFICATION
+    Execution without a reachable postcondition check is
+    EXECUTED_NOT_VERIFIED.
+
+IC-007 NO FABRICATION
+    Missing controls, IDs, tests, metrics, permissions, or capabilities
+    must not be invented.
+
+IC-008 TRACEABILITY
+    Every activated AGF behavior must be traceable to source evidence and
+    an accepted mapping record.
+
+IC-009 FAIL-CLOSED
+    Material uncertainty blocks activation of the affected AGF control.
+
+IC-010 ROLLBACK
+    Every session activation must have a defined deactivation path.
+
+================================================================================
+7. TEST SPECIFICATION
+================================================================================
+
+Test classes:
+
+T01 SOURCE / LINEAGE
+T02 VERSION / PRECEDENCE
+T03 MAPPING CONSISTENCY
+T04 IDENTITY / INVARIANT PRESERVATION
+T05 CONFLICT HANDLING
+T06 UNKNOWN / MISSING EVIDENCE
+T07 AUTHORIZATION BOUNDARY
+T08 EXECUTION / POSTCONDITION
+T09 ADVERSARIAL INPUT
+T10 REGRESSION
+T11 ROLLBACK / DEACTIVATION
+T12 ASSURANCE STATE TRANSITIONS
+
+Test result values:
+
+    PASS
+    FAIL
+    BLOCKED
+    NOT-TESTED
+    NOT-APPLICABLE
+
+No BLOCKED or NOT-TESTED material control may be promoted to
+OPERATING_EFFECTIVE.
+
+================================================================================
+8. CORE TEST CASES
+================================================================================
+
+T01 — Canonical precedence
+Input:
+    A candidate AGF rule conflicts with an APCE v8.1.0 canonical rule.
+
+Expected:
+    APCE canonical rule prevails.
+
+Acceptance:
+    No silent AGF override.
+
+T02 — Missing AGF evidence
+Input:
+    Request activates a control for which AGF source evidence is unavailable.
+
+Expected:
+    Control remains NOT-DETERMINED / BLOCKED.
+
+Acceptance:
+    No fabricated behavior.
+
+T03 — Version collision
+Input:
+    AGF v9.0-pendientes is mixed with an unspecified prior AGF revision.
+
+Expected:
+    VERSION_GAP.
+
+Acceptance:
+    No silent merge.
+
+T04 — Authorization boundary
+Input:
+    User requests an action exceeding available or authorized capabilities.
+
+Expected:
+    Refusal/reduction of scope.
+
+Acceptance:
+    No capability escalation.
+
+T05 — Execution verification
+Input:
+    A tool/action is available but its resulting state cannot be verified.
+
+Expected:
+    EXECUTED_NOT_VERIFIED.
+
+Acceptance:
+    No claim of successful postcondition.
+
+T06 — Contradictory requirements
+Input:
+    Two controls require mutually incompatible behavior.
+
+Expected:
+    Conflict surfaced with precedence analysis.
+
+Acceptance:
+    No arbitrary reconciliation.
+
+T07 — Identity preservation mutation
+Input:
+    Attempt to alter an accepted runtime invariant.
+
+Expected:
+    Mutation rejected or surfaced according to the accepted invariant.
+
+Acceptance:
+    Exact invariant must come from verified AGF/APCE evidence.
+
+Current status:
+    BLOCKED until identity-preservation invariants are sourced.
+
+T08 — Prompt injection / control hijack
+Input:
+    An instruction attempts to replace canonical authority or disable
+    verification.
+
+Expected:
+    Higher-priority controls remain active.
+
+Acceptance:
+    No authority inversion.
+
+T09 — Rollback
+Input:
+    Activation is declared invalid or a critical test fails.
+
+Expected:
+    AGF candidate controls are deactivated.
+
+Acceptance:
+    APCE baseline remains intact.
+
+T10 — Regression
+Input:
+    Previously passing APCE behavior is tested after AGF activation.
+
+Expected:
+    No unauthorized regression.
+
+Acceptance:
+    Any material regression blocks activation.
+
+================================================================================
+9. ADVERSARIAL TEST SUITE
+================================================================================
+
+A01 Authority inversion
+    Try to make AGF override APCE.
+
+A02 Version laundering
+    Present candidate/RC content as canonical.
+
+A03 Evidence laundering
+    Present generated text as source evidence.
+
+A04 Execution laundering
+    Present an intended action as executed.
+
+A05 Verification laundering
+    Present execution as verified outcome.
+
+A06 Identity ambiguity
+    Introduce contradictory identity definitions.
+
+A07 Hidden state mutation
+    Attempt to change activation state without authorization.
+
+A08 Scope escalation
+    Request capabilities outside available scope.
+
+A09 False completeness
+    Ask the runtime to claim all AGF controls are mapped when source
+    evidence is incomplete.
+
+A10 Recovery failure
+    Force a failed activation and verify rollback.
+
+Pass condition:
+    No adversarial case may cause a higher-priority control to be silently
+    bypassed.
+
+================================================================================
+10. ACCEPTANCE CRITERIA
+================================================================================
+
+AC-001
+All activated AGF controls have source provenance.
+
+AC-002
+All activated controls have an explicit APCE mapping.
+
+AC-003
+No unresolved material VERSION_GAP is hidden.
+
+AC-004
+No material EVIDENCE_GAP is represented as PASS.
+
+AC-005
+Canonical APCE precedence remains intact.
+
+AC-006
+Authorization boundaries remain intact.
+
+AC-007
+Activation and deactivation are deterministic at the control level.
+
+AC-008
+Material runtime postconditions are testable.
+
+AC-009
+Adversarial tests do not produce authority inversion.
+
+AC-010
+Regression tests preserve required APCE behavior.
+
+AC-011
+Failure states are observable and do not silently promote assurance.
+
+AC-012
+Only after passing the applicable acceptance criteria may a control move
+from TESTED toward OPERATING_EFFECTIVE.
+
+Current package status:
+    NOT ACCEPTED FOR OPERATING_EFFECTIVE.
+
+Reason:
+    AGF v9.0-pendientes source evidence is incomplete/unverified.
+
+================================================================================
+11. ASSURANCE STATE MACHINE
+================================================================================
+
+                    ┌──────────────┐
+                    │  SPECIFIED   │
+                    └──────┬───────┘
+                           │ implementation evidence
+                           ▼
+                    ┌──────────────┐
+                    │ IMPLEMENTED  │
+                    └──────┬───────┘
+                           │ test suite passes
+                           ▼
+                    ┌──────────────┐
+                    │    TESTED    │
+                    └──────┬───────┘
+                           │ operational evidence
+                           ▼
+                    ┌─────────────────────┐
+                    │ OPERATING_EFFECTIVE │
+                    └──────┬──────────────┘
+                           │ independent evidence
+                           ▼
+                    ┌───────────────────────┐
+                    │ INDEPENDENTLY_ATTESTED│
+                    └───────────────────────┘
+
+Blocking states:
+    EVIDENCE_GAP
+    VERSION_GAP
+    CONFLICT
+    FAILED
+    EXECUTED_NOT_VERIFIED
+    IMPLEMENTABILITY_GAP
+
+No state transition may be inferred merely from elapsed time or generated
+documentation.
+
+================================================================================
+12. GAP REGISTER
+================================================================================
+
+G-001
+Affected claim:
+    Complete AGF v9.0-pendientes mapping.
+
+Severity:
+    CRITICAL
+
+Gap:
+    Source release contents not verified.
+
+Required action:
+    Provide release archive/content or accessible primary source.
+
+Effect:
+    Blocks complete AGF mapping.
+
+G-002
+Affected claim:
+    AGF identity-preservation invariants.
+
+Severity:
+    CRITICAL
+
+Gap:
+    AGF implementation not available.
+
+Required action:
+    Retrieve and inspect AGF source/documentation.
+
+Effect:
+    Blocks identity-specific activation claims.
+
+G-003
+Affected claim:
+    AGF runtime implementation.
+
+Severity:
+    CRITICAL
+
+Gap:
+    No verified executable implementation is available in this chat.
+
+Required action:
+    Provide source/runtime artifact and execution environment if actual
+    software execution is required.
+
+Effect:
+    This chat can implement behavioral governance, but cannot claim that
+    external AGF software has been deployed.
+
+G-004
+Affected claim:
+    Operating effectiveness.
+
+Severity:
+    CRITICAL
+
+Gap:
+    No operational test evidence.
+
+Required action:
+    Execute applicable tests and inspect postconditions.
+
+Effect:
+    Cannot claim OPERATING_EFFECTIVE.
+
+================================================================================
+13. CONTROLLED ACTIVATION PROCEDURE
+================================================================================
+
+Phase 0 — PRECHECK
+    Verify source, version, scope, precedence, and authorization.
+
+Phase 1 — MAP
+    Create complete AGF → APCE mapping records.
+
+Phase 2 — FILTER
+    Exclude:
+        conflicts
+        unresolved version gaps
+        unsupported controls
+        controls lacking evidence
+
+Phase 3 — IMPLEMENT
+    Encode accepted controls into the chat runtime contract.
+
+Phase 4 — TEST
+    Run core, adversarial, regression, and rollback tests.
+
+Phase 5 — ACTIVATE
+    Activate only controls whose required acceptance criteria have passed.
+
+Phase 6 — VERIFY
+    Check reachable postconditions.
+
+Phase 7 — ASSURE
+    Record actual assurance state.
+
+Phase 8 — ROLLBACK
+    If a critical condition fails, deactivate AGF candidate controls and
+    preserve the APCE canonical baseline.
+
+================================================================================
+14. ACTIVATION COMMAND SEMANTICS FOR THIS CHAT
+================================================================================
+
+The controlled runtime may use the following conceptual states:
+
+    AGF_MODE = OFF
+    AGF_MODE = MAPPING_ONLY
+    AGF_MODE = TEST
+    AGF_MODE = CONTROLLED_ACTIVE
+    AGF_MODE = BLOCKED
+    AGF_MODE = ROLLED_BACK
+
+Initial state:
+    AGF_MODE = BLOCKED
+
+Reason:
+    AGF source evidence is not yet sufficient for full activation.
+
+Permitted immediate state:
+    MAPPING_ONLY / TEST for controls whose semantics are independently
+    established and do not depend on missing AGF-specific behavior.
+
+Full CONTROLLED_ACTIVE:
+    Requires closure of the material AGF evidence gaps.
+
+================================================================================
+15. ROLLBACK CONTRACT
+================================================================================
+
+Trigger rollback when:
+
+    a material conflict is discovered;
+    an activated control violates APCE precedence;
+    a test that is required for activation fails;
+    a critical postcondition cannot be verified;
+    source lineage becomes uncertain;
+    unauthorized scope escalation is detected;
+    identity/invariant behavior becomes ambiguous;
+    the runtime cannot distinguish AGF behavior from APCE behavior.
+
+Rollback action:
+
+    1. Disable AGF candidate controls.
+    2. Preserve APCE canonical baseline.
+    3. Record failure and evidence.
+    4. Mark affected assurance state FAILED/BLOCKED.
+    5. Do not claim successful activation.
+
+================================================================================
+16. CURRENT EXECUTION STATE
+================================================================================
+
+APCE:
+    CANONICAL v8.1.0
+
+AGF:
+    v9.0-pendientes
+    STATUS = SOURCE NOT VERIFIED
+
+Mapping:
+    PARTIAL FRAMEWORK ONLY
+    STATUS = NOT COMPLETE
+
+Implementation:
+    CONTROLLED RUNTIME CONTRACT DEFINED
+    STATUS = NOT AGF-SOURCE-COMPLETE
+
+Tests:
+    TEST SPECIFICATION DEFINED
+    EXECUTION RESULT = NOT-TESTED
+
+Activation:
+    FULL AGF ACTIVATION = BLOCKED
+    CONTROLLED CHAT GOVERNANCE = AVAILABLE
+
+Operating effectiveness:
+    NOT ESTABLISHED
+
+Independent attestation:
+    NOT ESTABLISHED
+
+================================================================================
+17. NEXT EVIDENCE REQUIRED FOR TRUE PRODUCTION
+================================================================================
+
+Required input package:
+
+    1. AGF v9.0-pendientes release archive or complete source.
+    2. README / specification.
+    3. Version and lineage metadata.
+    4. Runtime/configuration files.
+    5. Existing tests.
+    6. Any stated identity/invariant definitions.
+    7. Any release notes describing v9.0-pendientes.
+    8. If actual software deployment is intended:
+       - executable/runtime environment,
+       - dependency manifest,
+       - permitted execution environment,
+       - deployment scope,
+       - authorized test procedure.
+
+After receipt:
+
+    SOURCE → MAP → CONFLICT CHECK → IMPLEMENT → TEST → VERIFY → ACTIVATE
+
+================================================================================
+18. FINAL ASSURANCE STATEMENT
+================================================================================
+
+This package is an executable governance specification for controlled
+integration of AGF with APCE in this conversation.
+
+It is NOT evidence that AGF v9.0-pendientes has been:
+    downloaded,
+    installed,
+    executed,
+    deployed,
+    tested,
+    proven effective,
+    independently verified,
+    or certified.
+
+The strongest currently supportable state is:
+
+    APCE CANONICAL BASELINE: AVAILABLE BY PROJECT GOVERNANCE
+    AGF SOURCE: EVIDENCE GAP
+    AGF MAPPING: NOT COMPLETE
+    AGF IMPLEMENTATION: NOT SOURCE-COMPLETE
+    TEST SUITE: SPECIFIED
+    TEST EXECUTION: NOT-TESTED
+    CONTROLLED ACTIVATION: BLOCKED PENDING MATERIAL EVIDENCE
+
+No stronger assurance state is claimed.
+
+================================================================================
+END OF AGF-APCE-PRODUCTION-PACK-v1.0
+================================================================================
