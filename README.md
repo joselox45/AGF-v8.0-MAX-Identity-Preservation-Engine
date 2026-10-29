@@ -42,3 +42,11 @@ python tools/agf_master_score.py foto_vieja.jpg foto_restaurada.jpg blaze_face_s
 3. Human-in-the-Loop: Si el sistema dice HUMAN_REVIEW, tú tienes la última palabra.
 
 *Repositorio Privado. Modelos biométricos en .gitignore.*
+
+## 👥 Manejo de Fotos Grupales (Multi-Face)
+AGF v12.2 está optimizado para 1 rostro (selfies, retratos). Para fotos con múltiples personas, el motor usa una estrategia de Fail-Closed:
+1. El Kernel le exige al LLM devolver un array de cajas (faces_detected), una por cada rostro.
+2. Si el LLM agrupa las caras en una sola caja (error común), AGF bloquea la validación.
+3. En Termux, el detector BlazeFace busca la cara más grande o la de mayor confianza. Si la foto es muy antigua o las caras son muy pequeñas, BlazeFace puede fallar (Zero-Fabrication).
+
+Recomendación: Para fotos grupales históricas, recorta la cara de interés antes de pasarla por agf_full_audit.py.
