@@ -1,0 +1,23 @@
+# AGF Chat Runtime v0.1 — Contrato FSM
+# Transiciones permitidas; cualquier otra => BLOCKED (fail-closed).
+initial_state: IDLE
+states: [IDLE, INTAKE, KERNEL, DISPATCH, AWAIT_OUTPUT, CAPTURE,
+         VERIFY, ACCEPTED, REJECTED, BLOCKED]
+terminal_states: [ACCEPTED, BLOCKED]
+transitions:
+  - {from: IDLE,          to: INTAKE,        event: START}
+  - {from: INTAKE,        to: KERNEL,        event: IMAGES_VALID}
+  - {from: INTAKE,        to: BLOCKED,       event: IMAGES_INVALID}
+  - {from: KERNEL,        to: DISPATCH,      event: BLOCK_BUILT}
+  - {from: DISPATCH,      to: AWAIT_OUTPUT,  event: SENT}
+  - {from: AWAIT_OUTPUT,  to: CAPTURE,       event: OUTPUT_RECEIVED}
+  - {from: CAPTURE,       to: VERIFY,        event: OUTPUT_RECORDED}
+  - {from: CAPTURE,       to: BLOCKED,       event: OUTPUT_EMPTY}
+  - {from: VERIFY,        to: ACCEPTED,      event: DECISION_ACCEPT}
+  - {from: VERIFY,        to: KERNEL,        event: DECISION_REJECT}
+  - {from: VERIFY,        to: BLOCKED,       event: DECISION_BLOCK}
+max_retries: 2
+boundary:
+  API: PROHIBITED
+  DIRECT_MODEL_ACCESS: PROHIBITED
+  INTERACTION_CHANNEL: CHAT_WINDOW

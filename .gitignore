@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Modelos y Pesos
+*.tflite
+*.onnx
+
+# Imágenes de prueba (Sandbox)
+sandbox/*
+!sandbox/.gitkeep
+*.jpg
+*.png
+*.webp
+
+# Evidencia local (JSONs)
+evidence/*.json
+!evidence/.gitkeep
+
+# Backups y temporales
+*.bak
+*.tmp
+out/
+doctor_audit.txt

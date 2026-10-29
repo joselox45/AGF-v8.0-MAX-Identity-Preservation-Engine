@@ -1,0 +1,30 @@
+{
+  "T22": {
+    "status": "PASS",
+    "model_id": "facenet:tflite:54660297ebad23b7",
+    "evidence_hash": "3c5165258e2302549d20308c7dc365f563ec73f972766e71a64859e61d5c8dc8830c1df592cea7e0a56f60fca9879cd9b64caa9b252e1b212f70e71c67e6ebfb",
+    "weights_sha256": "54660297ebad23b7106a8ccd05f2f2f616b3d39bf7d7e82e148cf8ed7e27ae1a",
+    "pipeline": "blazeface:alineado_160"
+  },
+  "T21": {
+    "status": "BLOCKED",
+    "reason": "correr con modelo arcface.tflite"
+  },
+  "verification": {
+    "rule": "FACE_VERIFY_TFLITE",
+    "cosine": 0.94089,
+    "status": "PASS",
+    "reason": "cosine 0.9409 vs umbral 0.79",
+    "evidence_hash": "ce948ec1895a9029c28de9671ccb2066f8df69cbc0e4cc645148a450f1352d2929b6eef62e8e2dc51efd19130e141aa53bcd271ec8e0f4e7aa8a9bf123010cc6"
+  },
+  "_meta": {
+    "ts": "2026-10-29T01:07:13.020677+00:00",
+    "kind": "facenet",
+    "normalize_mode": "arcface",
+    "host": "termux",
+    "fail_closed": true,
+    "assurance_level": "DETECTOR_ALIGNED",
+    "ref_sha256": "05b071abac3d7f6036897f7534b521a6b3788baca7d9668f27655526a7fcb2c8",
+    "tgt_sha256": "7d9bdf23525681358e5dabdb701f7b20e1910ad08cd7b2832197daba166e5749"
+  }
+}

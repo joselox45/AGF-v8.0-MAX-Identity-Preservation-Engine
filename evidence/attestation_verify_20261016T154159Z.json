@@ -1,0 +1,47 @@
+{
+  "checks": [
+    {
+      "check": "json_parseable",
+      "detail": "",
+      "ok": true
+    },
+    {
+      "check": "has_weights_sha256",
+      "detail": "",
+      "ok": true
+    },
+    {
+      "check": "weights_hash_pinned",
+      "detail": "facenet.tflite",
+      "ok": true
+    },
+    {
+      "check": "has_evidence_hash",
+      "detail": "",
+      "ok": true
+    },
+    {
+      "check": "cosine_present",
+      "detail": "cosine=0.980663",
+      "ok": true
+    },
+    {
+      "check": "status_pass",
+      "detail": "PASS",
+      "ok": true
+    },
+    {
+      "check": "file_sha512_recorded",
+      "detail": "",
+      "ok": true
+    }
+  ],
+  "evidence_file": "evidence/verify_20261016T154159Z.json",
+  "file_sha512": "08cb120ce527dd4b0b17df53cfaf9e6bdc84ee8f5070f8fee62cbee5d7494a9035c9a55596652e9f45f74ad8f37214798b948ee873de6af7692fede2b54b8044",
+  "signer": "akadiecuador-verifier",
+  "ts": "2026-10-16T15:44:09.577718+00:00",
+  "verdict": "ATTESTED",
+  "attestor_ed25519": "6e5e792c8ab7d8e2a38656eb5eea45bcc379e55702c02e46182607f5d199f7fc",
+  "signature": "9510cef50959c93e9633311d2a83fad5e28b8ab763e9d786d8b67c3f257c2ce5814e4e7554d2c1b9b5f8926f3e934642b1b2237b488c37d7d462dc77dd450c03",
+  "_agf_review": "PRIMER ATTESTATION INDEPENDIENTE VALIDO \u2014 signer: akadiecuador-verifier. Reproduccion en hardware independiente: cosine 0.980663 determinista (dos corridas identicas). Pendiente: publicacion externa de la clave 6e5e792c... por el attestor (ATTESTATION_CONTRACT sec.2)."
+}

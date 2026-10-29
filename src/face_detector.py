@@ -1,0 +1,120 @@
+"""
+AGF T21-ALIGN — TFLiteFaceDetector con decodificador BlazeFace CORREGIDO.
+Spec oficial MediaPipe (face_detection_short_range.pbtxt / face_detection.pbtxt):
+  letterbox keep-aspect 128x128, input float [-1,1]
+  anchors: 4 capas strides [8,16,16,16], fixed_anchor_size=true
+  decode: offsets/tamanos absolutos /128, SIN exponencial
+  proyeccion inversa del letterbox a pixeles de la imagen original
+Salidas: regression (1,896,16) + classification (1,896,1).
+Stability: threads=1 (determinismo) + select='largest' (mayor area).
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Optional, Sequence
+
+from blazeface_decoder import generate_anchors, decode, nms
+
+
+@dataclass
+class DetectionResult:
+    status: str                    # PASS | BLOCKED | FAIL
+    detections: Optional[list] = None
+    reason: str = ""
+
+
+class TFLiteFaceDetector:
+    INPUT_SIZE = 128
+
+    def __init__(self, model_bytes: Optional[bytes] = None,
+                 threads: int = 1, select: str = "largest"):
+        # threads=1: determinismo XNNPACK. select='largest': en escenas
+        # multirrostro se elige la cara de MAYOR AREA, no la de mayor score.
+        assert select in ("score", "largest")
+        self._threads = threads
+        self._select = select
+        self._interp = None
+        self.anchors = generate_anchors()
+        if model_bytes:
+            self._load(model_bytes)
+
+    def _load(self, model_bytes: bytes) -> None:
+        try:
+            from tflite_runtime.interpreter import Interpreter  # type: ignore
+        except ImportError:
+            try:
+                from tensorflow.lite.python.interpreter import Interpreter  # type: ignore
+            except ImportError:
+                self._interp = None
+                return
+        import tempfile, os
+        try:
+            with tempfile.NamedTemporaryFile(suffix=".tflite", delete=False) as f:
+                f.write(model_bytes)
+                path = f.name
+            self._interp = Interpreter(model_path=path, num_threads=self._threads)
+            os.unlink(path)
+            self._interp.allocate_tensors()
+            outs = sorted(self._interp.get_output_details(),
+                          key=lambda d: d["shape"][-1])
+            self._reg_idx = outs[-1]["index"]      # (1,896,16)
+            self._cls_idx = outs[0]["index"]       # (1,896,1)
+            self._in_idx = self._interp.get_input_details()[0]["index"]
+        except Exception:
+            self._interp = None
+
+    def detect(self, rgb_pixels: Optional[Sequence] = None,
+               score_threshold: float = 0.7) -> DetectionResult:
+        if self._interp is None or rgb_pixels is None:
+            return DetectionResult("BLOCKED", None,
+                                   "sin detector TFLite o sin pixeles; fail-closed")
+        try:
+            import numpy as np  # type: ignore
+            # CORREGIDO: letterbox keep-aspect (no estirar) + rango [-1,1]
+            from PIL import Image as _Im
+            arr = np.clip(np.asarray(rgb_pixels, dtype=np.float32), 0, 255).astype(np.uint8)
+            orig_h, orig_w = arr.shape[:2]
+            s = self.INPUT_SIZE / float(max(orig_w, orig_h))
+            nw = max(1, int(round(orig_w * s)))
+            nh = max(1, int(round(orig_h * s)))
+            resized = np.asarray(_Im.fromarray(arr).resize((nw, nh), _Im.BILINEAR),
+                                 dtype=np.float32)
+            pad_x = (self.INPUT_SIZE - nw) // 2
+            pad_y = (self.INPUT_SIZE - nh) // 2
+            canvas = np.zeros((self.INPUT_SIZE, self.INPUT_SIZE, 3), np.float32)
+            canvas[pad_y:pad_y + nh, pad_x:pad_x + nw] = resized
+            inp = canvas / 127.5 - 1.0
+            self._interp.set_tensor(self._in_idx, np.expand_dims(inp, 0))
+            self._interp.invoke()
+            reg = self._interp.get_tensor(self._reg_idx).reshape(896, 16)
+            cls = self._interp.get_tensor(self._cls_idx).reshape(896, 1)
+            dets = decode(reg, cls, self.anchors,
+                          input_size=self.INPUT_SIZE,
+                          score_thresh=score_threshold)
+            dets = nms(dets)
+            if self._select == "largest" and len(dets) > 1:
+                def _area(d):
+                    x1, y1, x2, y2 = d.box
+                    return max(0.0, x2 - x1) * max(0.0, y2 - y1)
+                dets = [max(dets, key=_area)]
+            # box: (ymin, xmin, ymax, xmax), normalizada en espacio letterbox.
+            # Proyectar a pixeles originales conservando el orden y/x del contrato.
+            for d in dets:
+                ymin, xmin, ymax, xmax = d.box
+                pymin = (ymin * self.INPUT_SIZE - pad_y) / s
+                pxmin = (xmin * self.INPUT_SIZE - pad_x) / s
+                pymax = (ymax * self.INPUT_SIZE - pad_y) / s
+                pxmax = (xmax * self.INPUT_SIZE - pad_x) / s
+                d.box = (
+                    min(pymin, pymax),
+                    min(pxmin, pxmax),
+                    max(pymin, pymax),
+                    max(pxmin, pxmax),
+                )
+                d.keypoints = [((kx * self.INPUT_SIZE - pad_x) / s,
+                                (ky * self.INPUT_SIZE - pad_y) / s)
+                               for kx, ky in d.keypoints]
+            return DetectionResult("PASS", dets, f"{len(dets)} rostro(s)")
+        except Exception as e:
+            return DetectionResult("FAIL", None, str(e))

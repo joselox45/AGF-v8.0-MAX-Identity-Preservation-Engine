@@ -1,0 +1,14 @@
+# AGF Chat Runtime v0.1 — Política operativa
+precedence: [capability, privacy, security, policy, purpose, authorization]
+provenance_rule:
+  RECOVERED: informacion recuperada de la propia imagen
+  RECONSTRUCTED: informacion inferida y reconstruida (marcar siempre)
+  GENERATED: contenido nuevo generado; nunca equivale a restauracion
+restore_acceptable: [RECOVERED, RECONSTRUCTED]
+verification:
+  fail_closed: true
+  required: true
+  no_fabricated_pass: true
+evidence:
+  chain: SHA-512
+  append_only: true

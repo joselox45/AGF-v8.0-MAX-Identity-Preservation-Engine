@@ -1,0 +1,20 @@
+{
+  "record_type": "chatgpt_image_generation_evidence",
+  "date": "2026-10-14",
+  "user_request": [
+    "Cambiar entorno galpón de ingeniería aeroespacial",
+    "Cambiar atuendo de ingeniero aeroespacial"
+  ],
+  "input_image": {"filename": "182345.jpg", "sha256": "43cc07320a728ce1ff7ebd711e92c23df096130820c0ee0dee078e7c2252a911"},
+  "output_image": {"filename": "a_crisp_realistic_high_resolution_portrait_style.png", "sha256": "0baf9f084cffa1ae2457541caf9b358b0d0e6a8fb76f6d3907228e6050f3d7b3"},
+  "agf_pipeline_execution": "NOT_RUN_OR_NOT_ESTABLISHED",
+  "biometric_inference": "NOT_RUN",
+  "l2": "NOT_RUN",
+  "l3": "NOT_CERTIFIED",
+  "identity_preservation": "UNVERIFIED",
+  "notes": [
+    "Hashes identify local files only; they do not establish authenticity or identity preservation.",
+    "The output was produced by ChatGPT image generation, not demonstrated to have been produced by the AGF FaceNet/TFLite pipeline.",
+    "No biometric inference or new certification is claimed."
+  ]
+}

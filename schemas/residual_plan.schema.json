@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AGF Residual Plan",
+  "type": "object",
+  "properties": {
+    "target_region": { "type": "string", "enum": ["global", "face", "background", "clothing"] },
+    "lighting_delta": { "type": "string", "enum": ["increase", "decrease", "neutral", "increase_minimal"] },
+    "color_temperature_delta": { "type": "string", "enum": ["warm", "cool", "neutral", "remove_magenta"] },
+    "saturation_delta": { "type": "string", "enum": ["increase", "decrease", "neutral", "increase_minimal"] },
+    "sharpness_delta": { "type": "string", "enum": ["increase", "decrease", "neutral"] },
+    "pixel_locked": { "type": "boolean" },
+    "face_protection": { "type": "boolean" },
+    "zero_generative_smoothing": { "type": "boolean" }
+  },
+  "required": ["target_region", "pixel_locked", "face_protection"]
+}

@@ -1,0 +1,1428 @@
+{
+  "status": "PASS",
+  "tipo": "CALIBRACION_UMBRAL",
+  "created_utc": "20261017T234200Z",
+  "summary": {
+    "corpus": {
+      "name": "agf-corpus-v1",
+      "n_ids": 20,
+      "modelo_base": "procedural-parametrico",
+      "limitacion": "procedural-parametrico: pipeline-validation ONLY, no fotorealista",
+      "custodia_sha256": "VERIFIED"
+    },
+    "modelo": {
+      "embedder": "facenet:tflite:54660297ebad23b7",
+      "kind": "facenet",
+      "normalize": "raw",
+      "detector_sha256": "b4578f35940bf5a1a655214a1cce5cab13eba73c1297cd78e1a04c2380b0152f",
+      "emb_runs_mediana": 3,
+      "threads": 1
+    },
+    "n_genuine": 80,
+    "n_impostor": 190,
+    "umbral_actual_0.65": {
+      "threshold": 0.65,
+      "TAR": 1.0,
+      "FAR": 1.0,
+      "n_genuine": 80,
+      "n_impostor": 190,
+      "TAR_ci95": [
+        0.9542,
+        1.0
+      ],
+      "FAR_ci95": [
+        0.9802,
+        1.0
+      ]
+    },
+    "umbral_youden": {
+      "threshold": 0.95,
+      "J": 0.2441,
+      "TAR": 0.7125,
+      "FAR": 0.4684,
+      "n_genuine": 80,
+      "n_impostor": 190,
+      "TAR_ci95": [
+        0.6054,
+        0.8001
+      ],
+      "FAR_ci95": [
+        0.3988,
+        0.5393
+      ]
+    },
+    "umbral_eer": {
+      "threshold": 0.95,
+      "TAR": 0.7125,
+      "FAR": 0.4684,
+      "dist": 0.1809,
+      "n_genuine": 80,
+      "n_impostor": 190,
+      "TAR_ci95": [
+        0.6054,
+        0.8001
+      ],
+      "FAR_ci95": [
+        0.3988,
+        0.5393
+      ]
+    },
+    "recomendacion": {
+      "threshold": 0.95,
+      "criterio": "youden_j",
+      "NOTA": "valido solo para este corpus; recalibrar con corpus fotorealista (roadmap #5)"
+    }
+  },
+  "scores": [
+    {
+      "pair": "id_001/base vs id_001/luz",
+      "label": "genuine",
+      "cosine": 0.998948
+    },
+    {
+      "pair": "id_001/base vs id_001/oclusion",
+      "label": "genuine",
+      "cosine": 0.986148
+    },
+    {
+      "pair": "id_001/base vs id_001/pose",
+      "label": "genuine",
+      "cosine": 0.910681
+    },
+    {
+      "pair": "id_001/base vs id_001/dano",
+      "label": "genuine",
+      "cosine": 0.91478
+    },
+    {
+      "pair": "id_002/base vs id_002/luz",
+      "label": "genuine",
+      "cosine": 0.999978
+    },
+    {
+      "pair": "id_002/base vs id_002/oclusion",
+      "label": "genuine",
+      "cosine": 0.930352
+    },
+    {
+      "pair": "id_002/base vs id_002/pose",
+      "label": "genuine",
+      "cosine": 0.995777
+    },
+    {
+      "pair": "id_002/base vs id_002/dano",
+      "label": "genuine",
+      "cosine": 0.942673
+    },
+    {
+      "pair": "id_003/base vs id_003/luz",
+      "label": "genuine",
+      "cosine": 0.987997
+    },
+    {
+      "pair": "id_003/base vs id_003/oclusion",
+      "label": "genuine",
+      "cosine": 0.884665
+    },
+    {
+      "pair": "id_003/base vs id_003/pose",
+      "label": "genuine",
+      "cosine": 0.995597
+    },
+    {
+      "pair": "id_003/base vs id_003/dano",
+      "label": "genuine",
+      "cosine": 0.976479
+    },
+    {
+      "pair": "id_004/base vs id_004/luz",
+      "label": "genuine",
+      "cosine": 0.992085
+    },
+    {
+      "pair": "id_004/base vs id_004/oclusion",
+      "label": "genuine",
+      "cosine": 0.99563
+    },
+    {
+      "pair": "id_004/base vs id_004/pose",
+      "label": "genuine",
+      "cosine": 0.985891
+    },
+    {
+      "pair": "id_004/base vs id_004/dano",
+      "label": "genuine",
+      "cosine": 0.99436
+    },
+    {
+      "pair": "id_005/base vs id_005/luz",
+      "label": "genuine",
+      "cosine": 0.996183
+    },
+    {
+      "pair": "id_005/base vs id_005/oclusion",
+      "label": "genuine",
+      "cosine": 0.90107
+    },
+    {
+      "pair": "id_005/base vs id_005/pose",
+      "label": "genuine",
+      "cosine": 0.976889
+    },
+    {
+      "pair": "id_005/base vs id_005/dano",
+      "label": "genuine",
+      "cosine": 0.872502
+    },
+    {
+      "pair": "id_006/base vs id_006/luz",
+      "label": "genuine",
+      "cosine": 0.990652
+    },
+    {
+      "pair": "id_006/base vs id_006/oclusion",
+      "label": "genuine",
+      "cosine": 0.957376
+    },
+    {
+      "pair": "id_006/base vs id_006/pose",
+      "label": "genuine",
+      "cosine": 0.994641
+    },
+    {
+      "pair": "id_006/base vs id_006/dano",
+      "label": "genuine",
+      "cosine": 0.994678
+    },
+    {
+      "pair": "id_007/base vs id_007/luz",
+      "label": "genuine",
+      "cosine": 0.991028
+    },
+    {
+      "pair": "id_007/base vs id_007/oclusion",
+      "label": "genuine",
+      "cosine": 0.995975
+    },
+    {
+      "pair": "id_007/base vs id_007/pose",
+      "label": "genuine",
+      "cosine": 0.993148
+    },
+    {
+      "pair": "id_007/base vs id_007/dano",
+      "label": "genuine",
+      "cosine": 0.912303
+    },
+    {
+      "pair": "id_008/base vs id_008/luz",
+      "label": "genuine",
+      "cosine": 0.997166
+    },
+    {
+      "pair": "id_008/base vs id_008/oclusion",
+      "label": "genuine",
+      "cosine": 0.988858
+    },
+    {
+      "pair": "id_008/base vs id_008/pose",
+      "label": "genuine",
+      "cosine": 0.999859
+    },
+    {
+      "pair": "id_008/base vs id_008/dano",
+      "label": "genuine",
+      "cosine": 0.985459
+    },
+    {
+      "pair": "id_009/base vs id_009/luz",
+      "label": "genuine",
+      "cosine": 0.995304
+    },
+    {
+      "pair": "id_009/base vs id_009/oclusion",
+      "label": "genuine",
+      "cosine": 0.983125
+    },
+    {
+      "pair": "id_009/base vs id_009/pose",
+      "label": "genuine",
+      "cosine": 0.874841
+    },
+    {
+      "pair": "id_009/base vs id_009/dano",
+      "label": "genuine",
+      "cosine": 0.937008
+    },
+    {
+      "pair": "id_010/base vs id_010/luz",
+      "label": "genuine",
+      "cosine": 0.991609
+    },
+    {
+      "pair": "id_010/base vs id_010/oclusion",
+      "label": "genuine",
+      "cosine": 0.969212
+    },
+    {
+      "pair": "id_010/base vs id_010/pose",
+      "label": "genuine",
+      "cosine": 0.902937
+    },
+    {
+      "pair": "id_010/base vs id_010/dano",
+      "label": "genuine",
+      "cosine": 0.924348
+    },
+    {
+      "pair": "id_011/base vs id_011/luz",
+      "label": "genuine",
+      "cosine": 0.978029
+    },
+    {
+      "pair": "id_011/base vs id_011/oclusion",
+      "label": "genuine",
+      "cosine": 0.977985
+    },
+    {
+      "pair": "id_011/base vs id_011/pose",
+      "label": "genuine",
+      "cosine": 0.963395
+    },
+    {
+      "pair": "id_011/base vs id_011/dano",
+      "label": "genuine",
+      "cosine": 0.862085
+    },
+    {
+      "pair": "id_012/base vs id_012/luz",
+      "label": "genuine",
+      "cosine": 0.996995
+    },
+    {
+      "pair": "id_012/base vs id_012/oclusion",
+      "label": "genuine",
+      "cosine": 0.976119
+    },
+    {
+      "pair": "id_012/base vs id_012/pose",
+      "label": "genuine",
+      "cosine": 0.915891
+    },
+    {
+      "pair": "id_012/base vs id_012/dano",
+      "label": "genuine",
+      "cosine": 0.989806
+    },
+    {
+      "pair": "id_013/base vs id_013/luz",
+      "label": "genuine",
+      "cosine": 0.962797
+    },
+    {
+      "pair": "id_013/base vs id_013/oclusion",
+      "label": "genuine",
+      "cosine": 0.966046
+    },
+    {
+      "pair": "id_013/base vs id_013/pose",
+      "label": "genuine",
+      "cosine": 0.916821
+    },
+    {
+      "pair": "id_013/base vs id_013/dano",
+      "label": "genuine",
+      "cosine": 0.904533
+    },
+    {
+      "pair": "id_014/base vs id_014/luz",
+      "label": "genuine",
+      "cosine": 0.999333
+    },
+    {
+      "pair": "id_014/base vs id_014/oclusion",
+      "label": "genuine",
+      "cosine": 0.984801
+    },
+    {
+      "pair": "id_014/base vs id_014/pose",
+      "label": "genuine",
+      "cosine": 0.998681
+    },
+    {
+      "pair": "id_014/base vs id_014/dano",
+      "label": "genuine",
+      "cosine": 0.983367
+    },
+    {
+      "pair": "id_015/base vs id_015/luz",
+      "label": "genuine",
+      "cosine": 0.999862
+    },
+    {
+      "pair": "id_015/base vs id_015/oclusion",
+      "label": "genuine",
+      "cosine": 0.984915
+    },
+    {
+      "pair": "id_015/base vs id_015/pose",
+      "label": "genuine",
+      "cosine": 0.931934
+    },
+    {
+      "pair": "id_015/base vs id_015/dano",
+      "label": "genuine",
+      "cosine": 0.986552
+    },
+    {
+      "pair": "id_016/base vs id_016/luz",
+      "label": "genuine",
+      "cosine": 0.996196
+    },
+    {
+      "pair": "id_016/base vs id_016/oclusion",
+      "label": "genuine",
+      "cosine": 0.992254
+    },
+    {
+      "pair": "id_016/base vs id_016/pose",
+      "label": "genuine",
+      "cosine": 0.995406
+    },
+    {
+      "pair": "id_016/base vs id_016/dano",
+      "label": "genuine",
+      "cosine": 0.996039
+    },
+    {
+      "pair": "id_017/base vs id_017/luz",
+      "label": "genuine",
+      "cosine": 0.992998
+    },
+    {
+      "pair": "id_017/base vs id_017/oclusion",
+      "label": "genuine",
+      "cosine": 0.955017
+    },
+    {
+      "pair": "id_017/base vs id_017/pose",
+      "label": "genuine",
+      "cosine": 0.756945
+    },
+    {
+      "pair": "id_017/base vs id_017/dano",
+      "label": "genuine",
+      "cosine": 0.998456
+    },
+    {
+      "pair": "id_018/base vs id_018/luz",
+      "label": "genuine",
+      "cosine": 0.999949
+    },
+    {
+      "pair": "id_018/base vs id_018/oclusion",
+      "label": "genuine",
+      "cosine": 0.992748
+    },
+    {
+      "pair": "id_018/base vs id_018/pose",
+      "label": "genuine",
+      "cosine": 0.996927
+    },
+    {
+      "pair": "id_018/base vs id_018/dano",
+      "label": "genuine",
+      "cosine": 0.99582
+    },
+    {
+      "pair": "id_019/base vs id_019/luz",
+      "label": "genuine",
+      "cosine": 0.983896
+    },
+    {
+      "pair": "id_019/base vs id_019/oclusion",
+      "label": "genuine",
+      "cosine": 0.94109
+    },
+    {
+      "pair": "id_019/base vs id_019/pose",
+      "label": "genuine",
+      "cosine": 0.93789
+    },
+    {
+      "pair": "id_019/base vs id_019/dano",
+      "label": "genuine",
+      "cosine": 0.939892
+    },
+    {
+      "pair": "id_020/base vs id_020/luz",
+      "label": "genuine",
+      "cosine": 0.999985
+    },
+    {
+      "pair": "id_020/base vs id_020/oclusion",
+      "label": "genuine",
+      "cosine": 0.969176
+    },
+    {
+      "pair": "id_020/base vs id_020/pose",
+      "label": "genuine",
+      "cosine": 0.904034
+    },
+    {
+      "pair": "id_020/base vs id_020/dano",
+      "label": "genuine",
+      "cosine": 0.773347
+    },
+    {
+      "pair": "id_001/base vs id_002/base",
+      "label": "impostor",
+      "cosine": 0.964271
+    },
+    {
+      "pair": "id_001/base vs id_003/base",
+      "label": "impostor",
+      "cosine": 0.928268
+    },
+    {
+      "pair": "id_001/base vs id_004/base",
+      "label": "impostor",
+      "cosine": 0.938421
+    },
+    {
+      "pair": "id_001/base vs id_005/base",
+      "label": "impostor",
+      "cosine": 0.958444
+    },
+    {
+      "pair": "id_001/base vs id_006/base",
+      "label": "impostor",
+      "cosine": 0.933272
+    },
+    {
+      "pair": "id_001/base vs id_007/base",
+      "label": "impostor",
+      "cosine": 0.935016
+    },
+    {
+      "pair": "id_001/base vs id_008/base",
+      "label": "impostor",
+      "cosine": 0.939581
+    },
+    {
+      "pair": "id_001/base vs id_009/base",
+      "label": "impostor",
+      "cosine": 0.937713
+    },
+    {
+      "pair": "id_001/base vs id_010/base",
+      "label": "impostor",
+      "cosine": 0.949871
+    },
+    {
+      "pair": "id_001/base vs id_011/base",
+      "label": "impostor",
+      "cosine": 0.954435
+    },
+    {
+      "pair": "id_001/base vs id_012/base",
+      "label": "impostor",
+      "cosine": 0.940454
+    },
+    {
+      "pair": "id_001/base vs id_013/base",
+      "label": "impostor",
+      "cosine": 0.934163
+    },
+    {
+      "pair": "id_001/base vs id_014/base",
+      "label": "impostor",
+      "cosine": 0.925311
+    },
+    {
+      "pair": "id_001/base vs id_015/base",
+      "label": "impostor",
+      "cosine": 0.929562
+    },
+    {
+      "pair": "id_001/base vs id_016/base",
+      "label": "impostor",
+      "cosine": 0.949243
+    },
+    {
+      "pair": "id_001/base vs id_017/base",
+      "label": "impostor",
+      "cosine": 0.920803
+    },
+    {
+      "pair": "id_001/base vs id_018/base",
+      "label": "impostor",
+      "cosine": 0.939526
+    },
+    {
+      "pair": "id_001/base vs id_019/base",
+      "label": "impostor",
+      "cosine": 0.950317
+    },
+    {
+      "pair": "id_001/base vs id_020/base",
+      "label": "impostor",
+      "cosine": 0.925776
+    },
+    {
+      "pair": "id_002/base vs id_003/base",
+      "label": "impostor",
+      "cosine": 0.951159
+    },
+    {
+      "pair": "id_002/base vs id_004/base",
+      "label": "impostor",
+      "cosine": 0.964406
+    },
+    {
+      "pair": "id_002/base vs id_005/base",
+      "label": "impostor",
+      "cosine": 0.955933
+    },
+    {
+      "pair": "id_002/base vs id_006/base",
+      "label": "impostor",
+      "cosine": 0.969695
+    },
+    {
+      "pair": "id_002/base vs id_007/base",
+      "label": "impostor",
+      "cosine": 0.966921
+    },
+    {
+      "pair": "id_002/base vs id_008/base",
+      "label": "impostor",
+      "cosine": 0.976712
+    },
+    {
+      "pair": "id_002/base vs id_009/base",
+      "label": "impostor",
+      "cosine": 0.953801
+    },
+    {
+      "pair": "id_002/base vs id_010/base",
+      "label": "impostor",
+      "cosine": 0.935702
+    },
+    {
+      "pair": "id_002/base vs id_011/base",
+      "label": "impostor",
+      "cosine": 0.949658
+    },
+    {
+      "pair": "id_002/base vs id_012/base",
+      "label": "impostor",
+      "cosine": 0.973462
+    },
+    {
+      "pair": "id_002/base vs id_013/base",
+      "label": "impostor",
+      "cosine": 0.919192
+    },
+    {
+      "pair": "id_002/base vs id_014/base",
+      "label": "impostor",
+      "cosine": 0.931953
+    },
+    {
+      "pair": "id_002/base vs id_015/base",
+      "label": "impostor",
+      "cosine": 0.971213
+    },
+    {
+      "pair": "id_002/base vs id_016/base",
+      "label": "impostor",
+      "cosine": 0.979364
+    },
+    {
+      "pair": "id_002/base vs id_017/base",
+      "label": "impostor",
+      "cosine": 0.958901
+    },
+    {
+      "pair": "id_002/base vs id_018/base",
+      "label": "impostor",
+      "cosine": 0.963694
+    },
+    {
+      "pair": "id_002/base vs id_019/base",
+      "label": "impostor",
+      "cosine": 0.937064
+    },
+    {
+      "pair": "id_002/base vs id_020/base",
+      "label": "impostor",
+      "cosine": 0.954626
+    },
+    {
+      "pair": "id_003/base vs id_004/base",
+      "label": "impostor",
+      "cosine": 0.931276
+    },
+    {
+      "pair": "id_003/base vs id_005/base",
+      "label": "impostor",
+      "cosine": 0.871039
+    },
+    {
+      "pair": "id_003/base vs id_006/base",
+      "label": "impostor",
+      "cosine": 0.976763
+    },
+    {
+      "pair": "id_003/base vs id_007/base",
+      "label": "impostor",
+      "cosine": 0.954773
+    },
+    {
+      "pair": "id_003/base vs id_008/base",
+      "label": "impostor",
+      "cosine": 0.938892
+    },
+    {
+      "pair": "id_003/base vs id_009/base",
+      "label": "impostor",
+      "cosine": 0.951837
+    },
+    {
+      "pair": "id_003/base vs id_010/base",
+      "label": "impostor",
+      "cosine": 0.845999
+    },
+    {
+      "pair": "id_003/base vs id_011/base",
+      "label": "impostor",
+      "cosine": 0.887598
+    },
+    {
+      "pair": "id_003/base vs id_012/base",
+      "label": "impostor",
+      "cosine": 0.962094
+    },
+    {
+      "pair": "id_003/base vs id_013/base",
+      "label": "impostor",
+      "cosine": 0.868777
+    },
+    {
+      "pair": "id_003/base vs id_014/base",
+      "label": "impostor",
+      "cosine": 0.934266
+    },
+    {
+      "pair": "id_003/base vs id_015/base",
+      "label": "impostor",
+      "cosine": 0.945222
+    },
+    {
+      "pair": "id_003/base vs id_016/base",
+      "label": "impostor",
+      "cosine": 0.960808
+    },
+    {
+      "pair": "id_003/base vs id_017/base",
+      "label": "impostor",
+      "cosine": 0.95979
+    },
+    {
+      "pair": "id_003/base vs id_018/base",
+      "label": "impostor",
+      "cosine": 0.978391
+    },
+    {
+      "pair": "id_003/base vs id_019/base",
+      "label": "impostor",
+      "cosine": 0.874086
+    },
+    {
+      "pair": "id_003/base vs id_020/base",
+      "label": "impostor",
+      "cosine": 0.952134
+    },
+    {
+      "pair": "id_004/base vs id_005/base",
+      "label": "impostor",
+      "cosine": 0.91234
+    },
+    {
+      "pair": "id_004/base vs id_006/base",
+      "label": "impostor",
+      "cosine": 0.96272
+    },
+    {
+      "pair": "id_004/base vs id_007/base",
+      "label": "impostor",
+      "cosine": 0.95479
+    },
+    {
+      "pair": "id_004/base vs id_008/base",
+      "label": "impostor",
+      "cosine": 0.977274
+    },
+    {
+      "pair": "id_004/base vs id_009/base",
+      "label": "impostor",
+      "cosine": 0.984282
+    },
+    {
+      "pair": "id_004/base vs id_010/base",
+      "label": "impostor",
+      "cosine": 0.908748
+    },
+    {
+      "pair": "id_004/base vs id_011/base",
+      "label": "impostor",
+      "cosine": 0.921963
+    },
+    {
+      "pair": "id_004/base vs id_012/base",
+      "label": "impostor",
+      "cosine": 0.969933
+    },
+    {
+      "pair": "id_004/base vs id_013/base",
+      "label": "impostor",
+      "cosine": 0.926203
+    },
+    {
+      "pair": "id_004/base vs id_014/base",
+      "label": "impostor",
+      "cosine": 0.969237
+    },
+    {
+      "pair": "id_004/base vs id_015/base",
+      "label": "impostor",
+      "cosine": 0.957794
+    },
+    {
+      "pair": "id_004/base vs id_016/base",
+      "label": "impostor",
+      "cosine": 0.982725
+    },
+    {
+      "pair": "id_004/base vs id_017/base",
+      "label": "impostor",
+      "cosine": 0.949667
+    },
+    {
+      "pair": "id_004/base vs id_018/base",
+      "label": "impostor",
+      "cosine": 0.952762
+    },
+    {
+      "pair": "id_004/base vs id_019/base",
+      "label": "impostor",
+      "cosine": 0.933799
+    },
+    {
+      "pair": "id_004/base vs id_020/base",
+      "label": "impostor",
+      "cosine": 0.968314
+    },
+    {
+      "pair": "id_005/base vs id_006/base",
+      "label": "impostor",
+      "cosine": 0.906177
+    },
+    {
+      "pair": "id_005/base vs id_007/base",
+      "label": "impostor",
+      "cosine": 0.911673
+    },
+    {
+      "pair": "id_005/base vs id_008/base",
+      "label": "impostor",
+      "cosine": 0.93405
+    },
+    {
+      "pair": "id_005/base vs id_009/base",
+      "label": "impostor",
+      "cosine": 0.889189
+    },
+    {
+      "pair": "id_005/base vs id_010/base",
+      "label": "impostor",
+      "cosine": 0.976185
+    },
+    {
+      "pair": "id_005/base vs id_011/base",
+      "label": "impostor",
+      "cosine": 0.970292
+    },
+    {
+      "pair": "id_005/base vs id_012/base",
+      "label": "impostor",
+      "cosine": 0.915619
+    },
+    {
+      "pair": "id_005/base vs id_013/base",
+      "label": "impostor",
+      "cosine": 0.939736
+    },
+    {
+      "pair": "id_005/base vs id_014/base",
+      "label": "impostor",
+      "cosine": 0.861278
+    },
+    {
+      "pair": "id_005/base vs id_015/base",
+      "label": "impostor",
+      "cosine": 0.915062
+    },
+    {
+      "pair": "id_005/base vs id_016/base",
+      "label": "impostor",
+      "cosine": 0.920884
+    },
+    {
+      "pair": "id_005/base vs id_017/base",
+      "label": "impostor",
+      "cosine": 0.885832
+    },
+    {
+      "pair": "id_005/base vs id_018/base",
+      "label": "impostor",
+      "cosine": 0.886873
+    },
+    {
+      "pair": "id_005/base vs id_019/base",
+      "label": "impostor",
+      "cosine": 0.947976
+    },
+    {
+      "pair": "id_005/base vs id_020/base",
+      "label": "impostor",
+      "cosine": 0.893059
+    },
+    {
+      "pair": "id_006/base vs id_007/base",
+      "label": "impostor",
+      "cosine": 0.96851
+    },
+    {
+      "pair": "id_006/base vs id_008/base",
+      "label": "impostor",
+      "cosine": 0.971851
+    },
+    {
+      "pair": "id_006/base vs id_009/base",
+      "label": "impostor",
+      "cosine": 0.96711
+    },
+    {
+      "pair": "id_006/base vs id_010/base",
+      "label": "impostor",
+      "cosine": 0.882934
+    },
+    {
+      "pair": "id_006/base vs id_011/base",
+      "label": "impostor",
+      "cosine": 0.914776
+    },
+    {
+      "pair": "id_006/base vs id_012/base",
+      "label": "impostor",
+      "cosine": 0.974859
+    },
+    {
+      "pair": "id_006/base vs id_013/base",
+      "label": "impostor",
+      "cosine": 0.900296
+    },
+    {
+      "pair": "id_006/base vs id_014/base",
+      "label": "impostor",
+      "cosine": 0.946318
+    },
+    {
+      "pair": "id_006/base vs id_015/base",
+      "label": "impostor",
+      "cosine": 0.962396
+    },
+    {
+      "pair": "id_006/base vs id_016/base",
+      "label": "impostor",
+      "cosine": 0.977425
+    },
+    {
+      "pair": "id_006/base vs id_017/base",
+      "label": "impostor",
+      "cosine": 0.961527
+    },
+    {
+      "pair": "id_006/base vs id_018/base",
+      "label": "impostor",
+      "cosine": 0.978612
+    },
+    {
+      "pair": "id_006/base vs id_019/base",
+      "label": "impostor",
+      "cosine": 0.902801
+    },
+    {
+      "pair": "id_006/base vs id_020/base",
+      "label": "impostor",
+      "cosine": 0.972957
+    },
+    {
+      "pair": "id_007/base vs id_008/base",
+      "label": "impostor",
+      "cosine": 0.981699
+    },
+    {
+      "pair": "id_007/base vs id_009/base",
+      "label": "impostor",
+      "cosine": 0.961156
+    },
+    {
+      "pair": "id_007/base vs id_010/base",
+      "label": "impostor",
+      "cosine": 0.912097
+    },
+    {
+      "pair": "id_007/base vs id_011/base",
+      "label": "impostor",
+      "cosine": 0.918155
+    },
+    {
+      "pair": "id_007/base vs id_012/base",
+      "label": "impostor",
+      "cosine": 0.964261
+    },
+    {
+      "pair": "id_007/base vs id_013/base",
+      "label": "impostor",
+      "cosine": 0.91917
+    },
+    {
+      "pair": "id_007/base vs id_014/base",
+      "label": "impostor",
+      "cosine": 0.94474
+    },
+    {
+      "pair": "id_007/base vs id_015/base",
+      "label": "impostor",
+      "cosine": 0.981462
+    },
+    {
+      "pair": "id_007/base vs id_016/base",
+      "label": "impostor",
+      "cosine": 0.953089
+    },
+    {
+      "pair": "id_007/base vs id_017/base",
+      "label": "impostor",
+      "cosine": 0.977488
+    },
+    {
+      "pair": "id_007/base vs id_018/base",
+      "label": "impostor",
+      "cosine": 0.987114
+    },
+    {
+      "pair": "id_007/base vs id_019/base",
+      "label": "impostor",
+      "cosine": 0.935086
+    },
+    {
+      "pair": "id_007/base vs id_020/base",
+      "label": "impostor",
+      "cosine": 0.985174
+    },
+    {
+      "pair": "id_008/base vs id_009/base",
+      "label": "impostor",
+      "cosine": 0.966028
+    },
+    {
+      "pair": "id_008/base vs id_010/base",
+      "label": "impostor",
+      "cosine": 0.930212
+    },
+    {
+      "pair": "id_008/base vs id_011/base",
+      "label": "impostor",
+      "cosine": 0.93458
+    },
+    {
+      "pair": "id_008/base vs id_012/base",
+      "label": "impostor",
+      "cosine": 0.97229
+    },
+    {
+      "pair": "id_008/base vs id_013/base",
+      "label": "impostor",
+      "cosine": 0.941754
+    },
+    {
+      "pair": "id_008/base vs id_014/base",
+      "label": "impostor",
+      "cosine": 0.945759
+    },
+    {
+      "pair": "id_008/base vs id_015/base",
+      "label": "impostor",
+      "cosine": 0.980322
+    },
+    {
+      "pair": "id_008/base vs id_016/base",
+      "label": "impostor",
+      "cosine": 0.972931
+    },
+    {
+      "pair": "id_008/base vs id_017/base",
+      "label": "impostor",
+      "cosine": 0.966501
+    },
+    {
+      "pair": "id_008/base vs id_018/base",
+      "label": "impostor",
+      "cosine": 0.966953
+    },
+    {
+      "pair": "id_008/base vs id_019/base",
+      "label": "impostor",
+      "cosine": 0.947721
+    },
+    {
+      "pair": "id_008/base vs id_020/base",
+      "label": "impostor",
+      "cosine": 0.981629
+    },
+    {
+      "pair": "id_009/base vs id_010/base",
+      "label": "impostor",
+      "cosine": 0.876684
+    },
+    {
+      "pair": "id_009/base vs id_011/base",
+      "label": "impostor",
+      "cosine": 0.90165
+    },
+    {
+      "pair": "id_009/base vs id_012/base",
+      "label": "impostor",
+      "cosine": 0.95658
+    },
+    {
+      "pair": "id_009/base vs id_013/base",
+      "label": "impostor",
+      "cosine": 0.910542
+    },
+    {
+      "pair": "id_009/base vs id_014/base",
+      "label": "impostor",
+      "cosine": 0.992494
+    },
+    {
+      "pair": "id_009/base vs id_015/base",
+      "label": "impostor",
+      "cosine": 0.951652
+    },
+    {
+      "pair": "id_009/base vs id_016/base",
+      "label": "impostor",
+      "cosine": 0.97716
+    },
+    {
+      "pair": "id_009/base vs id_017/base",
+      "label": "impostor",
+      "cosine": 0.953589
+    },
+    {
+      "pair": "id_009/base vs id_018/base",
+      "label": "impostor",
+      "cosine": 0.97004
+    },
+    {
+      "pair": "id_009/base vs id_019/base",
+      "label": "impostor",
+      "cosine": 0.92268
+    },
+    {
+      "pair": "id_009/base vs id_020/base",
+      "label": "impostor",
+      "cosine": 0.980016
+    },
+    {
+      "pair": "id_010/base vs id_011/base",
+      "label": "impostor",
+      "cosine": 0.971736
+    },
+    {
+      "pair": "id_010/base vs id_012/base",
+      "label": "impostor",
+      "cosine": 0.9086
+    },
+    {
+      "pair": "id_010/base vs id_013/base",
+      "label": "impostor",
+      "cosine": 0.94675
+    },
+    {
+      "pair": "id_010/base vs id_014/base",
+      "label": "impostor",
+      "cosine": 0.849193
+    },
+    {
+      "pair": "id_010/base vs id_015/base",
+      "label": "impostor",
+      "cosine": 0.905081
+    },
+    {
+      "pair": "id_010/base vs id_016/base",
+      "label": "impostor",
+      "cosine": 0.897355
+    },
+    {
+      "pair": "id_010/base vs id_017/base",
+      "label": "impostor",
+      "cosine": 0.87571
+    },
+    {
+      "pair": "id_010/base vs id_018/base",
+      "label": "impostor",
+      "cosine": 0.879116
+    },
+    {
+      "pair": "id_010/base vs id_019/base",
+      "label": "impostor",
+      "cosine": 0.956454
+    },
+    {
+      "pair": "id_010/base vs id_020/base",
+      "label": "impostor",
+      "cosine": 0.883882
+    },
+    {
+      "pair": "id_011/base vs id_012/base",
+      "label": "impostor",
+      "cosine": 0.923599
+    },
+    {
+      "pair": "id_011/base vs id_013/base",
+      "label": "impostor",
+      "cosine": 0.932027
+    },
+    {
+      "pair": "id_011/base vs id_014/base",
+      "label": "impostor",
+      "cosine": 0.871131
+    },
+    {
+      "pair": "id_011/base vs id_015/base",
+      "label": "impostor",
+      "cosine": 0.918376
+    },
+    {
+      "pair": "id_011/base vs id_016/base",
+      "label": "impostor",
+      "cosine": 0.930278
+    },
+    {
+      "pair": "id_011/base vs id_017/base",
+      "label": "impostor",
+      "cosine": 0.896036
+    },
+    {
+      "pair": "id_011/base vs id_018/base",
+      "label": "impostor",
+      "cosine": 0.894618
+    },
+    {
+      "pair": "id_011/base vs id_019/base",
+      "label": "impostor",
+      "cosine": 0.927143
+    },
+    {
+      "pair": "id_011/base vs id_020/base",
+      "label": "impostor",
+      "cosine": 0.901111
+    },
+    {
+      "pair": "id_012/base vs id_013/base",
+      "label": "impostor",
+      "cosine": 0.89932
+    },
+    {
+      "pair": "id_012/base vs id_014/base",
+      "label": "impostor",
+      "cosine": 0.932788
+    },
+    {
+      "pair": "id_012/base vs id_015/base",
+      "label": "impostor",
+      "cosine": 0.967456
+    },
+    {
+      "pair": "id_012/base vs id_016/base",
+      "label": "impostor",
+      "cosine": 0.975283
+    },
+    {
+      "pair": "id_012/base vs id_017/base",
+      "label": "impostor",
+      "cosine": 0.966922
+    },
+    {
+      "pair": "id_012/base vs id_018/base",
+      "label": "impostor",
+      "cosine": 0.967208
+    },
+    {
+      "pair": "id_012/base vs id_019/base",
+      "label": "impostor",
+      "cosine": 0.914715
+    },
+    {
+      "pair": "id_012/base vs id_020/base",
+      "label": "impostor",
+      "cosine": 0.952549
+    },
+    {
+      "pair": "id_013/base vs id_014/base",
+      "label": "impostor",
+      "cosine": 0.898084
+    },
+    {
+      "pair": "id_013/base vs id_015/base",
+      "label": "impostor",
+      "cosine": 0.905629
+    },
+    {
+      "pair": "id_013/base vs id_016/base",
+      "label": "impostor",
+      "cosine": 0.914763
+    },
+    {
+      "pair": "id_013/base vs id_017/base",
+      "label": "impostor",
+      "cosine": 0.879607
+    },
+    {
+      "pair": "id_013/base vs id_018/base",
+      "label": "impostor",
+      "cosine": 0.895632
+    },
+    {
+      "pair": "id_013/base vs id_019/base",
+      "label": "impostor",
+      "cosine": 0.979655
+    },
+    {
+      "pair": "id_013/base vs id_020/base",
+      "label": "impostor",
+      "cosine": 0.926544
+    },
+    {
+      "pair": "id_014/base vs id_015/base",
+      "label": "impostor",
+      "cosine": 0.928099
+    },
+    {
+      "pair": "id_014/base vs id_016/base",
+      "label": "impostor",
+      "cosine": 0.963041
+    },
+    {
+      "pair": "id_014/base vs id_017/base",
+      "label": "impostor",
+      "cosine": 0.933811
+    },
+    {
+      "pair": "id_014/base vs id_018/base",
+      "label": "impostor",
+      "cosine": 0.959977
+    },
+    {
+      "pair": "id_014/base vs id_019/base",
+      "label": "impostor",
+      "cosine": 0.913686
+    },
+    {
+      "pair": "id_014/base vs id_020/base",
+      "label": "impostor",
+      "cosine": 0.970954
+    },
+    {
+      "pair": "id_015/base vs id_016/base",
+      "label": "impostor",
+      "cosine": 0.960963
+    },
+    {
+      "pair": "id_015/base vs id_017/base",
+      "label": "impostor",
+      "cosine": 0.990928
+    },
+    {
+      "pair": "id_015/base vs id_018/base",
+      "label": "impostor",
+      "cosine": 0.969502
+    },
+    {
+      "pair": "id_015/base vs id_019/base",
+      "label": "impostor",
+      "cosine": 0.922551
+    },
+    {
+      "pair": "id_015/base vs id_020/base",
+      "label": "impostor",
+      "cosine": 0.972214
+    },
+    {
+      "pair": "id_016/base vs id_017/base",
+      "label": "impostor",
+      "cosine": 0.953527
+    },
+    {
+      "pair": "id_016/base vs id_018/base",
+      "label": "impostor",
+      "cosine": 0.96099
+    },
+    {
+      "pair": "id_016/base vs id_019/base",
+      "label": "impostor",
+      "cosine": 0.920312
+    },
+    {
+      "pair": "id_016/base vs id_020/base",
+      "label": "impostor",
+      "cosine": 0.964232
+    },
+    {
+      "pair": "id_017/base vs id_018/base",
+      "label": "impostor",
+      "cosine": 0.975736
+    },
+    {
+      "pair": "id_017/base vs id_019/base",
+      "label": "impostor",
+      "cosine": 0.898374
+    },
+    {
+      "pair": "id_017/base vs id_020/base",
+      "label": "impostor",
+      "cosine": 0.969089
+    },
+    {
+      "pair": "id_018/base vs id_019/base",
+      "label": "impostor",
+      "cosine": 0.91812
+    },
+    {
+      "pair": "id_018/base vs id_020/base",
+      "label": "impostor",
+      "cosine": 0.980609
+    },
+    {
+      "pair": "id_019/base vs id_020/base",
+      "label": "impostor",
+      "cosine": 0.931588
+    }
+  ]
+}

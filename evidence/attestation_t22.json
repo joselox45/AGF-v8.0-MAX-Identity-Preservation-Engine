@@ -1,0 +1,47 @@
+{
+  "checks": [
+    {
+      "check": "json_parseable",
+      "detail": "",
+      "ok": true
+    },
+    {
+      "check": "has_weights_sha256",
+      "detail": "",
+      "ok": true
+    },
+    {
+      "check": "weights_hash_pinned",
+      "detail": "facenet.tflite",
+      "ok": true
+    },
+    {
+      "check": "has_evidence_hash",
+      "detail": "",
+      "ok": true
+    },
+    {
+      "check": "cosine_present",
+      "detail": "cosine=0.967478",
+      "ok": true
+    },
+    {
+      "check": "status_pass",
+      "detail": "PASS",
+      "ok": true
+    },
+    {
+      "check": "file_sha512_recorded",
+      "detail": "",
+      "ok": true
+    }
+  ],
+  "evidence_file": "evidence/t22.json",
+  "file_sha512": "35b64905a4f838f85ae668299451645bc9852433e87b207a1945c4ec8eca3f1dd105c41b85de1cadca2c7018e3c46b79cbe5fbc4ecaf6f4f139c009c14995403",
+  "signer": "joselox45",
+  "ts": "2026-10-15T00:49:00.889173+00:00",
+  "verdict": "ATTESTED",
+  "attestor_ed25519": "79037572fbdde5c9012c859dd2fc9df75d2e6d1e8fff6c0ebc73a215649c06d6",
+  "signature": "61818fd2ae19480b098e8795198777d629abf521711089dadcffecc065668e8782b41165206ba05925355d7d83024ecae4cc13977ed087787411143d5aca7304",
+  "_agf_review": "self-attestation (signer=joselox45, clave efimera) \u2014 demuestra el protocolo; attestation INDEPENDIENTE requiere tercero con clave registrada fuera del repo (ATTESTATION_CONTRACT.md)"
+}
