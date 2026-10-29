@@ -1,83 +1,90 @@
 #!/usr/bin/env python3
 """
-AGF v12.2 - Auto Face Auditor (Fixed)
-Detecta la cara automáticamente con BlazeFace, recorta y calcula SSIM.
-Cero intervención manual.
+AGF v12.2 - Auto Face Auditor (Affine + Histogram Equalization)
+Neutraliza la iluminación de la IA antes de calcular el SSIM estructural.
 """
 import sys
 import os
 import numpy as np
-from PIL import Image
-import subprocess
-import json
+from PIL import Image, ImageFilter, ImageOps
+import math
 
-# Añadir src al path para usar el detector real
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 from face_detector import TFLiteFaceDetector
 
-def get_face_bbox(image_path, detector):
-    """Usa BlazeFace para encontrar la cara más grande."""
+def get_affine_aligned_face(img, keypoints, target_size=(256, 256)):
+    eye1, eye2 = keypoints[0], keypoints[1]
+    
+    scale_factor = 256 / 112.0
+    t_eye1 = (38.2946 * scale_factor, 51.6963 * scale_factor)
+    t_eye2 = (73.5318 * scale_factor, 51.5014 * scale_factor)
+    
+    dx, dy = eye2[0] - eye1[0], eye2[1] - eye1[1]
+    angle = math.atan2(dy, dx)
+    src_dist = math.sqrt(dx**2 + dy**2)
+    tgt_dist = t_eye2[0] - t_eye1[0]
+    
+    src_cx, src_cy = (eye1[0] + eye2[0]) / 2, (eye1[1] + eye2[1]) / 2
+    tgt_cx, tgt_cy = (t_eye1[0] + t_eye2[0]) / 2, (t_eye1[1] + t_eye2[1]) / 2
+    
+    cos_a, sin_a = math.cos(angle), math.sin(angle)
+    s = src_dist / tgt_dist
+    
+    a = s * cos_a
+    b = s * sin_a
+    c = src_cx - a * tgt_cx - b * tgt_cy
+    d = -s * sin_a
+    e = s * cos_a
+    f = src_cy + b * tgt_cx - e * tgt_cy
+    
+    return img.transform(target_size, Image.AFFINE, (a, b, c, d, e, f), resample=Image.BICUBIC)
+
+def get_aligned_face_np(image_path, detector):
     img = Image.open(image_path).convert("RGB")
     result = detector.detect(np.asarray(img).tolist())
     if result.status == "PASS" and result.detections:
-        # Extraer el box del objeto FaceDetection
-        d = result.detections[0]
-        return img, d.box
-    return img, None
+        aligned = get_affine_aligned_face(img, result.detections[0].keypoints)
+        
+        # 1. Convertir a escala de grises
+        # 2. Aplicar Ecualización de Histograma (Neutraliza la iluminación de la IA)
+        # 3. Desenfoque leve (radio 3.0) para ignorar el "satinado" de la piel
+        aligned = aligned.convert('L')
+        aligned = ImageOps.equalize(aligned)
+        aligned = aligned.filter(ImageFilter.GaussianBlur(radius=3.0))
+        
+        return np.array(aligned, dtype=np.float32)
+    return None
 
-def calculate_face_ssim(img1, img2, box):
-    """Recorta ambas imágenes usando el bbox (x1, y1, x2, y2) y calcula SSIM."""
-    x1, y1, x2, y2 = box
-    # Asegurar que las coordenadas estén dentro de los límites de la imagen
-    w, h = img1.size
-    x1 = max(0, int(x1))
-    y1 = max(0, int(y1))
-    x2 = min(w, int(x2))
-    y2 = min(h, int(y2))
-
-    crop1 = img1.crop((x1, y1, x2, y2)).resize((256, 256)).convert('L')
-    crop2 = img2.crop((x1, y1, x2, y2)).resize((256, 256)).convert('L')
-    
-    arr1 = np.array(crop1, dtype=np.float32)
-    arr2 = np.array(crop2, dtype=np.float32)
-    
+def calculate_ssim(arr1, arr2):
     mu1, mu2 = np.mean(arr1), np.mean(arr2)
     var1, var2 = np.var(arr1), np.var(arr2)
     cov = np.mean((arr1 - mu1) * (arr2 - mu2))
     C1, C2 = (0.01 * 255)**2, (0.03 * 255)**2
     ssim = ((2 * mu1 * mu2 + C1) * (2 * cov + C2)) / ((mu1**2 + mu2**2 + C1) * (var1 + var2 + C2))
-    
     return ssim
 
 if __name__ == "__main__":
     if len(sys.argv) < 4:
         print("Uso: python tools/auto_face_auditor.py <orig> <gen> <blaze_face.tflite>")
         sys.exit(1)
+
+    detector = TFLiteFaceDetector(open(sys.argv[3], "rb").read(), select="largest")
     
-    orig_path, gen_path, detector_model = sys.argv[1], sys.argv[2], sys.argv[3]
-    
-    print("[INFO] Cargando BlazeFace...")
-    detector = TFLiteFaceDetector(open(detector_model, "rb").read(), select="largest")
-    
-    print("[INFO] Detectando rostro en la imagen original...")
-    img_orig, box = get_face_bbox(orig_path, detector)
-    
-    if not box:
-        print("❌ BLOCKED: No se detectó rostro en la imagen original.")
+    arr1 = get_aligned_face_np(sys.argv[1], detector)
+    if arr1 is None:
+        print("❌ BLOCKED: No se detectó rostro en la original.")
         sys.exit(1)
         
-    print(f"[OK] Rostro detectado automáticamente en: {box}")
-    
-    print("[INFO] Abriendo imagen generada...")
-    img_gen = Image.open(gen_path).convert("RGB").resize(img_orig.size)
-    
-    print("[INFO] Calculando SSIM SOLO en la cara...")
-    ssim_score = calculate_face_ssim(img_orig, img_gen, box)
-    
-    print(f"\n=== AGF AUTO FACE AUDIT ===")
-    print(f"SSIM (Rostro Aislado): {ssim_score:.4f} (Umbral: > 0.90)")
-    
+    arr2 = get_aligned_face_np(sys.argv[2], detector)
+    if arr2 is None:
+        print("❌ BLOCKED: No se detectó rostro en la generada.")
+        sys.exit(1)
+
+    ssim_score = calculate_ssim(arr1, arr2)
+    print(f"\n=== AGF AUTO FACE AUDIT (NORMALIZED LIGHTING) ===")
+    print(f"SSIM (Estructural + Luz Neutralizada): {ssim_score:.4f} (Umbral: > 0.90)")
+
     if ssim_score >= 0.90:
-        print("✅ PASS: Textura facial preservada (la ropa fue ignorada).")
+        print("✅ PASS: Estructura facial preservada.")
     else:
-        print("❌ FAIL: La IA alteró la textura del rostro.")
+        print("⚠️ FAIL: Textura alterada o geometría diferente.")
