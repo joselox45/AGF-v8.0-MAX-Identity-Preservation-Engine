@@ -1,27 +1,29 @@
-# Python
+# Entornos y caché de Python
 __pycache__/
-*.py[cod]
-*$py.class
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
 
-# Modelos y Pesos
-*.tflite
+# Modelos biométricos pesados (NUNCA subir a GitHub)
 *.onnx
+*.tflite
+*.h5
 
-# Imágenes de prueba (Sandbox)
-sandbox/*
-!sandbox/.gitkeep
+# Evidencia local, imágenes de prueba y bóvedas (Privacidad)
+sandbox/
+termux_sealed/
+evidence/
 *.jpg
+*.jpeg
 *.png
 *.webp
+*.agf.json
 
-# Evidencia local (JSONs)
-evidence/*.json
-!evidence/.gitkeep
-
-# Backups y temporales
-*.bak
-*.tmp
-out/
-doctor_audit.txt
-*.onnx
-*.tflite
+# Archivos temporales y logs
+*.log
+.DS_Store
+.env
