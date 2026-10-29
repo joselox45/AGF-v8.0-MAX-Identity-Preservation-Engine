@@ -51,3 +51,46 @@ El LLM debe devolver este JSON (ejemplo de Restauración):
   "steps_applied": ["DIAGNOSTICAR", "REPARAR", "RESTAURAR", "RECONSTRUIR", "CLARIFICAR", "COLORIZAR", "SATINIZAR"],
   "verification_status": "PENDING_LOCAL_VERIFICATION"
 }
+
+## 5. REGLA DE MÚLTIPLES ROSTROS (Fotos Grupales)
+Si la imagen contiene más de una persona, el LLM NO debe agruparlas en una sola caja delimitadora.
+El contrato JSON debe devolver un array `faces_detected` con una caja por cada rostro, ej:
+
+"faces_detected": [
+  {"id": 1, "box": [x1, y1, x2, y2], "description": "Hombre de pie, camisa blanca"},
+  {"id": 2, "box": [x1, y1, x2, y2], "description": "Hombre de pie, suéter café"},
+  {"id": 3, "box": [x1, y1, x2, y2], "description": "Hombre de pie, suéter a rayas"},
+  ...
+]
+
+Si el LLM no puede calcular las coordenadas exactas, debe poner "null" en la caja y describir la posición relativa (ej. "arriba a la izquierda").
+
+---
+
+## 6. CONTRATO MULTI-ROSTRO (Fotos Grupales)
+Si la imagen contiene más de una persona, el LLM NO DEBE agrupar a las personas ni encerrar cuerpos o ropa en las cajas.
+El contrato exige una **caja por cada rostro individual** detectable. Si la imagen tiene 8 personas, deben haber 8 cajas.
+
+El JSON debe devolver un array `faces_detected` con este formato:
+```json
+"faces_detected": [
+  {"id": 1, "box": [x1, y1, x2, y2], "description": "Hombre 1, camisa blanca, arriba izquierda"},
+  {"id": 2, "box": [x1, y1, x2, y2], "description": "Hombre 2, suéter café, arriba centro"},
+  {"id": 3, "box": [x1, y1, x2, y2], "description": "Hombre 3, suéter rayas, arriba derecha"},
+  ...
+]
+
+---
+
+## 6. CONTRATO MULTI-ROSTRO (Fotos Grupales)
+Si la imagen contiene más de una persona, el LLM NO DEBE agrupar a las personas ni encerrar cuerpos o ropa en las cajas.
+El contrato exige una caja por cada rostro individual detectable. Si la imagen tiene 8 personas, deben haber 8 cajas.
+
+El JSON debe devolver un array `faces_detected` con este formato:
+"faces_detected": [
+  {"id": 1, "box": [x1, y1, x2, y2], "description": "Hombre 1, camisa blanca, arriba izquierda"},
+  {"id": 2, "box": [x1, y1, x2, y2], "description": "Hombre 2, suéter café, arriba centro"},
+  {"id": 3, "box": [x1, y1, x2, y2], "description": "Hombre 3, suéter rayas, arriba derecha"}
+]
+
+REGLA DE ORO: La caja debe encerrar EXCLUSIVAMENTE el rostro (frente a mentón, oreja a oreja). No incluyas hombros, torso, ropa ni fondo. Si no puedes calcular las coordenadas exactas, usa "null" y describe la posición relativa.
