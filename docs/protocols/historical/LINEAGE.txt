@@ -1,0 +1,3 @@
+00a7e7566442d2ebe8efa60a21e1aea471ac755b786aded726e974a54058fa47  docs/protocols/historical/AKADI-OMEGA-LITE-O0_v18.0_refundido.md
+90e64cca7d82c6dbc2b22a9d9b969fd65fa5962ec455d4676d39f5d5f87b932a  docs/protocols/historical/IDENTITY-LOCK-v1.6.md
+22dd06f077dea5178c61128e4ae28115f68a48499d9e7e703e17655988c0804c  /sdcard/Download/PROTOCOLO-AKADI-UNIFICADO-v19.0.md

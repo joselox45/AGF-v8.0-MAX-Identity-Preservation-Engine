@@ -1,0 +1,25 @@
+{
+  "verdict": {
+    "L1_formal": "PASS",
+    "L2_biometric": "PASS",
+    "L3_identity": "NOT_DETERMINED",
+    "cosine": 0.678946,
+    "threshold": 0.65,
+    "reasons": [
+      "L3: identidad NO DETERMINADA; falta: procedencia declarada, discriminacion cruzada (par distinto-sujeto)"
+    ]
+  },
+  "inputs": {
+    "subject_label": "unknown",
+    "prompt_sha256": null,
+    "ref_sha256": "16f8c3685a6b9bfafba3449d450da72ae06bbcc651ed8111bc8dc4ad6b0b883a",
+    "candidate_sha256": "3d7efd6e0118d6f2fc1028538db67b39bf6534427b068b82628436597a093f5e",
+    "weights_sha256": "54660297ebad23b7106a8ccd05f2f2f616b3d39bf7d7e82e148cf8ed7e27ae1a",
+    "model_id": "facenet:tflite:54660297ebad23b7",
+    "pipeline": "aligned:stable-median-N3"
+  },
+  "_meta": {
+    "ts": "2026-10-18T04:55:22.972178+00:00",
+    "host": "termux"
+  }
+}

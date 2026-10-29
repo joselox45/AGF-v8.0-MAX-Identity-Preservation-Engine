@@ -1,0 +1,52 @@
+# Validacion Biometrica — estado y limites (auditoria 11, H-03)
+
+## Umbral 0.65: PROVISIONAL, no derivado empiricamente
+El umbral comun a ArcFace/FaceNet es un punto de partida de ingenieria, NO
+una constante validada. La derivacion exige: corpus etiquetado (mismo/distinto
+sujeto), TAR/FAR con IC 95% por modelo y por condicion (retrato vs escena
+compleja), y tabla de decision documentada. ROADMAP: data/corpus_v1 +
+tools/corpus_benchmark.py ya existen; falta ejecutar con etiquetas.
+
+## Hallazgo de estabilidad (2026-10-14, inedito)
+Las escenas callejeras multirrostro producen varianza entre corridas (mismo
+par: 0.476 vs 0.098) porque el detector selecciona por score y el entorno
+XNNPACK no garantiza reproducibilidad en escenas complejas. Consecuencia:
+los REFUTED de escenas callejeras (verify_2026-10-14/) son MEDICIONES
+INESTABLES, no veredictos. El L3 SUPPORTED (0.931) es de retrato de medio
+cuerpo — condicion estable.
+
+## Parche de estabilidad (proximo)
+Seleccion de cara por MAYOR AREA (no score), num_threads=1, y mediana de
+N=3 corridas por par. Hasta aplicarse, los veredictos biometricos solo son
+vinculantes en condiciones de retrato (cara dominante en cuadro).
+
+## Lo que un PASS L2 significa hoy
+"Similitud coseno >= umbral provisional en condiciones de medicion estables,
+con pesos custodiados y pipeline alineado". NO es garantia biometrica
+concluyente (H-03 del auditor, aceptado).
+
+## Medicion real (2026-10-15, evidence/benchmark_corpus.json)
+
+Corpus procedural n=93 pares (80 mismo / 13 distinto), FaceNet TFLite custodiado:
+
+| Metrica | Valor | IC95 Wilson |
+|---|---|---|
+| TAR @ 0.65 | 0.625 | [0.52, 0.72] |
+| FAR @ 0.65 | 0.4615 | [0.23, 0.71] |
+| cos mismo (media) | 0.7224 | — |
+| cos distinto (max) | 0.9292 | — |
+
+Conclusion medida: las caras parametricas son out-of-distribution para
+FaceNet; las distribuciones mismo/distinto se solapan. El umbral 0.65 NO es
+transferible a entradas fuera de distribucion (confirma H-03). Para claims
+biometricos: corpus fotorealista (StyleGAN o fotos reales consentidas).
+Lo que SI queda demostrado: el pipeline de medicion completo corre a escala
+con intervalos de confianza — la maquinaria estadistica es sound.
+
+## Valor de referencia ESTABLE (2026-10-16, pipeline median-N3 + threads=1 + cara mayor area)
+Par ChatGPT-control (182345.jpg vs generada): cosine **0.815868**, reproducible
+bit a bit en dos corridas (determinismo verificado). El valor single-shot
+historico (0.896514) era una muestra con varianza ascendente; el estimador
+robusto ronda 0.08 por debajo. Veredictos previos (L3 SUPPORTED) se mantienen
+(ambos >> umbral 0.65). Regla: citar SIEMPRE el valor stable-median para
+nuevas corridas; los historicos single-shot quedan como referencia del metodo anterior.

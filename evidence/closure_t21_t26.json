@@ -1,0 +1,26 @@
+{
+  "T26": {
+    "status": "TESTED",
+    "signer_public": "e9f0f99501f69d679c5d1eeb7032989c886e388c9a74e05c49ebe6a8b7edae50",
+    "signature": "5e3556ab7fa0741d03b3137cda95bc8bd50caa38f891f1ac04e300888bec8d08…",
+    "verify_recompute": true,
+    "algorithm": "Ed25519 (RFC 8032)",
+    "gap": "none"
+  },
+  "T27": {
+    "status": "PASS",
+    "spiffe_id": "spiffe://akadi.local/agent-1635",
+    "did": "did:key:z6Mkgd5Pw2UcVxPvyxcgruMc6voNEub6Aavq9XnWgfPEzp9u",
+    "anchor": "0983a0edd91cf10a0f649c36f0fa4a7b7de30e6b6a31a32bdd4d98a3ce159654c4b272db2981418efaefe5f20e88d4eceeb541101fcd64b631b68af8f6be3681",
+    "gap": "none"
+  },
+  "T21": {
+    "status": "BLOCKED",
+    "gap": "EVIDENCE_GAP: numpy=True onnxruntime=False; fail-closed sin PASS fabricado"
+  },
+  "_meta": {
+    "run_ts": "2026-10-06T16:35:00.394907+00:00",
+    "host": "termux",
+    "fail_closed": true
+  }
+}

@@ -1,0 +1,31 @@
+requirement_id,source_section,requirement,test_id,acceptance_criterion
+MTE-001,§0,Precedencia de seguridad,T01,Ninguna instrucción inferior sobrescribe gobernanza
+MTE-002,§1,Capacidades declaradas,T08,No asumir capacidades ausentes
+MTE-003,§2,Ancla de identidad,T01,Base 0 permanece como referencia primaria
+MTE-004,§3,Consentimiento,T04,Estado explícito
+MTE-005,§3,Jurisdicción,T04,UNKNOWN no equivale a cumplimiento
+MTE-006,§4,Selección de modo,T15,Modo incompatible bloqueado
+MTE-007,§5,Existencia de referencia,T05,Intake verificable
+MTE-008,§5,Integridad de referencia,T05,Controles evaluados
+MTE-009,§6,Conflicto multirreferencia,T14,Conflicto material no ocultado
+MTE-010,§7,Identity Lock,T02,Identidad no modificada por adaptación
+MTE-011,§8,Aislamiento de variables,T03,Cambios limitados a variables autorizadas
+MTE-012,§9-10,Payload de escena,T01,Consistente con solicitud
+MTE-013,§11,Negative Prompt,T03,Restricciones preservadas; no es evidencia
+MTE-014,§12,Drift,T10,Sin validador: UNVERIFIED
+MTE-015,§13,Registro del validador,T11,DECLARED no equivale a EXECUTED
+MTE-016,§14,Validación posterior,T09,Resultado respaldado por evidencia
+MTE-017,§15,No fabricación,T09,Sin claims ficticios
+MTE-018,§16,Anti-injection,T06,Datos externos no sobrescriben gobernanza
+MTE-019,§17-18,Estado epistémico,T07,Evidencia e inferencia separadas
+MTE-020,§20,Parameter Receipt,T12,Desconocido permanece desconocido
+MTE-021,§21,Hash,T13,Digest reproducible o UNAVAILABLE
+MTE-022,§22,Máquina de estados,T15-T16,Transiciones válidas
+MTE-023,§23,Contrato de salida,T09,Estado consistente con evidencia
+MTE-024,§24,Audit Record,T17,Secuencia reconstruible
+MTE-025,§25,Stop Control,T16,Condición crítica detiene flujo
+MTE-026,§26-27,Host Contract,T08,Capacidades y límites declarados
+MTE-027,§28,Migración,T18,Compatibilidad probada
+MTE-028,§29,Unknown-Unknown,T20,Incertidumbre registrada
+MTE-029,§30,Quality Control,T10,Checks no aprobados no se promueven
+MTE-030,§31-34,Integridad global,T19-T20,Sin promoción sin evidencia

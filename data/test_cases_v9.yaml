@@ -1,0 +1,49 @@
+# AGF v9.0 — Contratos T21–T28 (extienden T01–T20 de MTE v1.0)
+# Estado inicial: NOT_RUN. BLOCKED/UNVERIFIED nunca conforman.
+test_cases:
+  - id: T21
+    title: Embedding real ArcFace
+    given: ["pesos ONNX ArcFace ausentes en ventana de chat"]
+    when: ["OnnxFaceEmbedder('arcface').embed(None)"]
+    then: ["status == BLOCKED", "reason contiene 'fail-closed'"]
+  - id: T22
+    title: Embedding real FaceNet
+    given: ["pesos ONNX FaceNet ausentes en ventana de chat"]
+    when: ["OnnxFaceEmbedder('facenet').embed(None)"]
+    then: ["status == BLOCKED"]
+  - id: T23
+    title: Comparador coseno fail-closed
+    given: ["reference.status == BLOCKED"]
+    when: ["VectorComparator().verify(reference, candidate)"]
+    then: ["status == BLOCKED", "sin campo cosine"]
+    also:
+      - given: ["vectores idénticos"]
+        then: ["cosine == 1.0"]
+  - id: T24
+    title: Anti-replay de embeddings
+    given: ["dos embeddings bit a bit iguales"]
+    when: ["VectorComparator().verify(ref, cand)"]
+    then: ["status == FAIL", "reason menciona replay"]
+  - id: T25
+    title: Cadena de custodia SHA-512
+    given: ["cadena de 2 registros válidos"]
+    when: ["mutar payload del registro 1 y ejecutar verify()"]
+    then: ["status == FAIL", "seq == 1"]
+  - id: T26
+    title: Firma Ed25519 / degradación HMAC
+    given: ["signer HMACFallbackSigner"]
+    when: ["EvidenceChain.append({'k': 1})"]
+    then: ["record.status == UNVERIFIED", "nunca PASS"]
+  - id: T27
+    title: SPIFFE + did:key del agente
+    given: ["host sin cryptography"]
+    when: ["enroll_agent('example.org', 'agent-1')"]
+    then: ["status == BLOCKED", "did es None"]
+    also:
+      - given: ["cryptography disponible"]
+        then: ["did startswith 'did:key:z'", "spiffe_id == spiffe://example.org/agent-1"]
+  - id: T28
+    title: Verificación estructural SVID
+    given: ["AgentIdentity con did_document.id != did"]
+    when: ["verify_agent(identity)"]
+    then: ["status == FAIL"]

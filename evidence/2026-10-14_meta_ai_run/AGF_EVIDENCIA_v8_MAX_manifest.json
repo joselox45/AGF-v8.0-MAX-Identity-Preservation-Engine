@@ -1,0 +1,63 @@
+{
+  "version": "v8.0 MAX",
+  "commit": "3b7253469cd2bb15d2ed745cb352dab8c7c2f836",
+  "fecha_auditoria": "2026-10-14",
+  "protocolo": "AKADI-OMEGA-LITE-O0 v18.0",
+  "apce": "v8.1.0 CANONICO G1-G6",
+  "kernel_sha256": "abe7c2a083a95925654a4c769fc1a46e4c2c3af858c5493014979b5a4541a904",
+  "doctor": "9/9 OPERATIVO",
+  "evidencia": {
+    "t21": {
+      "cosine": 0.8901,
+      "estado": "TESTED",
+      "nota": "PASS dudoso rechazado - ZERO-FABRICATION veredictos"
+    },
+    "t22": {
+      "cosine": 0.9675,
+      "estado": "TESTED",
+      "determinismo": "byte-a-byte"
+    },
+    "t30": {
+      "TAR_n": 1,
+      "cosine": 0.9743,
+      "estado": "muestra minima declarada"
+    }
+  },
+  "chat_runtime_pruebas": [
+    {
+      "id": 1,
+      "fondo": "Parque La Carolina",
+      "archivo": "image_20261014_142805.webp",
+      "veredicto": "PASS_EVIDENCIADO"
+    },
+    {
+      "id": 2,
+      "fondo": "Calle ladrillo",
+      "archivo": "image_20261014_143108.webp",
+      "veredicto": "PASS_EVIDENCIADO"
+    },
+    {
+      "id": 3,
+      "fondo": "Calle comercial motos",
+      "archivo": "image_20261014_143551.webp",
+      "veredicto": "PASS_EVIDENCIADO"
+    },
+    {
+      "id": 4,
+      "fondo": "Calle adoquinada amarilla",
+      "archivo": "image_20261014_144311.webp",
+      "veredicto": "PASS_EVIDENCIADO"
+    },
+    {
+      "id": 5,
+      "fondo": "Interseccion rampa camiones",
+      "archivo": "image_20261014_145413.webp",
+      "veredicto": "PASS_EVIDENCIADO"
+    }
+  ],
+  "sha512_chain": "evidence/t21.json + t22.json verificable",
+  "attestation": "tools/attest.py Ed25519 terceros",
+  "licencia_codigo": "MIT",
+  "pesos": "NO distribuidos",
+  "estado_final": "8/8 TESTED - Nada OPERATING_EFFECTIVE por diseño - Requiere auditoria G6"
+}

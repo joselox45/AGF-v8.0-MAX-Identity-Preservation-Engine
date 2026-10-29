@@ -1,0 +1,27 @@
+{
+  "T21": {
+    "status": "PASS",
+    "model_id": "arcface:tflite:700ea787ab479a13",
+    "evidence_hash": "863576b0c7b8df59c186fa6df33c397cd35d28c8bf52fc446eeef1b44cdbd75a24a79fb23138730e4c39ce16ed72f7d2feb9b17e41f552885272ce3b122f96de",
+    "weights_sha256": "700ea787ab479a13ddf9c8225215569f88065748aa2b8f2b384735c5e6521bef",
+    "pipeline": "blazeface:alineado_112"
+  },
+  "T22": {
+    "status": "BLOCKED",
+    "reason": "correr con modelo facenet.tflite"
+  },
+  "verification": {
+    "rule": "FACE_VERIFY_TFLITE",
+    "cosine": 0.890083,
+    "status": "PASS",
+    "reason": "cosine 0.8901 vs umbral 0.65",
+    "evidence_hash": "cd7315e1481057b1bece1b4f122048d4465a15d346836da93924f6dce6ab101969e26f7ed590b7842edc45b5e5132d1304eab7674f4acbe252cb0c82b4d6130c"
+  },
+  "_meta": {
+    "ts": "2026-10-14T17:28:14.248696+00:00",
+    "kind": "arcface",
+    "normalize_mode": "div255",
+    "host": "termux",
+    "fail_closed": true
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "n_pairs": 1,
+  "threshold": 0.65,
+  "TAR_same_accepted": 1.0,
+  "FAR_diff_accepted": null,
+  "cos_same_min": 0.9743,
+  "cos_diff_max": null,
+  "note": "FAR>0 implica umbral insuficiente o detector ausente",
+  "_meta": {
+    "ts": "2026-10-14T17:30:38.954904+00:00",
+    "host": "termux"
+  }
+}

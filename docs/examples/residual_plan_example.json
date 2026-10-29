@@ -1,0 +1,18 @@
+{
+  "residual_plan": {
+    "target_region": "global",
+    "lighting_delta": "increase_minimal",
+    "color_temperature_delta": "remove_magenta",
+    "saturation_delta": "increase_minimal",
+    "sharpness_delta": "increase",
+    "pixel_locked": true,
+    "face_protection": true,
+    "zero_generative_smoothing": true
+  },
+  "face_bboxes_norm": [
+    {"x_min": 100, "y_min": 100, "x_max": 200, "y_max": 200, "label": "Subject_1_Example"},
+    {"x_min": 300, "y_min": 150, "x_max": 400, "y_max": 250, "label": "Subject_2_Example"}
+  ],
+  "image_size": {"width": 1000, "height": 800},
+  "total_faces": 2
+}
