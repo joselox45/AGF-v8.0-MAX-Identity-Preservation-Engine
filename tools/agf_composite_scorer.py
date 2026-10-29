@@ -1,101 +1,185 @@
 #!/usr/bin/env python3
 """
-AGF v12.2 - Composite Scorer (4 Métricas)
-Calcula Cosine, SSIM, Laplaciano y Luz, y devuelve una media ponderada.
+AGF v12.2 - COMPOSITE SCORER (4-Layer Forensic Engine)
+Integra: ArcFace + Fourier 2D + Edge Shazam + SSIM
 """
-import sys, os, math
+import sys
+import os
 import numpy as np
 from PIL import Image, ImageFilter, ImageOps
-import onnxruntime as ort
+import math
+import json
+from datetime import datetime
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-from face_detector import TFLiteFaceDetector
-from onnx_arcface_validator import get_aligned_face, get_embedding
-from auto_face_auditor import get_affine_aligned_face
+sys.path.insert(0, os.path.dirname(__file__))
 
-def calc_ssim(arr1, arr2):
+from face_detector import TFLiteFaceDetector
+from agf_texture_shazam import get_aligned_edge_fingerprint
+from agf_fourier_auditor import get_fft_spectrum
+import onnxruntime as ort
+
+def get_affine_aligned_face(img, keypoints, target_size=(112, 112)):
+    eye1, eye2 = keypoints[0], keypoints[1]
+    scale_factor = 112 / 112.0
+    t_eye1 = (38.2946 * scale_factor, 51.6963 * scale_factor)
+    t_eye2 = (73.5318 * scale_factor, 51.5014 * scale_factor)
+    dx, dy = eye2[0] - eye1[0], eye2[1] - eye1[1]
+    angle = math.atan2(dy, dx)
+    src_dist = math.sqrt(dx**2 + dy**2)
+    tgt_dist = t_eye2[0] - t_eye1[0]
+    src_cx, src_cy = (eye1[0] + eye2[0]) / 2, (eye1[1] + eye2[1]) / 2
+    tgt_cx, tgt_cy = (t_eye1[0] + t_eye2[0]) / 2, (t_eye1[1] + t_eye2[1]) / 2
+    cos_a, sin_a = math.cos(angle), math.sin(angle)
+    s = src_dist / tgt_dist
+    a, b = s * cos_a, s * sin_a
+    c = src_cx - a * tgt_cx - b * tgt_cy
+    d, e = -s * sin_a, s * cos_a
+    f = src_cy + b * tgt_cx - e * tgt_cy
+    return img.transform(target_size, Image.AFFINE, (a, b, c, d, e, f), resample=Image.BICUBIC)
+
+def compute_all_metrics(orig_path, gen_path, detector, session):
+    img1 = Image.open(orig_path).convert("RGB")
+    img2 = Image.open(gen_path).convert("RGB")
+    
+    res1 = detector.detect(np.asarray(img1).tolist())
+    res2 = detector.detect(np.asarray(img2).tolist())
+    
+    if not res1.detections or not res2.detections:
+        return None
+
+    # --- CAPA 1: ARCFACE (Geometría) ---
+    face1_112 = get_affine_aligned_face(img1, res1.detections[0].keypoints, (112, 112))
+    face2_112 = get_affine_aligned_face(img2, res2.detections[0].keypoints, (112, 112))
+    
+    def get_emb(face):
+        arr = np.array(face).astype(np.float32)
+        arr = (arr - 127.5) / 127.5
+        arr = np.transpose(arr, (2, 0, 1))
+        arr = np.expand_dims(arr, axis=0)
+        out = session.run(None, {session.get_inputs()[0].name: arr})[0][0]
+        return out / np.linalg.norm(out)
+        
+    cosine = float(np.dot(get_emb(face1_112), get_emb(face2_112)))
+
+    # --- CAPA 2: FOURIER 2D (Frecuencia) ---
+    spec1 = get_fft_spectrum(orig_path, detector)
+    spec2 = get_fft_spectrum(gen_path, detector)
+    
+    if spec1 is not None and spec2 is not None:
+        c = 128; crop = 40
+        s1 = spec1[c-crop:c+crop, c-crop:c+crop].astype(np.float32)
+        s2 = spec2[c-crop:c+crop, c-crop:c+crop].astype(np.float32)
+        dot = np.sum(s1 * s2); norm1 = np.linalg.norm(s1); norm2 = np.linalg.norm(s2)
+        fourier = float(dot / (norm1 * norm2)) if norm1 > 0 and norm2 > 0 else 0.0
+    else:
+        fourier = 0.0
+
+    # --- CAPA 3: EDGE SHAZAM (Estructura) ---
+    arr_orig = get_aligned_edge_fingerprint(orig_path, detector)
+    arr_gen = get_aligned_edge_fingerprint(gen_path, detector)
+    
+    if arr_orig is not None and arr_gen is not None:
+        valid = (arr_orig > 0) | (arr_gen > 0)
+        a1, a2 = arr_orig[valid], arr_gen[valid]
+        mu1, mu2 = np.mean(a1), np.mean(a2)
+        var1, var2 = np.var(a1), np.var(a2)
+        cov = np.mean((a1 - mu1) * (a2 - mu2))
+        C1, C2 = (0.01 * 255)**2, (0.03 * 255)**2
+        shazam = float(((2 * mu1 * mu2 + C1) * (2 * cov + C2)) / ((mu1**2 + mu2**2 + C1) * (var1 + var2 + C2)))
+    else:
+        shazam = 0.0
+
+    # --- CAPA 4: SSIM CLÁSICO (Píxeles) ---
+    f1 = get_affine_aligned_face(img1, res1.detections[0].keypoints, (256, 256)).convert('L')
+    f2 = get_affine_aligned_face(img2, res2.detections[0].keypoints, (256, 256)).convert('L')
+    arr1 = np.array(ImageOps.equalize(f1).filter(ImageFilter.GaussianBlur(3)), dtype=np.float32)
+    arr2 = np.array(ImageOps.equalize(f2).filter(ImageFilter.GaussianBlur(3)), dtype=np.float32)
+    
     mu1, mu2 = np.mean(arr1), np.mean(arr2)
     var1, var2 = np.var(arr1), np.var(arr2)
     cov = np.mean((arr1 - mu1) * (arr2 - mu2))
-    C1, C2 = (0.01 * 255)**2, (0.03 * 255)**2
-    return ((2 * mu1 * mu2 + C1) * (2 * cov + C2)) / ((mu1**2 + mu2**2 + C1) * (var1 + var2 + C2))
+    ssim = float(((2 * mu1 * mu2 + C1) * (2 * cov + C2)) / ((mu1**2 + mu2**2 + C1) * (var1 + var2 + C2)))
 
-def calc_laplacian_var(img_gray):
-    # Aproximación de varianza laplaciana (nitidez) sin OpenCV
-    edges = img_gray.filter(ImageFilter.FIND_EDGES)
-    return np.var(np.array(edges, dtype=np.float32))
-
-def get_metrics(orig_path, gen_path, model_path="arcface.onnx"):
-    detector = TFLiteFaceDetector(open("blaze_face_short_range.tflite", "rb").read(), select="largest")
-    session = ort.InferenceSession(model_path)
-    
-    # 1. Cosine (ArcFace)
-    face1_112 = get_aligned_face(orig_path, detector)
-    face2_112 = get_aligned_face(gen_path, detector)
-    if not face1_112 or not face2_112:
-        return None
-        
-    emb1 = get_embedding(session, face1_112)
-    emb2 = get_embedding(session, face2_112)
-    cosine = float(np.dot(emb1, emb2))
-    
-    # 2. SSIM (Textura Alineada)
-    img_orig = Image.open(orig_path).convert("RGB")
-    img_gen = Image.open(gen_path).convert("RGB")
-    res1 = detector.detect(np.asarray(img_orig).tolist())
-    res2 = detector.detect(np.asarray(img_gen).tolist())
-    
-    aligned1 = get_affine_aligned_face(img_orig, res1.detections[0].keypoints).convert('L')
-    aligned2 = get_affine_aligned_face(img_gen, res2.detections[0].keypoints).convert('L')
-    
-    arr1 = np.array(ImageOps.equalize(aligned1.filter(ImageFilter.GaussianBlur(3.0))), dtype=np.float32)
-    arr2 = np.array(ImageOps.equalize(aligned2.filter(ImageFilter.GaussianBlur(3.0))), dtype=np.float32)
-    ssim = calc_ssim(arr1, arr2)
-    
-    # 3. Laplaciano (Nitidez / Suavizado)
-    lap1 = calc_laplacian_var(aligned1)
-    lap2 = calc_laplacian_var(aligned2)
-    # Ratio de nitidez (si la gen es muy suave, el ratio baja)
-    lap_score = min(lap1, lap2) / max(lap1, lap2) if max(lap1, lap2) > 0 else 0
-    
-    # 4. Luz (Diferencia de media de luminancia)
-    mu1, mu2 = np.mean(arr1), np.mean(arr2)
-    light_score = 1.0 - (abs(mu1 - mu2) / 255.0)
-    
-    return cosine, ssim, lap_score, light_score
+    return {
+        "cosine": cosine,
+        "fourier": fourier,
+        "shazam": shazam,
+        "ssim": ssim
+    }
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        print("Uso: python tools/agf_composite_scorer.py <orig> <gen>")
+    if len(sys.argv) < 4:
+        print("Uso: python tools/agf_composite_scorer.py <orig> <gen> <blaze_face.tflite> [--mode preservation|restoration]")
         sys.exit(1)
-        
-    metrics = get_metrics(sys.argv[1], sys.argv[2])
+
+    mode = "preservation"
+    if "--mode" in sys.argv:
+        mode = sys.argv[sys.argv.index("--mode") + 1]
+
+    print(f"[INFO] Cargando modelos para auditoría compuesta (Modo: {mode.upper()})...")
+    detector = TFLiteFaceDetector(open(sys.argv[3], "rb").read(), select="largest")
+    session = ort.InferenceSession("arcface.onnx")
+    
+    metrics = compute_all_metrics(sys.argv[1], sys.argv[2], detector, session)
+    
     if not metrics:
-        print("❌ BLOCKED: Fallo en detección facial.")
+        print("❌ BLOCKED: No se detectó rostro en una o ambas imágenes.")
         sys.exit(1)
-        
-    cosine, ssim, lap, light = metrics
+
+    print("\n" + "="*50)
+    print(" 🛡️  AGF v12.2 - COMPOSITE FORENSIC AUDIT")
+    print("="*50)
+    print(f" [1] Identidad (ArcFace) : {metrics['cosine']:.4f}")
+    print(f" [2] Firma de Frecuencia : {metrics['fourier']:.4f}")
+    print(f" [3] Estructura (Shazam) : {metrics['shazam']:.4f}")
+    print(f" [4] Píxeles (SSIM)      : {metrics['ssim']:.4f}")
+    print("-" * 50)
+
+    # LÓGICA DE DECISIÓN COMPUESTA (Fail-Closed)
+    verdict = "PASS"
+    reason = ""
     
-    # Compuerta Dura: Si la identidad falla, no importa el resto.
-    if cosine < 0.79:
-        print(f"\n=== RESULTADO AGF (COMPOSITE) ===")
-        print(f"❌ BLOCKED: Cosine {cosine:.4f} < 0.79 (Identidad no coincide).")
-        sys.exit(1)
-        
-    # Media Ponderada (40% Cos, 40% SSIM, 10% Lap, 10% Light)
-    composite = (cosine * 0.40) + (ssim * 0.40) + (lap * 0.10) + (light * 0.10)
+    # 1. Identity Check
+    min_cos = 0.65 if mode == "restoration" else 0.79
+    if metrics['cosine'] < 0.65:
+        verdict = "BLOCKED"
+        reason = "ArcFace < 0.65 (Otra persona)"
+    # 2. Fourier Check (Anti-Deepfake)
+    elif metrics['fourier'] < 0.70:
+        verdict = "BLOCKED"
+        reason = "Fourier < 0.70 (Textura sintética alucinada)"
+    # 3. Shazam Check (Anti-Destrucción)
+    elif metrics['shazam'] < 0.20:
+        verdict = "HUMAN_REVIEW"
+        reason = "Estructura de bordes dañada"
+    # 4. Textura Check
+    elif mode == "preservation" and metrics['ssim'] < 0.90:
+        verdict = "HUMAN_REVIEW"
+        reason = "SSIM bajo en Preservation (Satinado detectado)"
+    elif mode == "restoration" and metrics['ssim'] < 0.60:
+        verdict = "HUMAN_REVIEW"
+        reason = "SSIM bajo en Restoration"
     
-    print(f"\n=== RESULTADO AGF (COMPOSITE) ===")
-    print(f"Cosine (40%):      {cosine:.4f}")
-    print(f"SSIM (40%):        {ssim:.4f}")
-    print(f"Laplaciano (10%):  {lap:.4f}")
-    print(f"Luz (10%):         {light:.4f}")
-    print("-" * 34)
-    print(f"SCORE FINAL:       {composite:.4f} (Umbral > 0.85 PASS)")
-    
-    if composite >= 0.85:
-        print("✅ PASS: Identidad y textura preservadas.")
-    elif composite >= 0.70:
-        print("⚠️ HUMAN_REVIEW: Drift bajo, requiere validación humana.")
+    if verdict == "PASS":
+        print(" ✅ VEREDICTO: PASS (Identidad y Textura Blindadas)")
+    elif verdict == "HUMAN_REVIEW":
+        print(f" ⚠️ VEREDICTO: HUMAN_REVIEW ({reason})")
     else:
-        print("❌ FAIL: Alteración agresiva detectada.")
+        print(f" 🚨 VEREDICTO: BLOCKED ({reason})")
+    
+    print("="*50)
+    
+    # Guardar JSON de evidencia
+    os.makedirs("termux_sealed", exist_ok=True)
+    report = {
+        "engine": "AGF-v12.2-Composite",
+        "timestamp": datetime.now().isoformat(),
+        "mode": mode,
+        "metrics": metrics,
+        "verdict": verdict,
+        "reason": reason
+    }
+    with open("termux_sealed/composite_audit.json", "w") as f:
+        json.dump(report, f, indent=4)
+    print(f"📄 Evidencia guardada en termux_sealed/composite_audit.json")
