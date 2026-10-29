@@ -9,7 +9,9 @@
 *   **v11.0 Multi-Face Support:** Audits multiple faces per image using JSON bounding boxes.
 *   **SMHP Protocol (v0.7.0):** Semantic-Math Handshake. Separates AI visual opinions from mathematical proof.
 *   **Strict Threshold:** `0.79` (Research) / `0.85` (Production).
+    *   *Threshold Rationale:* `0.79` is the provisional Youden threshold for Research (allowing for variations in historical photos). `0.85` is the strict Production threshold, documented to guarantee maximum identity preservation for legal or forensic use cases.
 *   **Tests:** 120/121 passing (1 legacy test removed during cleanup). No CI claims are made for the current HEAD.
+*   **Privacy:** Clean history. All personal biometric images have been purged from the Git history.
 
 ## Architecture and Layers
 The system operates on 6 verification layers to guarantee absolute integrity:
@@ -24,13 +26,13 @@ The system operates on 6 verification layers to guarantee absolute integrity:
 ## Repository Structure
 *   `agf.py`: Core engine and CLI for basic verification.
 *   `src/`: Modular Python code (v10.1 CLI with Honest Doctor, embeddings, detectors).
-*   `tools/`: Audit tools (SMHP Validator, Lighting Normalizer, Local Verifier, Multi-Face Auditor).
+*   `tools/`: Audit tools (SMHP Validator, Lighting Normalizer, Local Verifier, Multi-Face Auditor, Hash Generator).
 *   `schemas/`: JSON Schemas for standardized LLM communication (Residual Plan).
 *   `docs/governance/`: The SMHP Kernel and Identity Lock.
 *   `docs/evidence/`: Case studies and benchmark reports.
 *   `docs/setup/`: Guides for downloading models and setting up Termux.
 *   `sandbox/`: Local test images and `.tflite` models (Ignored by Git).
-*   `evidence/`: Historical JSON cryptographic evidence. *Note: Some legacy files are still tracked in Git history for audit trail purposes.*
+*   `evidence/`: Historical JSON cryptographic evidence (Ignored by Git).
 
 ## Quick Start (30 seconds on Termux)
 
