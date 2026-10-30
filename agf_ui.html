@@ -410,19 +410,29 @@
                 
                 const data = await response.json();
                 
-                // 4. Actualizar UI con los datos REALES
-                document.getElementById('res-cos').innerText = data.metrics.cosine.toFixed(4);
-                document.getElementById('res-fourier').innerText = data.metrics.fourier.toFixed(4);
-                document.getElementById('res-shazam').innerText = data.metrics.shazam.toFixed(4);
-                document.getElementById('res-ssim').innerText = data.metrics.ssim.toFixed(4);
-                document.getElementById('res-color').innerText = data.metrics.color.toFixed(4) + ` (ΔH=${data.metrics.hue_diff.toFixed(0)}°)`;
-
-                log(`AGF Score: ${data.agf_score.toFixed(4)}`);
-                log(`Veredicto: ${data.verdict}`);
-
+                // 4. Actualizar UI (Soporte para BLOCKED sin métricas)
                 const vEl = document.getElementById('res-verdict');
                 vEl.innerText = data.verdict;
                 vEl.className = `text-center text-xl font-bold p-3 border verdict-${data.verdict}`;
+
+                if (data.metrics) {
+                    document.getElementById('res-cos').innerText = data.metrics.cosine.toFixed(4);
+                    document.getElementById('res-fourier').innerText = data.metrics.fourier.toFixed(4);
+                    document.getElementById('res-shazam').innerText = data.metrics.shazam.toFixed(4);
+                    document.getElementById('res-ssim').innerText = data.metrics.ssim.toFixed(4);
+                    document.getElementById('res-color').innerText = data.metrics.color.toFixed(4) + ` (ΔH=${data.metrics.hue_diff.toFixed(0)}°)`;
+                    log(`AGF Score: ${data.agf_score.toFixed(4)}`);
+                } else {
+                    // Si es un BLOCKED directo del servidor (ej. fallo de crash o cara no detectada)
+                    document.getElementById('res-cos').innerText = "-";
+                    document.getElementById('res-fourier').innerText = "-";
+                    document.getElementById('res-shazam').innerText = "-";
+                    document.getElementById('res-ssim').innerText = "-";
+                    document.getElementById('res-color').innerText = "-";
+                    log(`Motivo: ${data.reason || 'No verificable'}`);
+                }
+
+                log(`Veredicto: ${data.verdict}`);
 
                 // 5. Mostrar el JSON REAL generado por Termux
                 document.getElementById('json-box').innerText = JSON.stringify(data, null, 2);
