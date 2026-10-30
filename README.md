@@ -1,4 +1,11 @@
-# AGF v12.2 - Identity Preservation Engine (INDUSTRIAL)
+# AGF v12.3.5 - Identity Preservation Engine (INDUSTRIAL)
+**Fail-Closed. Zero-Fabrication. Human-in-the-Loop.**
+
+> `LEGACY: The repo name says v8.0-MAX. Current version is v12.3.5-PHASE-CERTIFIED. See VERSION_MANIFEST.md.`
+
+> **Status:** AUDITED (AKADI 22.0 + Grok) · PATCHED (P0+P1) · PHASE-CERTIFIED (MIL/SIL/PIL/HIL)
+> **Independent Benchmark:** UNVERIFIED (honest disclosure)
+
 **Fail-Closed. Zero-Fabrication. Human-in-the-Loop.**
 
 > *Audit AKADI 22.0: P0 patches applied. See `docs/evidence/AUDIT_AKADI_RESPONSE.md`.*
@@ -118,3 +125,12 @@ Only HIL and Digital Twin results are considered valid for identity preservation
 
 ## Phase Certification Protocol (Kernel v0.9.0)
 The Kernel now forces the LLM to self-classify its validation phase (MIL, SIL, PIL, HIL). This prevents the LLM from claiming it verified the identity when it only generated the image. The API and Termux engine operate in the HIL (Hardware-in-the-Loop) phase.
+
+## Independent Benchmark Status
+**Status:** UNVERIFIED / PENDING EXTERNAL
+
+- **FAR/FRR (Face Recognition):** Not measured on standard datasets (LFW, CFP, AgeDB). Thresholds 0.7825 (PASS) and 0.6325 (REVIEW) are heuristic, calibrated on the author's local corpus.
+- **Adversarial Robustness:** Not tested against sophisticated face-swap (FaceSwap, DeepFaceLab) or adversarial embeddings.
+- **Corpus Size:** ~30 images (wedding, family, damaged photos). Not statistically significant.
+
+**What this means:** AGF is production-ready for a single-operator workflow (family photo restoration), but **NOT certified for enterprise identity verification** until independent benchmarks are published.
