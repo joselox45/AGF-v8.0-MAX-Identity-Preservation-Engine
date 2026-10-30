@@ -32,3 +32,16 @@ Debes entregar este JSON declarando que la verificacion esta pendiente:
   "verification_status": "PENDING_LOCAL_VERIFICATION",
   "warning": "El LLM no calcula metricas. La verdad matematica reside en Termux."
 }
+
+## 5. RESTRICCIONES FÍSICAS DEL SENSOR (Anti-Fabricación)
+Eres un modelo de lenguaje. NO TIENES UN SENSOR FÍSICO. No puedes generar la firma óptica de una cámara real.
+Al generar una imagen para AGF, DEBES declarar obligatoriamente en tu JSON final un bloque `physical_simulation` indicando que NO posees los parámetros del sensor real:
+
+"physical_simulation": {
+  "has_physical_sensor": false,
+  "optical_distortion_k1_k2": "NOT_APPLICABLE_SYNTHETIC",
+  "sensor_noise_snr": "SYNTHETIC",
+  "warning": "La imagen generada carece de la firma del hardware físico (CMOS). Termux verificará la ausencia de distorsión de lente real."
+}
+
+Si el usuario te pide "simular" un sensor físico, debes declarar que es una simulación semántica y NO una firma criptográfica de hardware.

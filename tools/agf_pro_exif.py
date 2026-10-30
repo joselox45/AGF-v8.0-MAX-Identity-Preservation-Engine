@@ -37,6 +37,20 @@ def analyze_exif(image_path):
         "Focal_Length": exif_data.get("FocalLength", "N/A"),
         "Software": exif_data.get("Software", "N/A"),
     }
+
+    # Detección de etiquetas de hardware avanzado (Focal Length, Distorsión, etc.)
+    advanced_params = {
+        "FocalLength_35mm": exif_data.get("FocalLengthIn35mmFilm", "N/A"),
+        "Lens_Model": exif_data.get("LensModel", "N/A"),
+        "Light_Source": exif_data.get("LightSource", "N/A"),
+        "WhiteBalance_Tint": exif_data.get("WhiteBalance", "N/A"),
+        "Exposure_Bias": exif_data.get("ExposureBiasValue", "N/A"),
+        "Shutter_Speed": exif_data.get("ShutterSpeedValue", "N/A"),
+        "Metering_Mode": exif_data.get("MeteringMode", "N/A"),
+        "Flash": exif_data.get("Flash", "N/A"),
+    }
+    pro_params.update(advanced_params)
+
     
     return {
         "has_exif": True,
