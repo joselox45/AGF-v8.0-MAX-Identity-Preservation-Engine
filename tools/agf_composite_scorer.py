@@ -122,8 +122,8 @@ def compute_all_metrics(orig_path, gen_path, detector, session):
 
     # --- 7. OVERLAY DIFF (Visual) ---
     overlay_result = generate_overlay_diff(orig_path, gen_path, detector)
-    if overlay_result:
-        drift_pct, _ = overlay_result
+    if overlay_result is not None:
+        drift_pct = overlay_result
     else:
         drift_pct = 0.0
 
