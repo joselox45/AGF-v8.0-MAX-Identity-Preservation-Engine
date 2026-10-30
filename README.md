@@ -138,3 +138,10 @@ The Kernel now forces the LLM to self-classify its validation phase (MIL, SIL, P
 
 ## Repository Privacy Status
 The repository is **PRIVATE**. Anonymous HTTP requests to raw.githubusercontent.com return 404. This is **intentional privacy behavior**, not a technical failure. Auditors must be invited as collaborators to access the full source.
+## Full 9-Layer Audit (Hierarchical)
+For deep forensic analysis, use `./agf_full.sh <orig> <gen> <mode>`. This runs all 9 layers but respects the hierarchy:
+- **Filters (No Block):** Metadata (only on generated image), Tiling.
+- **Diagnostics (No Score):** Lighting, Base64 Differential.
+- **Final Judge (Score):** ArcFace, Fourier, Shazam, SSIM, Color, Overlay.
+
+**Important:** Metadata from the original is ignored (social media adds FBMD). The final verdict (PASS/BLOCKED) depends ONLY on the weighted score.
