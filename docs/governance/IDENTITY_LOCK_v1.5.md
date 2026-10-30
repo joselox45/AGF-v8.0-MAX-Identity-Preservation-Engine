@@ -744,3 +744,185 @@ DOCUMENTAR LA PROCEDENCIA.
 VALIDAR ANTES DE PROMETER.
 
 FIN DE IDENTITY LOCK v1.5
+
+
+---
+
+## ANEXO A — TAXONOMÍAS OPERATIVAS PARA AUDITORÍA
+
+### A.0. Estado y alcance del anexo
+
+Este anexo es una extensión del protocolo IDENTITY LOCK v1.5. No modifica
+las secciones 0-13 del documento principal. Proporciona vocabulario
+operativo para la sección 3.1 (Registro de restricciones) y la sección 8
+(Motor externo de decisiones).
+
+Estado: especificación de referencia. Los valores numéricos mencionados
+en este anexo son candidatos propuestos, no umbrales calibrados. Su
+aplicación requiere validación experimental (HIL) según el principio de
+la sección 12: "No asignar puntuaciones ficticias".
+
+Compatibilidad con kernel v0.9.5:
+- Este anexo NO redefine veredictos del kernel v0.9.5.
+- Los veredictos operativos (HUMAN_REVIEW, PENDING_LOCAL_VERIFICATION,
+  BLOCKED) prevalecen sobre cualquier taxonomía aquí descrita.
+- Las decisiones de este anexo (ACEPTAR, CORREGIR, REVISAR, DETENER) se
+  mapean al kernel según la tabla A.5.
+
+### A.1. IMMUTABLE_FEATURES — vocabulario para el contrato de identidad
+
+Lista de referencia para declarar restricciones de identidad en el
+contrato (sección 3.1). Cada item puede marcarse como:
+
+- INMUTABLE: no puede alterarse bajo ninguna circunstancia.
+- MUTABLE_AUTORIZADO: puede alterarse si el contrato lo autoriza.
+- NO_EVALUADO: no se ha verificado su conservación.
+
+| Código | Rasgo | Descripción |
+|---|---|---|
+| FACE_SHAPE | Forma del rostro | Contorno general, proporciones |
+| EYE_SHAPE | Forma de ojos | Contorno, apertura, inclinación |
+| EYEBROW_DENSITY_CURVE | Cejas | Densidad y curvatura |
+| NOSE_BRIDGE_ANGLE_WIDTH | Puente nasal | Ángulo y anchura |
+| NOSE_NOSTRIL_SHAPE | Fosas nasales | Forma y apertura |
+| LIP_CURVATURE_VOLUME | Labios | Curvatura y volumen |
+| JAWLINE_ANGLE | Mandíbula | Ángulo y contorno |
+| CHIN_PROJECTION | Mentón | Proyección y forma |
+| FOREHEAD_HEIGHT | Frente | Altura y contorno |
+| INTEROCULAR_DISTANCE | Distancia interocular | Separación entre ojos |
+| SKIN_TONE_HSV | Tono de piel | Valores HSV |
+| SKIN_TEXTURE | Textura | Poros, arrugas, lunares, cicatrices, pecas |
+| NATURAL_ASYMMETRY | Asimetría natural | Vector de asimetría del sujeto |
+| AGE_APPEARANCE | Apariencia de edad | Edad aparente |
+| FACIAL_HAIR_PATTERN | Vello facial | Patrón y densidad (si aplica) |
+| DISTINCTIVE_MARKS | Marcas distintivas | Lunares, cicatrices, pecas específicas |
+| EAR_SHAPE | Forma de orejas | Solo si visibles |
+
+Nota: esta lista es vocabulario, no un umbral. La evaluación de cada
+rasgo depende de la disponibilidad de referencias y modelos (HIL).
+
+### A.2. ANTI_BEAUTIFICATION — categorías de deriva por estética no autorizada
+
+Deriva cosmética: alteración de rasgos con el objetivo (implícito o
+explícito) de "mejorar" la apariencia del sujeto. Viola el principio de
+precedencia de restricciones (sección 2) cuando no está autorizada.
+
+| Código | Señal | Descripción |
+|---|---|---|
+| SKIN_SMOOTHING | Suavizado de piel | Reducción de poros, arrugas, textura |
+| AGE_REDUCTION | Reducción de edad | Alteración hacia apariencia más joven |
+| EYE_ENLARGEMENT | Agrandamiento de ojos | Aumento de tamaño aparente |
+| FACE_SLIMMING | Adelgazamiento facial | Reducción de anchura de mandíbula o mejillas |
+| SYMMETRY_CORRECTION | Corrección de simetría | Eliminación de asimetría natural |
+| MAKEUP_HALLUCINATION | Maquillaje inventado | Añadir maquillaje no presente en referencia |
+| TEETH_WHITENING | Blanqueamiento dental | Exageración de blancura de dientes |
+
+Cada categoría detectada se registra en el contrato (sección 3.1) como
+restricción violada. La decisión resultante (sección 8.1) se determina:
+
+- CORREGIR si existe corrección viable y autorizada.
+- REVISAR si la detección es ambigua o hay múltiples categorías.
+- DETENER si la suma de derivas compromete la identidad del sujeto.
+
+NUNCA se asigna PASS. El kernel v0.9.5 prohíbe veredictos PASS en fases
+MIL/SIL/PIL (ver schema agf_strong_conditioning_schema.json, campo verdict).
+
+### A.3. MULTI_SUBJECT_PROTOCOL — auditoría de N sujetos
+
+Cuando el contrato involucra N sujetos (N mayor o igual a 2), se aplica el
+siguiente protocolo de auditoría. Es de EVALUACIÓN, no de generación.
+
+A.3.1. Binding posicional
+- SUBJECT_i se vincula a REFERENCE_i según orden posicional declarado en
+  el contrato (izquierda a derecha u otro criterio explícito).
+- El binding se registra como nodo del grafo de procedencia (sección 10.1).
+
+A.3.2. Evaluación independiente
+- Cada sujeto se evalúa por separado.
+- Veredictos por sujeto: CONFIRMADA, PARCIAL, PENDIENTE, INCOMPATIBLE
+  (sección 13).
+- NUNCA se promedia entre sujetos para un veredicto agregado.
+
+A.3.3. Operaciones prohibidas
+- Transferencia de rasgos entre sujetos.
+- Blending o morphing entre rostros de sujetos distintos.
+- Face swap cruzado (aplicar cara de SUBJECT_1 a SUBJECT_2).
+- Cualquier operación que mezcle embeddings entre sujetos.
+
+A.3.4. Decisión agregada (mínimo, no promedio)
+- Si algún sujeto DETENER: conjunto DETENER.
+- Si algún sujeto REVISAR: conjunto REVISAR.
+- Si algún sujeto CORREGIR: conjunto CORREGIR.
+- Solo si TODOS los sujetos ACEPTAR: conjunto ACEPTAR.
+
+A.3.5. Registro
+Cada sujeto emite su propio nodo de evaluación en el grafo de procedencia,
+con su veredicto individual y sus métricas asociadas.
+
+### A.4. CPEP_IDENTITY_PRESERVATION_FAILED — token fail-closed
+
+CPEP (Canonical Preservation Error Protocol) es el token que indica que
+la conservación de identidad declarada no puede sostenerse con la
+evidencia disponible.
+
+A.4.1. Cuándo se emite
+- Evidencia insuficiente para emitir decisión distinta de DETENER.
+- Restricción crítica (A.1) no evaluable por falta de modelo o referencia.
+- Violación acumulada de ANTI_BEAUTIFICATION (A.2) más allá del presupuesto
+  de riesgo (sección 9).
+- Contaminación cruzada detectada en multi-sujeto (A.3).
+
+A.4.2. Mapeo con kernel v0.9.5
+CPEP_IDENTITY_PRESERVATION_FAILED se mapea al veredicto BLOCKED del kernel.
+El campo reason del JSON lo incluye explícitamente.
+
+Ejemplo de JSON compatible con agf_strong_conditioning_schema.json:
+
+    {
+      "kernel_version": "v0.9.5",
+      "phase": "SIL",
+      "verdict": "BLOCKED",
+      "metrics_missing": ["arcface"],
+      "reason": "CPEP_IDENTITY_PRESERVATION_FAILED: evidencia insuficiente para conservación de identidad. Requiere HIL.",
+      "hardware_signature": "SYNTHETIC (No CMOS Sensor)"
+    }
+
+A.4.3. Prohibiciones
+- NUNCA se mapea a PASS.
+- NUNCA se omite del JSON cuando el veredicto es BLOCKED por identidad.
+- NUNCA se sustituye por una métrica numérica no verificada.
+
+A.4.4. Escalamiento
+Tras emitir CPEP_IDENTITY_PRESERVATION_FAILED:
+1. Registrar nodo de decisión DETENER en el grafo (sección 10.1).
+2. Solicitar referencia de mayor calidad o modelo HIL disponible.
+3. No reintentar automáticamente sin nueva evidencia (sección 9.2).
+
+### A.5. Tabla de mapeo con kernel v0.9.5
+
+| Decisión IDENTITY_LOCK | Veredicto kernel v0.9.5 |
+|---|---|
+| ACEPTAR | (no aplicable en MIL/SIL, solo HIL) |
+| CORREGIR | HUMAN_REVIEW |
+| REVISAR | HUMAN_REVIEW o PENDING_LOCAL_VERIFICATION |
+| DETENER | BLOCKED |
+| CPEP emitido | BLOCKED (con reason explícito) |
+
+Nota: kernel v0.9.5 prohíbe PASS en fases MIL/SIL/PIL. El veredicto PASS
+solo puede emitirse desde HIL con evidencia verificable (ver kernel v0.9.5
+sección 6: "El SIL_SCORE es SOLO un diagnóstico").
+
+### A.6. Referencias cruzadas
+
+- Sección 3.1: Registro de restricciones — vocabulario en A.1.
+- Sección 8: Motor externo de decisiones — decisiones en A.2, A.3.
+- Sección 9: Presupuesto de riesgo — límites en A.4.
+- Sección 10: Grafo de procedencia — nodos por sujeto en A.3.5.
+- Sección 11: Aceptación multidimensional — veredictos por sujeto en A.3.2.
+- Sección 13: Compatibilidad y adaptadores — estados en A.3.2.
+- Kernel v0.9.5 sección 7: Strong Conditioning — compatibilidad A.4, A.5.
+- Schema: schemas/agf_strong_conditioning_schema.json — campos JSON A.4.2.
+
+---
+
+FIN DEL ANEXO A
