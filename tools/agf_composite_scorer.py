@@ -17,6 +17,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from face_detector import TFLiteFaceDetector
 from agf_texture_shazam import get_aligned_edge_fingerprint
 from agf_fourier_auditor import get_fft_spectrum
+from agf_tiling_detector import get_best_face
 from agf_color_fingerprint import get_dominant_colors, compare_color_fingerprints
 from agf_overlay_diff import generate_overlay_diff
 import onnxruntime as ort
@@ -43,19 +44,23 @@ def get_affine_aligned_face(img, keypoints, target_size=(112, 112)):
 C1 = (0.01 * 255)**2
 C2 = (0.03 * 255)**2
 
+C1 = (0.01 * 255)**2
+C2 = (0.03 * 255)**2
+
 def compute_all_metrics(orig_path, gen_path, detector, session):
     img1 = Image.open(orig_path).convert("RGB")
     img2 = Image.open(gen_path).convert("RGB")
     
-    res1 = detector.detect(np.asarray(img1).tolist())
-    res2 = detector.detect(np.asarray(img2).tolist())
+    # CAPA 0: Detección Robusta (Directa + Tiling Fallback)
+    face1_data = get_best_face(img1, detector)
+    face2_data = get_best_face(img2, detector)
     
-    if not res1.detections or not res2.detections:
+    if not face1_data or not face2_data:
         return None
 
     # --- 1. ARCFACE ---
-    face1_112 = get_affine_aligned_face(img1, res1.detections[0].keypoints, (112, 112))
-    face2_112 = get_affine_aligned_face(img2, res2.detections[0].keypoints, (112, 112))
+    face1_112 = get_affine_aligned_face(img1, face1_data["keypoints"], (112, 112))
+    face2_112 = get_affine_aligned_face(img2, face2_data["keypoints"], (112, 112))
     
     def get_emb(face):
         arr = np.array(face).astype(np.float32)
@@ -90,14 +95,13 @@ def compute_all_metrics(orig_path, gen_path, detector, session):
         mu1, mu2 = np.mean(a1), np.mean(a2)
         var1, var2 = np.var(a1), np.var(a2)
         cov = np.mean((a1 - mu1) * (a2 - mu2))
-        C1, C2 = (0.01 * 255)**2, (0.03 * 255)**2
         shazam = float(((2 * mu1 * mu2 + C1) * (2 * cov + C2)) / ((mu1**2 + mu2**2 + C1) * (var1 + var2 + C2)))
     else:
         shazam = 0.0
 
     # --- 4. SSIM CLÁSICO ---
-    f1 = get_affine_aligned_face(img1, res1.detections[0].keypoints, (256, 256)).convert('L')
-    f2 = get_affine_aligned_face(img2, res2.detections[0].keypoints, (256, 256)).convert('L')
+    f1 = get_affine_aligned_face(img1, face1_data["keypoints"], (256, 256)).convert('L')
+    f2 = get_affine_aligned_face(img2, face2_data["keypoints"], (256, 256)).convert('L')
     arr1 = np.array(ImageOps.equalize(f1).filter(ImageFilter.GaussianBlur(3)), dtype=np.float32)
     arr2 = np.array(ImageOps.equalize(f2).filter(ImageFilter.GaussianBlur(3)), dtype=np.float32)
     
