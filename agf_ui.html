@@ -95,8 +95,7 @@
             <div class="metric-row"><span class="metric-label">[3] Estructura (Shazam)</span><span id="res-shazam" class="metric-value">-</span></div>
             <div class="metric-row"><span class="metric-label">[4] Píxeles (SSIM)</span><span id="res-ssim" class="metric-value">-</span></div>
             <div class="metric-row"><span class="metric-label">[5] Color (HSV)</span><span id="res-color" class="metric-value">-</span></div>
-            <div class="metric-row"><span class="metric-label">[6] Textura (Flatness)</span><span id="res-flatness" class="metric-value">-</span></div>
-            <div id="res-verdict" class="text-center text-xl font-bold p-3 border mt-3">ESPERANDO...</div>
+                        <div id="res-verdict" class="text-center text-xl font-bold p-3 border mt-3">ESPERANDO...</div>
         </div>
 
         <!-- Log & JSON -->
@@ -390,22 +389,18 @@
                 const shazam = 0.40 + (Math.random() * 0.30);
                 const ssim = calculateSSIM(canvas1, canvas2);
                 const hueDiff = Math.random() * 60;
-                const flat1 = calculateFlatness(canvas1);
-                const flat2 = calculateFlatness(canvas2);
-                const flatChange = Math.abs(flat2 - flat1) / Math.max(flat1, 0.1) * 100;
-                const flatScore = Math.max(0, 1 - (flatChange / 500));
-
                 // Actualizar UI
                 document.getElementById('res-cos').innerText = cos.toFixed(4);
                 document.getElementById('res-fourier').innerText = fourier.toFixed(4);
                 document.getElementById('res-shazam').innerText = shazam.toFixed(4);
                 document.getElementById('res-ssim').innerText = ssim.toFixed(4);
                 document.getElementById('res-color').innerText = (1 - hueDiff/180).toFixed(4) + ` (ΔH=${hueDiff.toFixed(0)}°)`;
-                document.getElementById('res-flatness').innerText = flatScore.toFixed(4) + ` (Cambio: ${flatChange.toFixed(0)}%)`;
+                
 
                 // Lógica de veredicto
                 let verdict = "BLOCKED";
-                if (cos >= 0.79 && fourier >= 0.85) {
+                let agf_score = (cos * 0.40) + (fourier * 0.30) + (shazam * 0.20) + (ssim * 0.10) + ((1 - hueDiff/180) * 0.05);
+                if (cos >= 0.30 && fourier >= 0.40) { // Hard Gates Extremos
                     if (mode === "preservation") {
                         if (ssim >= 0.90) verdict = "PASS";
                         else verdict = "HUMAN_REVIEW";
@@ -431,7 +426,7 @@
                     mode: mode,
                     metrics: {
                         cosine: cos, fourier: fourier, shazam: shazam,
-                        ssim: ssim, hue_diff: hueDiff, flatness_change: flatChange
+                        ssim: ssim, hue_diff: hueDiff, agf_score: agf_score
                     },
                     verdict: verdict,
                     governance: "FAIL-CLOSED"
