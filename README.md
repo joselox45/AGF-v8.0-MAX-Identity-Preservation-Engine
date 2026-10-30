@@ -1,6 +1,8 @@
 # AGF v12.2 - Identity Preservation Engine (INDUSTRIAL)
 **Fail-Closed. Zero-Fabrication. Human-in-the-Loop.**
 
+> *Audit AKADI 22.0: P0 patches applied. See `docs/evidence/AUDIT_AKADI_RESPONSE.md`.*
+
 AGF is a forensic-grade identity verification engine designed to audit AI-generated images (Meta AI, Grok, ChatGPT, Stable Diffusion). It does not trust what the LLM claims; it verifies identity, texture, structure, and metadata locally.
 
 ## The Technical Difference: Semantics vs. Pixels
@@ -58,7 +60,7 @@ To prevent LLMs from ignoring the rules, use Slash Triggers. The LLM must return
 # 3. **Human-in-the-Loop:** If the system says `HUMAN_REVIEW`, you decide.
 
 ## Derivation Policy
-This repository is **frozen and cryptographically signed**. However, forks and open derivations are allowed under the MIT License. See `DERIVATIONS.md` for the full policy.
+This repository uses **Git tags for versioning**. Cryptographic signing (GPG) is not currently implemented. Forks and open derivations are allowed under the MIT License. See `DERIVATIONS.md` for the full policy.
 
 *Private Repository. Biometric models in .gitignore. Physical schemas in schemas/.*
 ## Scale Normalization
