@@ -18,7 +18,6 @@ from face_detector import TFLiteFaceDetector
 from agf_texture_shazam import get_aligned_edge_fingerprint
 from agf_fourier_auditor import get_fft_spectrum
 from agf_color_fingerprint import get_dominant_colors, compare_color_fingerprints
-from agf_flatness_forensic import get_variance
 from agf_overlay_diff import generate_overlay_diff
 import onnxruntime as ort
 
@@ -135,8 +134,6 @@ def compute_all_metrics(orig_path, gen_path, detector, session):
         "ssim": ssim,
         "color": color_score,
         "hue_diff": hue_diff,
-        "flatness": flatness_score,
-        "flatness_change": flatness_change,
         "overlay_drift": drift_pct
     }
 
@@ -160,12 +157,11 @@ if __name__ == "__main__":
         sys.exit(1)
 
     # --- PONDERACIÓN INDUSTRIAL ---
-    W_IDENTITY = 0.355
-    W_FOURIER  = 0.255
+    W_IDENTITY = 0.40
+    W_FOURIER  = 0.30
     W_SHAZAM   = 0.19
     W_SSIM     = 0.10
     W_COLOR    = 0.05
-    W_FLATNESS = 0.05
 
     # 1. Calcular Ponderación (Siempre se calcula)
     agf_score = (metrics['cosine'] * W_IDENTITY) + \
@@ -206,7 +202,6 @@ if __name__ == "__main__":
     print(f" [3] Estructura (Shazam) [20%] : {metrics['shazam']:.4f}")
     print(f" [4] Píxeles (SSIM)      [10%] : {metrics['ssim']:.4f}")
     print(f" [5] Huella Cromática    [ 5%] : {metrics['color']:.4f} (ΔH={metrics['hue_diff']:.1f}°)")
-    print(f" [6] Flatness (Textura)  [ 5%] : {metrics['flatness']:.4f} (Cambio: {metrics['flatness_change']:.0f}%)")
     print(f" [7] Overlay Diff (Visual): {metrics['overlay_drift']:.2f}% de Deriva")
     print("-" * 55)
     print(f" 🏆 AGF SCORE PONDERADO        : {agf_score:.4f}")
