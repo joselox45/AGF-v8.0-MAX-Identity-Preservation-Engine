@@ -103,13 +103,6 @@ python -m unittest discover tests
 For full-body or group photos where faces are small, AGF uses a Tiling Detector. It divides the image into a 3x3 grid, detects faces in each tile, applies Non-Maximum Suppression (NMS) to remove duplicates, and filters out low-variance (blurry/fake) detections. If no valid faces are found, it returns BLOCKED (Fail-Closed).
 
 ## Transparent Fail-Closed API
-The API () now extracts the exact reason from the scorer's . If the engine blocks an image (e.g., no face detected), the API returns HTTP 200 with . This provides full transparency without crashing.
-
-## Transparent Fail-Closed API
-The API () now extracts the exact reason from the scorer's . If the engine blocks an image (e.g., no face detected), the API returns HTTP 200 with . This provides full transparency without crashing.
-
-
-## Transparent Fail-Closed API
 The API (`api_server.py`) now extracts the exact reason from the scorer's `stdout`. If the engine blocks an image (e.g., no face detected), the API returns HTTP 200 with a `BLOCKED` verdict and the exact `reason`. This provides full transparency without crashing.
 
 ## AGF Validation Pyramid (X-in-the-Loop)
