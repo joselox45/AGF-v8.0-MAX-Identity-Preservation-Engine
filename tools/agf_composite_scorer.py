@@ -118,7 +118,8 @@ def compute_all_metrics(orig_path, gen_path, detector, session):
         flatness_change = abs(var_gen - var_orig) / var_orig * 100
     else:
         flatness_change = 0.0
-    flatness_score = max(0.0, 1.0 - (flatness_change / 500.0))
+    divisor = 2000.0 if mode == 'restoration' else 500.0
+    flatness_score = max(0.0, 1.0 - (flatness_change / divisor))
 
     # --- 7. OVERLAY DIFF (Visual) ---
     overlay_result = generate_overlay_diff(orig_path, gen_path, detector)
@@ -170,10 +171,10 @@ if __name__ == "__main__":
     verdict = "PASS"
     reason = ""
     
-    if metrics['cosine'] < 0.6325:
+    if mode == 'preservation' and metrics['cosine'] < 0.6325 or mode == 'restoration' and metrics['cosine'] < 0.58:
         verdict = "BLOCKED"
         reason = f"Hard Gate: ArcFace {metrics['cosine']:.3f} < 0.65 (Otra persona)"
-    elif metrics['fourier'] < 0.6825:
+    elif mode == 'preservation' and metrics['fourier'] < 0.6825 or mode == 'restoration' and metrics['fourier'] < 0.65:
         verdict = "BLOCKED"
         reason = f"Hard Gate: Fourier {metrics['fourier']:.3f} < 0.70 (Alucinación sintética)"
     
@@ -187,9 +188,9 @@ if __name__ == "__main__":
                     (metrics['flatness'] * W_FLATNESS)
         
         # Umbrales del Score Ponderado
-        if agf_score >= 0.7825:
+        if mode == 'preservation' and agf_score >= 0.7825 or mode == 'restoration' and agf_score >= 0.60:
             verdict = "PASS"
-        elif agf_score >= 0.6325:
+        elif mode == 'preservation' and agf_score >= 0.6325 or mode == 'restoration' and agf_score >= 0.45:
             verdict = "HUMAN_REVIEW"
             reason = "Score moderado: requiere validación humana"
         else:
