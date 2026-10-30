@@ -91,3 +91,6 @@ The repository has been audited and patched:
 
 ### Running Tests
 python -m unittest discover tests
+
+## Layer 0: Tiling Detection (P1 Patch)
+For full-body or group photos where faces are small, AGF uses a Tiling Detector. It divides the image into a 3x3 grid, detects faces in each tile, applies Non-Maximum Suppression (NMS) to remove duplicates, and filters out low-variance (blurry/fake) detections. If no valid faces are found, it returns BLOCKED (Fail-Closed).
