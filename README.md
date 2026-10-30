@@ -67,3 +67,10 @@ For AI-generated images, always normalize the scale before auditing to avoid fal
 python tools/agf_scale_normalizer.py original_photo.jpg generated_photo.jpg
 ./agf.sh preservation sandbox/normalized_orig.jpg sandbox/normalized_gen.jpg
 ```
+
+## Full-Stack Architecture (Web + API)
+AGF is not just a CLI. You can run a local Flask API to consume the forensic engine from any web or mobile app.
+1. Start the API: `python api_server.py` (runs on http://0.0.0.0:8000)
+2. Start the Web UI: `python -m http.server 8080`
+3. Open Chrome at: `http://localhost:8080/agf_ui.html`
+The Web UI now uses `fetch()` to send cropped images to the Flask backend and displays the REAL ONNX metrics (no more simulation).
