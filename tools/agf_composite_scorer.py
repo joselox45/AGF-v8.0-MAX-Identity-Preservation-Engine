@@ -18,6 +18,7 @@ from face_detector import TFLiteFaceDetector
 from agf_texture_shazam import get_aligned_edge_fingerprint
 from agf_fourier_auditor import get_fft_spectrum
 from agf_color_fingerprint import get_dominant_colors, compare_color_fingerprints
+from agf_flatness_forensic import get_variance
 import onnxruntime as ort
 
 def get_affine_aligned_face(img, keypoints, target_size=(112, 112)):
@@ -109,13 +110,24 @@ def compute_all_metrics(orig_path, gen_path, detector, session):
     # Convertir diferencia de matiz a score (0-1): 0 grados = 1.0, 180 grados = 0.0
     color_score = max(0.0, 1.0 - (hue_diff / 180.0))
     
+    # --- 6. FLATNESS ---
+    var_orig = get_variance(orig_path, detector)
+    var_gen = get_variance(gen_path, detector)
+    if var_orig and var_gen and var_orig > 0:
+        flatness_change = abs(var_gen - var_orig) / var_orig * 100
+    else:
+        flatness_change = 0.0
+    flatness_score = max(0.0, 1.0 - (flatness_change / 500.0))
+
     return {
         "cosine": cosine,
         "fourier": fourier,
         "shazam": shazam,
         "ssim": ssim,
         "color": color_score,
-        "hue_diff": hue_diff
+        "hue_diff": hue_diff,
+        "flatness": flatness_score,
+        "flatness_change": flatness_change
     }
 
 if __name__ == "__main__":
@@ -138,11 +150,12 @@ if __name__ == "__main__":
         sys.exit(1)
 
     # --- PONDERACIÓN INDUSTRIAL ---
-    W_IDENTITY = 0.38
-    W_FOURIER  = 0.28
+    W_IDENTITY = 0.355
+    W_FOURIER  = 0.255
     W_SHAZAM   = 0.19
     W_SSIM     = 0.10
     W_COLOR    = 0.05
+    W_FLATNESS = 0.05
 
     # 1. Hard Gates (Fail-Closed)
     verdict = "PASS"
@@ -161,7 +174,8 @@ if __name__ == "__main__":
                     (metrics['fourier'] * W_FOURIER) + \
                     (metrics['shazam'] * W_SHAZAM) + \
                     (metrics['ssim'] * W_SSIM) + \
-                    (metrics['color'] * W_COLOR)
+                    (metrics['color'] * W_COLOR) + \
+                    (metrics['flatness'] * W_FLATNESS)
         
         # Umbrales del Score Ponderado
         if agf_score >= 0.7825:
@@ -183,6 +197,7 @@ if __name__ == "__main__":
     print(f" [3] Estructura (Shazam) [20%] : {metrics['shazam']:.4f}")
     print(f" [4] Píxeles (SSIM)      [10%] : {metrics['ssim']:.4f}")
     print(f" [5] Huella Cromática    [ 5%] : {metrics['color']:.4f} (ΔH={metrics['hue_diff']:.1f}°)")
+    print(f" [6] Flatness (Textura)  [ 5%] : {metrics['flatness']:.4f} (Cambio: {metrics['flatness_change']:.0f}%)")
     print("-" * 55)
     print(f" 🏆 AGF SCORE PONDERADO        : {agf_score:.4f}")
     print("-" * 55)
