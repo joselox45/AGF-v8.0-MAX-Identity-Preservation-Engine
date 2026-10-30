@@ -156,11 +156,7 @@ if __name__ == "__main__":
     W_COLOR    = 0.05
 
     # 1. Calcular Ponderación (Siempre se calcula)
-    agf_score = (metrics['cosine'] * W_IDENTITY) + \
-                (metrics['fourier'] * W_FOURIER) + \
-                (metrics['shazam'] * W_SHAZAM) + \
-                (metrics['ssim'] * W_SSIM) + \
-                (metrics['color'] * W_COLOR) + \
+    agf_score = (metrics['cosine'] * W_IDENTITY) + (metrics['fourier'] * W_FOURIER) + (metrics['shazam'] * W_SHAZAM) + (metrics['ssim'] * W_SSIM) + (metrics['color'] * W_COLOR)
 
     
     # 2. Hard Gates Extremos (Solo casos catastróficos)
