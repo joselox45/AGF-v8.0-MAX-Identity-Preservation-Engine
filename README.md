@@ -134,3 +134,7 @@ The Kernel now forces the LLM to self-classify its validation phase (MIL, SIL, P
 - **Corpus Size:** ~30 images (wedding, family, damaged photos). Not statistically significant.
 
 **What this means:** AGF is production-ready for a single-operator workflow (family photo restoration), but **NOT certified for enterprise identity verification** until independent benchmarks are published.
+
+
+## Repository Privacy Status
+The repository is **PRIVATE**. Anonymous HTTP requests to raw.githubusercontent.com return 404. This is **intentional privacy behavior**, not a technical failure. Auditors must be invited as collaborators to access the full source.
