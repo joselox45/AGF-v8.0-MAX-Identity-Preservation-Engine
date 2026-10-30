@@ -4,3 +4,5 @@ onnxruntime
 tflite-runtime
 flask
 flask-cors
+
+cryptography

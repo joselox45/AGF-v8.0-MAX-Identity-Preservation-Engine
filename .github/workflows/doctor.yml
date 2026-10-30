@@ -9,7 +9,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: deps
-        run: pip install numpy pillow tflite-runtime cryptography
+        run: pip install -r requirements.txt
       - name: autodiagnostico
         run: python agf.py doctor
       - name: suite completa
