@@ -1,0 +1,38 @@
+{
+  "type": "object",
+  "properties": {
+    "kernel_version": {
+      "type": "string",
+      "const": "v0.9.5"
+    },
+    "phase": {
+      "type": "string",
+      "enum": ["MIL", "SIL", "PIL", "HIL"]
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["HUMAN_REVIEW", "PENDING_LOCAL_VERIFICATION", "BLOCKED"],
+      "description": "PROHIBIDO usar PASS. El LLM no puede certificar identidad."
+    },
+    "metrics_missing": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Debe incluir 'arcface' si no tienes el modelo."
+    },
+    "sil_score": {
+      "type": ["object", "null"],
+      "properties": {
+        "weighted": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "reason": {
+      "type": "string"
+    },
+    "hardware_signature": {
+      "type": "string",
+      "const": "SYNTHETIC (No CMOS Sensor)"
+    }
+  },
+  "required": ["kernel_version", "phase", "verdict", "metrics_missing", "reason"],
+  "additionalProperties": false
+}
