@@ -17,6 +17,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from face_detector import TFLiteFaceDetector
 from agf_texture_shazam import get_aligned_edge_fingerprint
 from agf_fourier_auditor import get_fft_spectrum
+from agf_color_fingerprint import get_dominant_colors, compare_color_fingerprints
 import onnxruntime as ort
 
 def get_affine_aligned_face(img, keypoints, target_size=(112, 112)):
@@ -101,11 +102,20 @@ def compute_all_metrics(orig_path, gen_path, detector, session):
     cov = np.mean((arr1 - mu1) * (arr2 - mu2))
     ssim = float(((2 * mu1 * mu2 + C1) * (2 * cov + C2)) / ((mu1**2 + mu2**2 + C1) * (var1 + var2 + C2)))
 
+    # --- 5. COLOR FINGERPRINT ---
+    orig_colors = get_dominant_colors(orig_path)
+    gen_colors = get_dominant_colors(gen_path)
+    hue_diff = compare_color_fingerprints(orig_colors, gen_colors, "restoration")
+    # Convertir diferencia de matiz a score (0-1): 0 grados = 1.0, 180 grados = 0.0
+    color_score = max(0.0, 1.0 - (hue_diff / 180.0))
+    
     return {
         "cosine": cosine,
         "fourier": fourier,
         "shazam": shazam,
-        "ssim": ssim
+        "ssim": ssim,
+        "color": color_score,
+        "hue_diff": hue_diff
     }
 
 if __name__ == "__main__":
@@ -128,10 +138,11 @@ if __name__ == "__main__":
         sys.exit(1)
 
     # --- PONDERACIÓN INDUSTRIAL ---
-    W_IDENTITY = 0.40
-    W_FOURIER  = 0.30
-    W_SHAZAM   = 0.20
+    W_IDENTITY = 0.38
+    W_FOURIER  = 0.28
+    W_SHAZAM   = 0.19
     W_SSIM     = 0.10
+    W_COLOR    = 0.05
 
     # 1. Hard Gates (Fail-Closed)
     verdict = "PASS"
@@ -149,7 +160,8 @@ if __name__ == "__main__":
         agf_score = (metrics['cosine'] * W_IDENTITY) + \
                     (metrics['fourier'] * W_FOURIER) + \
                     (metrics['shazam'] * W_SHAZAM) + \
-                    (metrics['ssim'] * W_SSIM)
+                    (metrics['ssim'] * W_SSIM) + \
+                    (metrics['color'] * W_COLOR)
         
         # Umbrales del Score Ponderado
         if agf_score >= 0.7825:
@@ -170,6 +182,7 @@ if __name__ == "__main__":
     print(f" [2] Firma de Frecuencia [30%] : {metrics['fourier']:.4f}")
     print(f" [3] Estructura (Shazam) [20%] : {metrics['shazam']:.4f}")
     print(f" [4] Píxeles (SSIM)      [10%] : {metrics['ssim']:.4f}")
+    print(f" [5] Huella Cromática    [ 5%] : {metrics['color']:.4f} (ΔH={metrics['hue_diff']:.1f}°)")
     print("-" * 55)
     print(f" 🏆 AGF SCORE PONDERADO        : {agf_score:.4f}")
     print("-" * 55)
