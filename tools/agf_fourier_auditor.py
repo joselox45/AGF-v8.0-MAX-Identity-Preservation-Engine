@@ -31,7 +31,7 @@ def get_affine_aligned_face(img, keypoints, target_size=(112, 112)):
     f = src_cy + b * tgt_cx - e * tgt_cy
     return img.transform(target_size, Image.AFFINE, (a, b, c, d, e, f), resample=Image.BICUBIC)
 
-def get_fft_spectrum_aligned(image_path, detector):
+def get_fft_spectrum(image_path, detector):
     img = Image.open(image_path).convert("RGB")
     res = detector.detect(np.asarray(img).tolist())
     if res.status != "PASS" or not res.detections:
@@ -70,8 +70,8 @@ if __name__ == "__main__":
         sys.exit(1)
 
     detector = TFLiteFaceDetector(open(sys.argv[3], "rb").read(), select="largest")
-    spec_orig = get_fft_spectrum_aligned(sys.argv[1], detector)
-    spec_gen = get_fft_spectrum_aligned(sys.argv[2], detector)
+    spec_orig = get_fft_spectrum(sys.argv[1], detector)
+    spec_gen = get_fft_spectrum(sys.argv[2], detector)
     
     if spec_orig is None or spec_gen is None:
         print("❌ BLOCKED: No se detectó rostro.")
