@@ -104,3 +104,14 @@ The API () now extracts the exact reason from the scorer's . If the engine block
 
 ## Transparent Fail-Closed API
 The API (`api_server.py`) now extracts the exact reason from the scorer's `stdout`. If the engine blocks an image (e.g., no face detected), the API returns HTTP 200 with a `BLOCKED` verdict and the exact `reason`. This provides full transparency without crashing.
+
+## AGF Validation Pyramid (X-in-the-Loop)
+The AGF architecture follows the industry-standard X-in-the-Loop validation methodology:
+
+1. **MIL (Model-in-the-Loop):** The Chat Kernel (v0.8.8). The LLM simulates compliance but does not calculate metrics.
+2. **SIL (Software-in-the-Loop):** The Web UI (). Simulates the dashboard for user experience.
+3. **PIL (Processor-in-the-Loop):** The Flask API + ONNX runtime executing on the Android processor.
+4. **HIL (Hardware-in-the-Loop):** The full forensic engine () running with real models (ArcFace, Fourier) on physical hardware.
+5. **Digital Twin:** The immutable evidence stored in  with SHA-256 hashes.
+
+Only HIL and Digital Twin results are considered valid for identity preservation. MIL and SIL are for development and visualization.
