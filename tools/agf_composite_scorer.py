@@ -111,8 +111,6 @@ def compute_all_metrics(orig_path, gen_path, detector, session):
     color_score = max(0.0, 1.0 - (hue_diff / 180.0))
     
     # --- 6. FLATNESS ---
-    divisor = 2000.0 if mode == 'restoration' else 500.0
-    flatness_score = max(0.0, 1.0 - (flatness_change / divisor))
 
     # --- 7. OVERLAY DIFF (Visual) ---
     overlay_result = generate_overlay_diff(orig_path, gen_path, detector)
