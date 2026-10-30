@@ -74,3 +74,10 @@ AGF is not just a CLI. You can run a local Flask API to consume the forensic eng
 2. Start the Web UI: `python -m http.server 8080`
 3. Open Chrome at: `http://localhost:8080/agf_ui.html`
 The Web UI now uses `fetch()` to send cropped images to the Flask backend and displays the REAL ONNX metrics (no more simulation).
+
+
+## Advanced Diagnostics (Termux)
+Beyond the 5 weighted layers, the repository includes secondary forensic tools:
+- `tools/agf_base64_diff.py`: Binary flow analysis (Base64 Differential).
+- `tools/agf_lighting_forensic.py`: Light physics and shadow consistency.
+- `tools/agf_overlay_diff.py`: Visual heatmap of alterations.
