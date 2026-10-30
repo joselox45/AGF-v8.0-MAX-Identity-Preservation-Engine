@@ -39,3 +39,6 @@ Debes entregar este JSON declarando que la verificacion esta pendiente:
   "verification_status": "PENDING_LOCAL_VERIFICATION",
   "physical_simulation": { "has_physical_sensor": false }
 }
+
+## 4.1 NOTA SOBRE ESCALA Y RESOLUCION
+No controlas el pipeline de escalado de tu servidor. El humano (en Termux) normalizara la escala con PIL (LANCZOS) antes de auditar para evitar falsos negativos por diferencias de resolucion.

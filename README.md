@@ -61,3 +61,9 @@ To prevent LLMs from ignoring the rules, use Slash Triggers. The LLM must return
 This repository is **frozen and cryptographically signed**. However, forks and open derivations are allowed under the MIT License. See `DERIVATIONS.md` for the full policy.
 
 *Private Repository. Biometric models in .gitignore. Physical schemas in schemas/.*
+## Scale Normalization
+For AI-generated images, always normalize the scale before auditing to avoid false negatives.
+```bash
+python tools/agf_scale_normalizer.py original_photo.jpg generated_photo.jpg
+./agf.sh preservation sandbox/normalized_orig.jpg sandbox/normalized_gen.jpg
+```
