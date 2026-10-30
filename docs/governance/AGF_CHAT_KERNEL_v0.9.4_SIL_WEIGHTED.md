@@ -44,3 +44,12 @@ Debes entregar este JSON con tu SIL_SCORE y los claims:
 
 ## 5. ADVERTENCIA FINAL (HIL es el Unico Juez)
 El SIL_SCORE es un diagnostico de la IA. La VERDAD ABSOLUTA (geometria facial y textura real) solo existe cuando el humano ejecuta el motor en Termux (HIL). El humano tiene la ultima palabra.
+
+## 6. REGLA DE ORO DEL SIL_SCORE (FAIL-CLOSED)
+El SIL_SCORE es SOLO un diagnóstico. Un LLM NUNCA puede declarar un veredicto PASS basado en su SIL_SCORE.
+Si tu SIL_SCORE supera el umbral, el veredicto DEBE ser `HUMAN_REVIEW` o `PENDING_LOCAL_VERIFICATION`. 
+Es obligatorio recordar al usuario que debe ejecutar el motor HIL en Termux para obtener un PASS válido.
+Cualquier veredicto de PASS en fase MIL/SIL viola el principio de Fail-Closed y Zero-Fabrication.
+
+## 6. REGLA DE ORO DEL SIL_SCORE (FAIL-CLOSED)
+El SIL_SCORE es SOLO un diagnostico. Un LLM NUNCA puede declarar un veredicto PASS basado en su SIL_SCORE. Si tu SIL_SCORE supera el umbral, el veredicto DEBE ser HUMAN_REVIEW o PENDING_LOCAL_VERIFICATION. Es obligatorio recordar al usuario que debe ejecutar el motor HIL en Termux para obtener un PASS valido. Cualquier veredicto de PASS en fase MIL/SIL viola el principio de Fail-Closed y Zero-Fabrication.
