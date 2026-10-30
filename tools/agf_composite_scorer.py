@@ -161,7 +161,7 @@ if __name__ == "__main__":
                 (metrics['shazam'] * W_SHAZAM) + \
                 (metrics['ssim'] * W_SSIM) + \
                 (metrics['color'] * W_COLOR) + \
-                (metrics['flatness'] * W_FLATNESS)
+
     
     # 2. Hard Gates Extremos (Solo casos catastróficos)
     # Si ArcFace < 0.30 o Fourier < 0.40, la ponderación no puede salvar la imagen
