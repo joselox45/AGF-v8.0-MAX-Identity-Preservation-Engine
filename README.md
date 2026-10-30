@@ -83,3 +83,11 @@ Beyond the 5 weighted layers, the repository includes secondary forensic tools:
 - `tools/agf_base64_diff.py`: Binary flow analysis (Base64 Differential).
 - `tools/agf_lighting_forensic.py`: Light physics and shadow consistency.
 - `tools/agf_overlay_diff.py`: Visual heatmap of alterations.
+
+## Audit Status (AKADI 22.0)
+The repository has been audited and patched:
+- P0 (Critical): Fixed API Fail-Closed, Crash handling, Identity Floor (0.65/0.55), and Weights sum (1.0).
+- P1 (Technical Debt): Fourier 2D now aligns faces with BlazeFace before FFT. API URL in the Web UI is dynamic. Dependencies updated.
+
+### Running Tests
+python -m unittest discover tests
