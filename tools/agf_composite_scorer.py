@@ -19,6 +19,7 @@ from agf_texture_shazam import get_aligned_edge_fingerprint
 from agf_fourier_auditor import get_fft_spectrum
 from agf_color_fingerprint import get_dominant_colors, compare_color_fingerprints
 from agf_flatness_forensic import get_variance
+from agf_overlay_diff import generate_overlay_diff
 import onnxruntime as ort
 
 def get_affine_aligned_face(img, keypoints, target_size=(112, 112)):
@@ -119,6 +120,13 @@ def compute_all_metrics(orig_path, gen_path, detector, session):
         flatness_change = 0.0
     flatness_score = max(0.0, 1.0 - (flatness_change / 500.0))
 
+    # --- 7. OVERLAY DIFF (Visual) ---
+    overlay_result = generate_overlay_diff(orig_path, gen_path, detector, "termux_sealed/overlay_diff_audit.png")
+    if overlay_result:
+        drift_pct, _ = overlay_result
+    else:
+        drift_pct = 0.0
+
     return {
         "cosine": cosine,
         "fourier": fourier,
@@ -127,7 +135,8 @@ def compute_all_metrics(orig_path, gen_path, detector, session):
         "color": color_score,
         "hue_diff": hue_diff,
         "flatness": flatness_score,
-        "flatness_change": flatness_change
+        "flatness_change": flatness_change,
+        "overlay_drift": drift_pct
     }
 
 if __name__ == "__main__":
@@ -198,6 +207,7 @@ if __name__ == "__main__":
     print(f" [4] Píxeles (SSIM)      [10%] : {metrics['ssim']:.4f}")
     print(f" [5] Huella Cromática    [ 5%] : {metrics['color']:.4f} (ΔH={metrics['hue_diff']:.1f}°)")
     print(f" [6] Flatness (Textura)  [ 5%] : {metrics['flatness']:.4f} (Cambio: {metrics['flatness_change']:.0f}%)")
+    print(f" [7] Overlay Diff (Visual): {metrics['overlay_drift']:.2f}% de Deriva")
     print("-" * 55)
     print(f" 🏆 AGF SCORE PONDERADO        : {agf_score:.4f}")
     print("-" * 55)
