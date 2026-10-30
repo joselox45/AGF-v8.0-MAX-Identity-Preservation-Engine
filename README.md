@@ -115,3 +115,6 @@ The AGF architecture follows the industry-standard X-in-the-Loop validation meth
 5. **Digital Twin:** The immutable evidence stored in  with SHA-256 hashes.
 
 Only HIL and Digital Twin results are considered valid for identity preservation. MIL and SIL are for development and visualization.
+
+## Phase Certification Protocol (Kernel v0.9.0)
+The Kernel now forces the LLM to self-classify its validation phase (MIL, SIL, PIL, HIL). This prevents the LLM from claiming it verified the identity when it only generated the image. The API and Termux engine operate in the HIL (Hardware-in-the-Loop) phase.
