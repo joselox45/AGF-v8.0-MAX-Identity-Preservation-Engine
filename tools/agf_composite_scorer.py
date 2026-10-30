@@ -121,7 +121,7 @@ def compute_all_metrics(orig_path, gen_path, detector, session):
     flatness_score = max(0.0, 1.0 - (flatness_change / 500.0))
 
     # --- 7. OVERLAY DIFF (Visual) ---
-    overlay_result = generate_overlay_diff(orig_path, gen_path, detector, "termux_sealed/overlay_diff_audit.png")
+    overlay_result = generate_overlay_diff(orig_path, gen_path, detector)
     if overlay_result:
         drift_pct, _ = overlay_result
     else:
