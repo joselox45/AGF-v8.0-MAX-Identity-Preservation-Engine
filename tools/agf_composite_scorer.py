@@ -167,27 +167,27 @@ if __name__ == "__main__":
     W_COLOR    = 0.05
     W_FLATNESS = 0.05
 
-    # 1. Hard Gates (Fail-Closed)
+    # 1. Calcular Ponderación (Siempre se calcula)
+    agf_score = (metrics['cosine'] * W_IDENTITY) + \
+                (metrics['fourier'] * W_FOURIER) + \
+                (metrics['shazam'] * W_SHAZAM) + \
+                (metrics['ssim'] * W_SSIM) + \
+                (metrics['color'] * W_COLOR) + \
+                (metrics['flatness'] * W_FLATNESS)
+    
+    # 2. Hard Gates Extremos (Solo casos catastróficos)
+    # Si ArcFace < 0.30 o Fourier < 0.40, la ponderación no puede salvar la imagen
     verdict = "PASS"
     reason = ""
     
-    if mode == 'preservation' and metrics['cosine'] < 0.6325 or mode == 'restoration' and metrics['cosine'] < 0.58:
+    if metrics['cosine'] < 0.30:
         verdict = "BLOCKED"
-        reason = f"Hard Gate: ArcFace {metrics['cosine']:.3f} < 0.65 (Otra persona)"
-    elif mode == 'preservation' and metrics['fourier'] < 0.6825 or mode == 'restoration' and metrics['fourier'] < 0.65:
+        reason = f"Hard Gate Extremo: ArcFace {metrics['cosine']:.3f} < 0.30 (Cara no reconocible)"
+    elif metrics['fourier'] < 0.40:
         verdict = "BLOCKED"
-        reason = f"Hard Gate: Fourier {metrics['fourier']:.3f} < 0.70 (Alucinación sintética)"
-    
-    # 2. Score Ponderado (Solo si pasa los Hard Gates)
-    if verdict == "PASS":
-        agf_score = (metrics['cosine'] * W_IDENTITY) + \
-                    (metrics['fourier'] * W_FOURIER) + \
-                    (metrics['shazam'] * W_SHAZAM) + \
-                    (metrics['ssim'] * W_SSIM) + \
-                    (metrics['color'] * W_COLOR) + \
-                    (metrics['flatness'] * W_FLATNESS)
-        
-        # Umbrales del Score Ponderado
+        reason = f"Hard Gate Extremo: Fourier {metrics['fourier']:.3f} < 0.40 (Alucinación total)"
+    else:
+        # La Ponderación decide el Veredicto Final
         if mode == 'preservation' and agf_score >= 0.7825 or mode == 'restoration' and agf_score >= 0.60:
             verdict = "PASS"
         elif mode == 'preservation' and agf_score >= 0.6325 or mode == 'restoration' and agf_score >= 0.45:
@@ -196,8 +196,7 @@ if __name__ == "__main__":
         else:
             verdict = "BLOCKED"
             reason = f"Score ponderado muy bajo ({agf_score:.3f})"
-    else:
-        agf_score = 0.0
+
 
     print("\n" + "="*55)
     print(" 🛡️  AGF v12.2 - WEIGHTED COMPOSITE AUDIT")
