@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<camera_system_configuration>
+    <hardware_and_physical_settings>
+        <sensor_technology_architecture>Stacked BSI CMOS</sensor_technology_architecture>
+        <effective_resolution_megapixels></effective_resolution_megapixels>
+        <electronic_shutter_refresh_rate_hz></electronic_shutter_refresh_rate_hz>
+        <iso_sensitivity_range>
+            <native_min></native_min>
+            <native_max></native_max>
+        </iso_sensitivity_range>
+        <dynamic_range_stops></dynamic_range_stops>
+    </hardware_and_physical_settings>
+    <intrinsic_parameters>
+        <focal_length_horizontal_pixels_fx></focal_length_horizontal_pixels_fx>
+        <focal_length_vertical_pixels_fy></focal_length_vertical_pixels_fy>
+        <principal_point_x_cx></principal_point_x_cx>
+        <principal_point_y_cy></principal_point_y_cy>
+        <pixel_pitch_microns></pixel_pitch_microns>
+    </intrinsic_parameters>
+    <optical_distortion_coefficients>
+        <radial_distortion>
+            <k1></k1>
+            <k2></k2>
+            <k3></k3>
+        </radial_distortion>
+    </optical_distortion_coefficients>
+    <photometric_and_radiometric_parameters>
+        <color_correction_matrix_ccm></color_correction_matrix_ccm>
+        <white_balance>
+            <color_temperature_kelvin></color_temperature_kelvin>
+            <tint_green_magenta></tint_green_magenta>
+        </white_balance>
+        <vignetting_falloff_coefficients></vignetting_falloff_coefficients>
+        <sensor_signal_to_noise_ratio_snr></sensor_signal_to_noise_ratio_snr>
+        <sensor_black_level></sensor_black_level>
+    </photometric_and_radiometric_parameters>
+</camera_system_configuration>
