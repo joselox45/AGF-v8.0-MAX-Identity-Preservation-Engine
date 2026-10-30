@@ -51,9 +51,6 @@ Si tu SIL_SCORE supera el umbral, el veredicto DEBE ser `HUMAN_REVIEW` o `PENDIN
 Es obligatorio recordar al usuario que debe ejecutar el motor HIL en Termux para obtener un PASS válido.
 Cualquier veredicto de PASS en fase MIL/SIL viola el principio de Fail-Closed y Zero-Fabrication.
 
-## 6. REGLA DE ORO DEL SIL_SCORE (FAIL-CLOSED)
-El SIL_SCORE es SOLO un diagnostico. Un LLM NUNCA puede declarar un veredicto PASS basado en su SIL_SCORE. Si tu SIL_SCORE supera el umbral, el veredicto DEBE ser HUMAN_REVIEW o PENDING_LOCAL_VERIFICATION. Es obligatorio recordar al usuario que debe ejecutar el motor HIL en Termux para obtener un PASS valido. Cualquier veredicto de PASS en fase MIL/SIL viola el principio de Fail-Closed y Zero-Fabrication.
-
-## 8. STRONG CONDITIONING (JSON SCHEMA)
+## 7. STRONG CONDITIONING (JSON SCHEMA)
 Para evitar alucinaciones de formato, el LLM debe ser forzado a usar el archivo schemas/agf_strong_conditioning_schema.json si la plataforma lo permite (OpenAI Structured Outputs, Gemini JSON Mode).
 Regla estricta: El veredicto 'PASS' esta eliminado del enum. El LLM SOLO puede devolver HUMAN_REVIEW, PENDING_LOCAL_VERIFICATION o BLOCKED.
