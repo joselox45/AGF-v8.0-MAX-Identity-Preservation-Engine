@@ -20,3 +20,9 @@ if [ "$1" = "verify" ]; then
     exit 0
 fi
 
+
+if [ "$1" = "full_audit" ]; then
+    python tools/agf_full_9_layers.py "$2" "$3" "${4:-preservation}"
+    exit 0
+fi
+
