@@ -145,3 +145,9 @@ For deep forensic analysis, use `./agf_full.sh <orig> <gen> <mode>`. This runs a
 - **Final Judge (Score):** ArcFace, Fourier, Shazam, SSIM, Color, Overlay.
 
 **Important:** Metadata from the original is ignored (social media adds FBMD). The final verdict (PASS/BLOCKED) depends ONLY on the weighted score.
+
+
+## SIL Weighted Score (Kernel v0.9.4)
+The Kernel now allows the LLM to compute a `SIL_SCORE` (Software-in-the-Loop) using its Python Sandbox and Latent Vectors (SSIM, Semantic Similarity, Color, Fourier).
+
+**Important:** The SIL_SCORE is a diagnostic metric only. It does NOT replace the HIL (Hardware-in-the-Loop) truth computed by Termux with the real ArcFace model. The LLM MUST declare `metrics_missing: ["arcface"]` if it cannot access the 167MB model. Zero-Fabrication remains enforced.
