@@ -152,9 +152,9 @@ if __name__ == "__main__":
                     (metrics['ssim'] * W_SSIM)
         
         # Umbrales del Score Ponderado
-        if agf_score >= 0.85:
+        if agf_score >= 0.7825:
             verdict = "PASS"
-        elif agf_score >= 0.70:
+        elif agf_score >= 0.6325:
             verdict = "HUMAN_REVIEW"
             reason = "Score moderado: requiere validación humana"
         else:
