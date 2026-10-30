@@ -2,8 +2,8 @@
 set -euo pipefail
 
 REPO="joselox45/AGF-v8.0-MAX-Identity-Preservation-Engine"
-RULESET_ID="26185862"
-FILE=".github/rulesets/frozen-main-v12.2.proposed.json"
+RULESET_ID="26237246"
+FILE=".github/rulesets/frozen-main-v12.3-minimal.proposed.json"
 
 if [[ ! -f "$FILE" ]]; then
   echo "ERROR: falta $FILE"
