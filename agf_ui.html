@@ -400,7 +400,8 @@
                 
                 // 3. Hacer la petición al Backend (Flask)
                 // NOTA: Asegúrate de que Flask está corriendo en la misma red
-                const response = await fetch('http://192.168.10.34:8000/api/v1/verify', {
+                const apiUrl = `http://${window.location.hostname}:8000/api/v1/verify`;
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     body: formData
                 });

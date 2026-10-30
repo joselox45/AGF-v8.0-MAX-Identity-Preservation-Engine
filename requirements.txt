@@ -1,12 +1,6 @@
-# AGF v9.0 Core
-Pillow
 numpy
-scipy
-tflite-runtime
-cryptography
-
-# Análisis Forense y Clásico
-opencv-python-headless
-scikit-image
-PyYAML
+Pillow
 onnxruntime
+tflite-runtime
+flask
+flask-cors
