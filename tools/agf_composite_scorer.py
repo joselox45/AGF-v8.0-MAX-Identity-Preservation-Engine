@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-AGF v12.2 - COMPOSITE SCORER (4-Layer Forensic Engine)
-Integra: ArcFace + Fourier 2D + Edge Shazam + SSIM
+AGF v12.2 - COMPOSITE SCORER (Weighted 4-Layer Engine)
+Integra: ArcFace (40%) + Fourier (30%) + Edge Shazam (20%) + SSIM (10%)
 """
 import sys
 import os
@@ -48,7 +48,7 @@ def compute_all_metrics(orig_path, gen_path, detector, session):
     if not res1.detections or not res2.detections:
         return None
 
-    # --- CAPA 1: ARCFACE (Geometría) ---
+    # --- 1. ARCFACE ---
     face1_112 = get_affine_aligned_face(img1, res1.detections[0].keypoints, (112, 112))
     face2_112 = get_affine_aligned_face(img2, res2.detections[0].keypoints, (112, 112))
     
@@ -62,7 +62,7 @@ def compute_all_metrics(orig_path, gen_path, detector, session):
         
     cosine = float(np.dot(get_emb(face1_112), get_emb(face2_112)))
 
-    # --- CAPA 2: FOURIER 2D (Frecuencia) ---
+    # --- 2. FOURIER 2D ---
     spec1 = get_fft_spectrum(orig_path, detector)
     spec2 = get_fft_spectrum(gen_path, detector)
     
@@ -75,7 +75,7 @@ def compute_all_metrics(orig_path, gen_path, detector, session):
     else:
         fourier = 0.0
 
-    # --- CAPA 3: EDGE SHAZAM (Estructura) ---
+    # --- 3. EDGE SHAZAM ---
     arr_orig = get_aligned_edge_fingerprint(orig_path, detector)
     arr_gen = get_aligned_edge_fingerprint(gen_path, detector)
     
@@ -90,7 +90,7 @@ def compute_all_metrics(orig_path, gen_path, detector, session):
     else:
         shazam = 0.0
 
-    # --- CAPA 4: SSIM CLÁSICO (Píxeles) ---
+    # --- 4. SSIM CLÁSICO ---
     f1 = get_affine_aligned_face(img1, res1.detections[0].keypoints, (256, 256)).convert('L')
     f2 = get_affine_aligned_face(img2, res2.detections[0].keypoints, (256, 256)).convert('L')
     arr1 = np.array(ImageOps.equalize(f1).filter(ImageFilter.GaussianBlur(3)), dtype=np.float32)
@@ -117,7 +117,7 @@ if __name__ == "__main__":
     if "--mode" in sys.argv:
         mode = sys.argv[sys.argv.index("--mode") + 1]
 
-    print(f"[INFO] Cargando modelos para auditoría compuesta (Modo: {mode.upper()})...")
+    print(f"[INFO] Cargando modelos para auditoría ponderada (Modo: {mode.upper()})...")
     detector = TFLiteFaceDetector(open(sys.argv[3], "rb").read(), select="largest")
     session = ort.InferenceSession("arcface.onnx")
     
@@ -127,39 +127,52 @@ if __name__ == "__main__":
         print("❌ BLOCKED: No se detectó rostro en una o ambas imágenes.")
         sys.exit(1)
 
-    print("\n" + "="*50)
-    print(" 🛡️  AGF v12.2 - COMPOSITE FORENSIC AUDIT")
-    print("="*50)
-    print(f" [1] Identidad (ArcFace) : {metrics['cosine']:.4f}")
-    print(f" [2] Firma de Frecuencia : {metrics['fourier']:.4f}")
-    print(f" [3] Estructura (Shazam) : {metrics['shazam']:.4f}")
-    print(f" [4] Píxeles (SSIM)      : {metrics['ssim']:.4f}")
-    print("-" * 50)
+    # --- PONDERACIÓN INDUSTRIAL ---
+    W_IDENTITY = 0.40
+    W_FOURIER  = 0.30
+    W_SHAZAM   = 0.20
+    W_SSIM     = 0.10
 
-    # LÓGICA DE DECISIÓN COMPUESTA (Fail-Closed)
+    # 1. Hard Gates (Fail-Closed)
     verdict = "PASS"
     reason = ""
     
-    # 1. Identity Check
-    min_cos = 0.65 if mode == "restoration" else 0.79
-    if metrics['cosine'] < 0.65:
+    if metrics['cosine'] < 0.6325:
         verdict = "BLOCKED"
-        reason = "ArcFace < 0.65 (Otra persona)"
-    # 2. Fourier Check (Anti-Deepfake)
-    elif metrics['fourier'] < 0.70:
+        reason = f"Hard Gate: ArcFace {metrics['cosine']:.3f} < 0.65 (Otra persona)"
+    elif metrics['fourier'] < 0.6825:
         verdict = "BLOCKED"
-        reason = "Fourier < 0.70 (Textura sintética alucinada)"
-    # 3. Shazam Check (Anti-Destrucción)
-    elif metrics['shazam'] < 0.20:
-        verdict = "HUMAN_REVIEW"
-        reason = "Estructura de bordes dañada"
-    # 4. Textura Check
-    elif mode == "preservation" and metrics['ssim'] < 0.90:
-        verdict = "HUMAN_REVIEW"
-        reason = "SSIM bajo en Preservation (Satinado detectado)"
-    elif mode == "restoration" and metrics['ssim'] < 0.60:
-        verdict = "HUMAN_REVIEW"
-        reason = "SSIM bajo en Restoration"
+        reason = f"Hard Gate: Fourier {metrics['fourier']:.3f} < 0.70 (Alucinación sintética)"
+    
+    # 2. Score Ponderado (Solo si pasa los Hard Gates)
+    if verdict == "PASS":
+        agf_score = (metrics['cosine'] * W_IDENTITY) + \
+                    (metrics['fourier'] * W_FOURIER) + \
+                    (metrics['shazam'] * W_SHAZAM) + \
+                    (metrics['ssim'] * W_SSIM)
+        
+        # Umbrales del Score Ponderado
+        if agf_score >= 0.85:
+            verdict = "PASS"
+        elif agf_score >= 0.70:
+            verdict = "HUMAN_REVIEW"
+            reason = "Score moderado: requiere validación humana"
+        else:
+            verdict = "BLOCKED"
+            reason = f"Score ponderado muy bajo ({agf_score:.3f})"
+    else:
+        agf_score = 0.0
+
+    print("\n" + "="*55)
+    print(" 🛡️  AGF v12.2 - WEIGHTED COMPOSITE AUDIT")
+    print("="*55)
+    print(f" [1] Identidad (ArcFace) [40%] : {metrics['cosine']:.4f}")
+    print(f" [2] Firma de Frecuencia [30%] : {metrics['fourier']:.4f}")
+    print(f" [3] Estructura (Shazam) [20%] : {metrics['shazam']:.4f}")
+    print(f" [4] Píxeles (SSIM)      [10%] : {metrics['ssim']:.4f}")
+    print("-" * 55)
+    print(f" 🏆 AGF SCORE PONDERADO        : {agf_score:.4f}")
+    print("-" * 55)
     
     if verdict == "PASS":
         print(" ✅ VEREDICTO: PASS (Identidad y Textura Blindadas)")
@@ -168,15 +181,17 @@ if __name__ == "__main__":
     else:
         print(f" 🚨 VEREDICTO: BLOCKED ({reason})")
     
-    print("="*50)
+    print("="*55)
     
     # Guardar JSON de evidencia
     os.makedirs("termux_sealed", exist_ok=True)
     report = {
-        "engine": "AGF-v12.2-Composite",
+        "engine": "AGF-v12.2-Weighted-Composite",
         "timestamp": datetime.now().isoformat(),
         "mode": mode,
         "metrics": metrics,
+        "weights": {"identity": 0.40, "fourier": 0.30, "shazam": 0.20, "ssim": 0.10},
+        "agf_score": round(agf_score, 4),
         "verdict": verdict,
         "reason": reason
     }
