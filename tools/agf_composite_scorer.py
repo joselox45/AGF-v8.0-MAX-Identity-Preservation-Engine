@@ -40,6 +40,9 @@ def get_affine_aligned_face(img, keypoints, target_size=(112, 112)):
     f = src_cy + b * tgt_cx - e * tgt_cy
     return img.transform(target_size, Image.AFFINE, (a, b, c, d, e, f), resample=Image.BICUBIC)
 
+C1 = (0.01 * 255)**2
+C2 = (0.03 * 255)**2
+
 def compute_all_metrics(orig_path, gen_path, detector, session):
     img1 = Image.open(orig_path).convert("RGB")
     img2 = Image.open(gen_path).convert("RGB")
@@ -142,7 +145,11 @@ if __name__ == "__main__":
     detector = TFLiteFaceDetector(open(sys.argv[3], "rb").read(), select="largest")
     session = ort.InferenceSession("arcface.onnx")
     
-    metrics = compute_all_metrics(sys.argv[1], sys.argv[2], detector, session)
+    try:
+        metrics = compute_all_metrics(sys.argv[1], sys.argv[2], detector, session)
+    except Exception as e:
+        print(f"❌ BLOCKED: Crash interno ({e})")
+        sys.exit(1)
     
     if not metrics:
         print("❌ BLOCKED: No se detectó rostro en una o ambas imágenes.")
@@ -150,7 +157,7 @@ if __name__ == "__main__":
 
     # --- PONDERACIÓN INDUSTRIAL ---
     W_IDENTITY = 0.40
-    W_FOURIER  = 0.30
+    W_FOURIER  = 0.25
     W_SHAZAM   = 0.19
     W_SSIM     = 0.10
     W_COLOR    = 0.05
@@ -164,9 +171,10 @@ if __name__ == "__main__":
     verdict = "PASS"
     reason = ""
     
-    if metrics['cosine'] < 0.30:
+    IDENTITY_FLOOR = {'preservation': 0.65, 'restoration': 0.55}.get(mode, 0.65)
+    if metrics['cosine'] < IDENTITY_FLOOR:
         verdict = "BLOCKED"
-        reason = f"Hard Gate Extremo: ArcFace {metrics['cosine']:.3f} < 0.30 (Cara no reconocible)"
+        reason = f"Hard Gate Identidad: ArcFace {metrics['cosine']:.3f} < {IDENTITY_FLOOR} (Piso de identidad)"
     elif metrics['fourier'] < 0.40:
         verdict = "BLOCKED"
         reason = f"Hard Gate Extremo: Fourier {metrics['fourier']:.3f} < 0.40 (Alucinación total)"
@@ -211,11 +219,14 @@ if __name__ == "__main__":
         "timestamp": datetime.now().isoformat(),
         "mode": mode,
         "metrics": metrics,
-        "weights": {"identity": 0.40, "fourier": 0.30, "shazam": 0.20, "ssim": 0.10},
+        "weights": {"identity": 0.40, "fourier": 0.25, "shazam": 0.20, "ssim": 0.10},
         "agf_score": round(agf_score, 4),
         "verdict": verdict,
         "reason": reason
     }
-    with open("termux_sealed/composite_audit.json", "w") as f:
+    output_path = "termux_sealed/composite_audit.json"
+    if "--output" in sys.argv:
+        output_path = sys.argv[sys.argv.index("--output") + 1]
+    with open(output_path, "w") as f:
         json.dump(report, f, indent=4)
-    print(f"📄 Evidencia guardada en termux_sealed/composite_audit.json")
+    print(f"📄 Evidencia guardada en {output_path}")
