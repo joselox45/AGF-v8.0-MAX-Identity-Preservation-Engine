@@ -111,12 +111,6 @@ def compute_all_metrics(orig_path, gen_path, detector, session):
     color_score = max(0.0, 1.0 - (hue_diff / 180.0))
     
     # --- 6. FLATNESS ---
-    var_orig = get_variance(orig_path, detector)
-    var_gen = get_variance(gen_path, detector)
-    if var_orig and var_gen and var_orig > 0:
-        flatness_change = abs(var_gen - var_orig) / var_orig * 100
-    else:
-        flatness_change = 0.0
     divisor = 2000.0 if mode == 'restoration' else 500.0
     flatness_score = max(0.0, 1.0 - (flatness_change / divisor))
 
