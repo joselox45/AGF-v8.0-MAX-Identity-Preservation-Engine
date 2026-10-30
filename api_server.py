@@ -30,21 +30,38 @@ def verify_images():
     file_gen.save(gen_path)
 
     try:
-        # Ejecutar el motor forense
+        # P0-1: ruta única por petición + chequeo de exit code
+        unique_id = uuid.uuid4().hex
+        output_path = f"termux_sealed/audit_{unique_id}.json"
+
         cmd = [
             sys.executable, "tools/agf_composite_scorer.py",
-            orig_path, gen_path, "blaze_face_short_range.tflite", "--mode", mode
+            orig_path, gen_path, "blaze_face_short_range.tflite",
+            "--mode", mode, "--output", output_path
         ]
-        subprocess.run(cmd, capture_output=True, text=True)
+        result = subprocess.run(cmd, capture_output=True, text=True)
 
-        # Leer el JSON de resultado
-        json_path = "termux_sealed/composite_audit.json"
-        if os.path.exists(json_path):
-            with open(json_path, "r") as f:
-                result = json.load(f)
-            return jsonify(result)
-        else:
-            return jsonify({"error": "No se generó el archivo de auditoría"}), 500
+        # Si el scorer falla, devolver BLOCKED (Fail-Closed real)
+        if result.returncode != 0:
+            return jsonify({
+                "verdict": "BLOCKED",
+                "reason": f"Scorer exit code {result.returncode}",
+                "stderr": result.stderr[-500:],
+                "agf_score": 0.0
+            }), 200
+
+        if not os.path.exists(output_path):
+            return jsonify({
+                "verdict": "BLOCKED",
+                "reason": "No output file produced",
+                "agf_score": 0.0
+            }), 200
+
+        with open(output_path, "r") as f:
+            data = json.load(f)
+
+        os.remove(output_path)
+        return jsonify(data)
 
     finally:
         # Limpieza de archivos temporales
