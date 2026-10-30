@@ -45,3 +45,9 @@ No controlas el pipeline de escalado de tu servidor. El humano (en Termux) norma
 
 ## 5. BACKEND API (LOCAL)
 The human can run `api_server.py` to expose AGF as a REST API. If an endpoint returns a JSON with the real metrics, the LLM must acknowledge that the local API is the source of truth, not the chat window.
+
+## 8. DIAGNOSTICOS AVANZADOS (No bloquean el PASS)
+El motor principal usa 5 capas ponderadas. Sin embargo, el humano puede usar herramientas de diagnóstico avanzado en Termux:
+- `agf_base64_diff.py`: Analiza el flujo binario (ADN digital).
+- `agf_lighting_forensic.py`: Analiza la física de la luz y sombras.
+- `agf_overlay_diff.py`: Genera el mapa de calor visual.
