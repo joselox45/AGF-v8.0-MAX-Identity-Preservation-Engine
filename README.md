@@ -151,3 +151,20 @@ For deep forensic analysis, use `./agf_full.sh <orig> <gen> <mode>`. This runs a
 The Kernel now allows the LLM to compute a `SIL_SCORE` (Software-in-the-Loop) using its Python Sandbox and Latent Vectors (SSIM, Semantic Similarity, Color, Fourier).
 
 **Important:** The SIL_SCORE is a diagnostic metric only. It does NOT replace the HIL (Hardware-in-the-Loop) truth computed by Termux with the real ArcFace model. The LLM MUST declare `metrics_missing: ["arcface"]` if it cannot access the 167MB model. Zero-Fabrication remains enforced.
+
+## Case Study 11: SIL (Chatbot) vs HIL (Termux) Contradiction
+This case demonstrates why the Kernel prohibits LLMs from self-validating identity.
+
+- **Chatbot (MIL/SIL phase):** Declared `HUMAN_REVIEW` because it could not access the ArcFace model. Its `SIL_SCORE` (simulated) was 0.895.
+- **Termux (HIL phase):** Computed the real `HIL_SCORE` with ArcFace (167MB). Result: **0.8045 (PASS)**.
+
+**Conclusion:** The SIL_SCORE is a diagnostic estimate. The HIL_SCORE is the mathematical truth. Only Termux can certify identity preservation. See `docs/evidence/CASE_11_SIL_VS_HIL.md`.
+
+---
+
+## Current Status
+- **Engine:** v12.3.5 (Audited, Phase-Certified)
+- **Kernel:** v0.9.4 (Cognitive-Integral, SIL Weighted Score)
+- **Tests:** 120/120 passing
+- **Audits:** AKADI 22.0 (P0+P1 patched) + Grok (versioning + benchmark disclosure)
+- **Repository:** Public for external AI auditing (no biometric data in tree)
