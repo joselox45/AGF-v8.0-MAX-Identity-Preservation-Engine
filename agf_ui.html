@@ -38,7 +38,7 @@
         <!-- Header -->
         <div class="text-center mb-4 border-b border-gray-700 pb-3">
             <h1 class="text-xl font-bold text-[#00ff88]">AGF v12.2 - FORENSIC</h1>
-            <p class="text-[10px] text-gray-400 mt-1">Aproximacion Visual (El veredicto real es en Termux)</p>
+            <p class="text-[10px] text-gray-400 mt-1">Servidor Forense Conectado (ONNX Real)</p>
         </div>
 
         <!-- Auto Helpers -->
@@ -373,86 +373,69 @@
             return (sqSum / laplacian.length) - (mean * mean);
         }
 
-        function runAudit() {
+        async function runAudit() {
             const btn = document.getElementById('btn-audit');
-            btn.disabled = true; btn.innerText = "AUDITANDO...";
+            btn.disabled = true; btn.innerText = "ENVIANDO A TERMUX...";
             document.getElementById('results').classList.remove('hidden');
             document.getElementById('log').innerHTML = "";
             
             const mode = document.getElementById('mode').value;
-            log(`Iniciando auditoría en modo: ${mode.toUpperCase()}`);
+            log(`Conectando con el motor forense en Termux (${mode.toUpperCase()})...`);
             
-            const canvas1 = getCroppedCanvas(img1, document.getElementById('box1'), document.getElementById('wrapper1'));
-            const canvas2 = getCroppedCanvas(img2, document.getElementById('box2'), document.getElementById('wrapper2'));
-            
-            setTimeout(() => {
-                try {
-                    // 1. Calcular métricas
-                    const cos = 0.85 + (Math.random() * 0.1);
-                    const fourier = 0.90 + (Math.random() * 0.08);
-                    const shazam = 0.40 + (Math.random() * 0.30);
-                    const ssim = calculateSSIM(canvas1, canvas2);
-                    const hueDiff = Math.random() * 60;
-                    const colorScore = 1 - (hueDiff / 180);
+            try {
+                // 1. Convertir las imágenes recortadas a Blob para enviarlas por POST
+                const canvas1 = getCroppedCanvas(img1, document.getElementById('box1'), document.getElementById('wrapper1'), 512);
+                const canvas2 = getCroppedCanvas(img2, document.getElementById('box2'), document.getElementById('wrapper2'), 512);
+                
+                const blob1 = await new Promise(resolve => canvas1.toBlob(resolve, 'image/jpeg', 0.95));
+                const blob2 = await new Promise(resolve => canvas2.toBlob(resolve, 'image/jpeg', 0.95));
+                
+                // 2. Preparar el FormData para la API de Flask
+                const formData = new FormData();
+                formData.append('original', blob1, 'original.jpg');
+                formData.append('generated', blob2, 'generated.jpg');
+                formData.append('mode', mode);
+                
+                log("Imágenes enviadas. Calculando ArcFace, Fourier y SSIM en el servidor...");
+                
+                // 3. Hacer la petición al Backend (Flask)
+                // NOTA: Asegúrate de que Flask está corriendo en la misma red
+                const response = await fetch('http://192.168.10.34:8000/api/v1/verify', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) throw new Error("Error en el servidor");
+                
+                const data = await response.json();
+                
+                // 4. Actualizar UI con los datos REALES
+                document.getElementById('res-cos').innerText = data.metrics.cosine.toFixed(4);
+                document.getElementById('res-fourier').innerText = data.metrics.fourier.toFixed(4);
+                document.getElementById('res-shazam').innerText = data.metrics.shazam.toFixed(4);
+                document.getElementById('res-ssim').innerText = data.metrics.ssim.toFixed(4);
+                document.getElementById('res-color').innerText = data.metrics.color.toFixed(4) + ` (ΔH=${data.metrics.hue_diff.toFixed(0)}°)`;
 
-                    // 2. Calcular Score Ponderado
-                    const agf_score = (cos * 0.40) + (fourier * 0.30) + (shazam * 0.20) + (ssim * 0.10) + (colorScore * 0.05);
+                log(`AGF Score: ${data.agf_score.toFixed(4)}`);
+                log(`Veredicto: ${data.verdict}`);
 
-                    // 3. Actualizar UI (Solo las 5 filas que existen)
-                    document.getElementById('res-cos').innerText = cos.toFixed(4);
-                    document.getElementById('res-fourier').innerText = fourier.toFixed(4);
-                    document.getElementById('res-shazam').innerText = shazam.toFixed(4);
-                    document.getElementById('res-ssim').innerText = ssim.toFixed(4);
-                    document.getElementById('res-color').innerText = colorScore.toFixed(4) + ` (ΔH=${hueDiff.toFixed(0)}°)`;
+                const vEl = document.getElementById('res-verdict');
+                vEl.innerText = data.verdict;
+                vEl.className = `text-center text-xl font-bold p-3 border verdict-${data.verdict}`;
 
-                    // 4. Determinar Veredicto (Lógica Soberana)
-                    let verdict = "BLOCKED";
-                    if (cos >= 0.30 && fourier >= 0.40) {
-                        if (mode === "preservation") {
-                            if (agf_score >= 0.7825) verdict = "PASS";
-                            else if (agf_score >= 0.6325) verdict = "HUMAN_REVIEW";
-                        } else {
-                            if (agf_score >= 0.60) verdict = "PASS";
-                            else if (agf_score >= 0.45) verdict = "HUMAN_REVIEW";
-                        }
-                    }
+                // 5. Mostrar el JSON REAL generado por Termux
+                document.getElementById('json-box').innerText = JSON.stringify(data, null, 2);
+                lastResult = data;
 
-                    // 5. Actualizar Veredicto en Pantalla
-                    log(`Cosine: ${cos.toFixed(4)} | Fourier: ${fourier.toFixed(4)}`);
-                    log(`AGF Score: ${agf_score.toFixed(4)}`);
-                    log(`Veredicto: ${verdict}`);
-
-                    const vEl = document.getElementById('res-verdict');
-                    vEl.innerText = verdict;
-                    vEl.className = `text-center text-xl font-bold p-3 border verdict-${verdict}`;
-
-                    // 6. Generar JSON
-                    lastResult = {
-                        engine: "AGF-v12.2-Web-Approximation",
-                        timestamp: new Date().toISOString(),
-                        mode: mode,
-                        metrics: { cosine: cos, fourier: fourier, shazam: shazam, ssim: ssim, hue_diff: hueDiff, agf_score: agf_score },
-                        verdict: verdict,
-                        governance: "FAIL-CLOSED"
-                    };
-                    document.getElementById('json-box').innerText = JSON.stringify(lastResult, null, 2);
-                    
-                } catch (e) {
-                    log(`ERROR JS: ${e.message}`);
-                    console.error(e);
-                } finally {
-                    btn.disabled = false; btn.innerText = "▶ AUDITORÍA FORENSE";
-                }
-            }, 1200);
-        }
-
-        function downloadJSON() {
-            if (!lastResult) return;
-            const blob = new Blob([JSON.stringify(lastResult, null, 2)], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = `agf_evidence_manual_${Date.now()}.json`;
-            a.click(); URL.revokeObjectURL(url); log("✅ JSON descargado.");
+            } catch (error) {
+                log(`❌ ERROR DE CONEXIÓN: ${error.message}`);
+                log("Asegúrate de que el servidor Flask esté corriendo en Termux.");
+                const vEl = document.getElementById('res-verdict');
+                vEl.innerText = "ERROR DE RED";
+                vEl.className = "text-center text-xl font-bold p-3 border verdict-BLOCKED";
+            } finally {
+                btn.disabled = false; btn.innerText = "▶ AUDITORÍA FORENSE (REAL)";
+            }
         }
 
         window.onload = initDragResize;
