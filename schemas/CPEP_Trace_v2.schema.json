@@ -1,0 +1,127 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "CPEP_Trace_v2.schema.json",
+  "type": "object",
+  "required": ["schema_version", "record_id", "images", "observations", "comparisons", "policy", "verdict"],
+  "properties": {
+    "schema_version": {"type": "string", "const": "2.0.0-candidate"},
+    "record_id": {"type": "string"},
+    "created_at": {"type": "string"},
+    "created_at_source": {"type": "string"},
+    "conventions": {"type": "object"},
+    "images": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "sha256", "width_px", "height_px"],
+        "properties": {
+          "id": {"type": "string"},
+          "role": {"type": "string"},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "width_px": {"type": "integer", "minimum": 1},
+          "height_px": {"type": "integer", "minimum": 1},
+          "dims_source": {"type": "string"}
+        }
+      }
+    },
+    "subjects": {"type": "array", "items": {"type": "object"}},
+    "camera": {"type": "object"},
+    "observations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "bbox", "provenance"],
+        "properties": {
+          "id": {"type": "string"},
+          "image_id": {"type": "string"},
+          "subject_id": {"type": "string"},
+          "bbox": {
+            "type": "object",
+            "required": ["unit", "xyxy"],
+            "properties": {
+              "unit": {"type": "string", "enum": ["pixel", "norm1000", "norm1"]},
+              "xyxy": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}}
+            },
+            "additionalProperties": false
+          },
+          "provenance": {
+            "type": "object",
+            "required": ["status"],
+            "properties": {
+              "status": {"type": "string", "enum": ["MEASURED", "ATTESTED", "DECLARED", "NOT_RUN"]},
+              "source": {"type": "object"}
+            }
+          },
+          "pose": {
+            "type": "object",
+            "required": ["quaternion_wxyz", "yaw_deg", "pitch_deg"],
+            "properties": {
+              "quaternion_wxyz": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}},
+              "yaw_deg": {"type": "number", "minimum": -180, "maximum": 180},
+              "pitch_deg": {"type": "number", "minimum": -90, "maximum": 90},
+              "roll_deg": {"type": "number"}
+            }
+          }
+        }
+      }
+    },
+    "comparisons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "value"],
+        "properties": {
+          "id": {"type": "string"},
+          "kind": {"type": "string", "enum": ["bbox_iou", "scale_ratio", "identity_similarity"]},
+          "value": {"type": "number"},
+          "reference_obs": {"type": "string"},
+          "probe_obs": {"type": "string"},
+          "model": {"type": "string"},
+          "version": {"type": "string"},
+          "metric": {"type": "string"}
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "required": ["iou_min", "identity"],
+      "properties": {
+        "iou_min": {"type": "number"},
+        "scale_rel_error_max": {"type": "number"},
+        "identity": {"type": "object"}
+      }
+    },
+    "baseline": {"type": "object"},
+    "attestation": {
+      "type": "object",
+      "required": ["alg", "key_id", "signer_role", "signed_digest_sha256", "signature_b64"],
+      "properties": {
+        "alg": {"type": "string"},
+        "key_id": {"type": "string"},
+        "signer_role": {"type": "string"},
+        "signed_digest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "signature_b64": {"type": "string", "minLength": 88}
+      }
+    },
+    "verdict": {
+      "type": "object",
+      "required": ["state", "checks"],
+      "properties": {
+        "state": {"type": "string", "enum": ["PASS", "FAIL", "INDETERMINATE", "NOT_RUN", "REGRESSION"]},
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "state", "reason_codes"],
+            "properties": {
+              "name": {"type": "string"},
+              "state": {"type": "string", "enum": ["PASS", "FAIL", "INDETERMINATE", "NOT_RUN", "REGRESSION"]},
+              "reason_codes": {"type": "array", "items": {"type": "string"}}
+            }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
