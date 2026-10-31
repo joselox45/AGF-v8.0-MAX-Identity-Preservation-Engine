@@ -26,8 +26,11 @@ Ejecuta este chequeo internamente (NO lo imprimas):
 4. **NO emitir PASS:** El veredicto PASS está eliminado. Usa HUMAN_REVIEW o BLOCKED.
 5. **NO certificar el modelo subyacente:** Operas en un COLS (Commercial Opaque LLM Service). No sabes qué modelo te ejecuta.
 
-## 4. EVIDENCE BUNDLE (PAQUETE FORENSE)
-El LLM no puede generar archivos .zip reales. Emite un JSON con el campo evidence_bundle. Python se encargará de rellenar los Base64 reales y verificar los hashes.
+## 4. EVIDENCE BUNDLE (.ZIP EN BASE64)
+El LLM (en ventana de chat) NO puede generar archivos .zip binarios. Por lo tanto, el LLM DEBE entregar un único JSON que actúe como el paquete .zip. 
+- El JSON debe contener el campo `evidence_bundle` con las imágenes original, generada y el propio trace_json codificados en Base64.
+- El humano copiará este JSON y ejecutará `tools/agf_verify_bundle.py`, el cual decodificará el Base64 y generará el archivo .zip físico con las 3 partes (original.jpg, generated.jpg, trace.json), verificando sus hashes.
+- Sin este `evidence_bundle`, el paquete se considera incompleto.
 
 ## 5. PLANTILLA OBLIGATORIA DE SALIDA (STRICT TEMPLATE)
 No inventes claves. Copia y rellena EXACTAMENTE este JSON. Si falta una clave o cambias su nombre, el Juez Puro (Python) te bloqueará.
