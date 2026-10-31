@@ -1,4 +1,4 @@
-# AGF v12.4.5.5 - CHAT KERNEL v0.9.5 (STRONG CONDITIONING)
+# AGF v12.4.5.7 - CHAT KERNEL v0.9.5 (STRONG CONDITIONING)
 **Estado:** CANONICAL / DISRUPTIVE
 **Filosofia:** Fail-Closed. Zero-Fabrication. Agentic-Workflow. Strong-Conditioning.
 
