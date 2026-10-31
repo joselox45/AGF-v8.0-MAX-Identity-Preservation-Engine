@@ -1,7 +1,7 @@
-# AGF v12.4.5.10 - Identity Preservation Engine (STRONG)
+# AGF v12.4.5.12 - Identity Preservation Engine (STRONG)
 **Fail-Closed. Zero-Fabrication. Human-in-the-Loop.**
 
-> `LEGACY: The repo name says v8.0-MAX. Current version is v12.4.5.10-STRONG. See VERSION_MANIFEST.md.`
+> `LEGACY: The repo name says v8.0-MAX. Current version is v12.4.5.12-STRONG. See VERSION_MANIFEST.md.`
 
 > **Status:** AUDITED (AKADI 22.0 + Grok) · PATCHED (P0+P1) · PHASE-CERTIFIED (MIL/SIL/PIL/HIL)
 > **Independent Benchmark:** UNVERIFIED (honest disclosure)
@@ -156,7 +156,7 @@ This case demonstrates why the Kernel prohibits LLMs from self-validating identi
 ---
 
 ## Current Status
-- **Engine:** v12.4.5.10 (Audited, Phase-Certified, Strong Conditioning)
+- **Engine:** v12.4.5.12 (Audited, Phase-Certified, Strong Conditioning)
 - **Kernel:** v0.9.5 (Strong Conditioning)
 - **Tests:** 120/120 passing
 - **Audits:** AKADI 22.0 (P0+P1 patched) + Grok (versioning + benchmark disclosure)
@@ -209,3 +209,11 @@ Ver `docs/governance/IDENTITY_LOCK_v1.5.md` **Anexo C**. `PASS` sigue prohibido.
 
 - `docs/governance/MIL_VS_HIL_VERDICT_SCOPE.md`: aclaracion del alcance de PASS en MIL (prohibido) vs HIL (valido con umbrales + humano).
 - `docs/governance/PRUNE_AUDIT_2026-10-31.md`: auditoria de poda (repo correctamente dimensionado, sin poda de corpus/evidence justificada).
+
+### Defensas contra fabricacion en LLMs opacos
+
+Basado en papers de arXiv (auditoria 2026-10-31):
+
+- **B.8 — Prohibicion de evidencia procedural fabricada** (Anexo B): el LLM NO debe declarar tool logs, file paths, timestamps, hashes o artefactos de verificacion que no provengan de fuente externa verificable. Output truncado o exit code distinto de 0 se declara UNVERIFIABLE, no confirmado. Basado en OLIF + Compaction as Epistemic Failure (arXiv:2607.13071).
+- **C.8 — COLS (Commercial Opaque LLM Services)** (Anexo C): el kernel opera en un COLS. No puede verificar el modelo subyacente, conteo de tokens, ni integridad de operaciones internas. Cualquier afirmacion sobre el proveedor es UNVERIFIABLE. Basado en arXiv:2505.18471.
+- **Semantic Gate** (kernel seccion 7): JSON valido NO es suficiente. Verificar coherencia semantica antes de emitir: metrics_missing vs entorno, reason vs verdict, hardware_signature vs phase, pixel_access vs conditioning_level. Inconsistencia degrada a HUMAN_REVIEW. Basado en When JSON Is Not Enough (arXiv:2607.18261).
