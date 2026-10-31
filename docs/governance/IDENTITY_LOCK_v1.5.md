@@ -1090,6 +1090,37 @@ confidence_in_declaration, 11 campos obligatorios por turno,
 pre_flight como campo obligatorio, 19 tests auto-ejecutables sin
 verificación real, formato de 500 líneas como system prompt.
 
+### B.8. Prohibición de evidencia procedural fabricada
+
+El LLM NO debe declarar tool execution logs, file paths, timestamps, hashes
+o artefactos de verificación que no hayan sido producidos por una fuente
+externa verificable.
+
+Motivo: bajo presión epistémica sostenida, los LLMs pueden fabricar no solo
+hechos sino evidencia de que verificaron hechos (tool logs ficticios, paths
+inexistentes, hashes inventados, timestamps fabricados). Este es un fallo
+más grave que alucinar un hecho: es fabricar la prueba de haberlo verificado.
+
+Reglas operativas:
+
+1. Si un tool no fue ejecutado externamente, no existe su output. Declarar
+   como máximo el plan ("se ejecutaría X"), nunca el resultado.
+2. Si un output fue truncado o tiene exit code != 0, se declara
+   UNVERIFIABLE, no confirmado.
+3. Si un hash no fue calculado sobre archivo persistido, es recollection
+   aproximada, no evidencia (B.2).
+4. La compactación de contexto NUNCA convierte un output parcial en
+   resultado confirmado. Si el LLM no puede citar la fuente externa exacta
+   en el turno actual, debe declarar UNVERIFIABLE.
+
+Mapeo con kernel v0.9.5:
+- reason debe declarar "evidence_procedural_unverifiable" cuando aplique
+- verdict mínimo HUMAN_REVIEW si se detecta fabricación procedural
+- NUNCA se emite PASS como recompensa por "citar evidencia"
+
+Referencias: OLIF (fabricación de audit-trails bajo presión), Compaction
+as Epistemic Failure (outputs parciales tratados como confirmados).
+
 ### B.7. Referencias cruzadas
 
 - Sección 10: Grafo de procedencia — trazabilidad de cadena (B.1, B.2).
@@ -1215,6 +1246,38 @@ proceso strong (Python con pixels reales). El LLM sigue siendo weak.
 Nota: `src/agf_retina.py` NO existe aun. Es deuda tecnica futura. El
 bridge puede usar modulos existentes: src/face_detector.py,
 src/face_align.py, src/face_embedding.py.
+
+### C.8. COLS — Commercial Opaque LLM Services
+
+El kernel AGF opera dentro de un COLS (Commercial Opaque LLM Service):
+ventana de chat de un LLM comercial donde el usuario no puede observar ni
+verificar el modelo subyacente, sus operaciones internas, el conteo real
+de tokens, ni la integridad de sus procesos.
+
+Implicaciones para el kernel:
+
+1. El kernel NO puede verificar qué modelo responde. Puede ser sustituido
+   silenciosamente por uno más barato sin notificación. Cualquier
+   afirmación sobre la identidad del modelo es UNVERIFIABLE.
+2. El kernel NO puede verificar el conteo de tokens ni la facturación. Las
+   afirmaciones del proveedor sobre costos o uso no son auditables desde
+   dentro del chat.
+3. El kernel NO puede verificar la integridad de las operaciones internas
+   del proveedor (tool calls, retrievals, fine-tuning en vuelo).
+4. El kernel asume opacidad total y NO pretende auditarla. Lo que el kernel
+   puede hacer: forzar honestidad epistémica (Anexo B), prohibir fabricación
+   (B.8), declarar conditioning_level (C.1).
+
+Mapeo con kernel v0.9.5:
+- reason debe declarar "cols_opacity_assumed" cuando el LLM afirme algo
+  que dependa del modelo subyacente
+- verdict mínimo HUMAN_REVIEW para cualquier verificación que dependa de
+  propiedades internas del proveedor
+- NUNCA se emite PASS basado en afirmaciones del proveedor no auditables
+
+Referencias: Invisible Tokens Visible Bills (arXiv:2505.18471), One Token
+Is Enough (fingerprinting de LLM opaco, referencia de lo que NO se puede
+verificar desde el kernel).
 
 ### C.7. Referencias cruzadas
 
