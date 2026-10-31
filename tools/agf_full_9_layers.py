@@ -17,7 +17,21 @@ def run(cmd, desc, is_judge=False):
     result = subprocess.run(cmd, capture_output=True, text=True)
     print(result.stdout)
     if is_judge:
-        return result.returncode == 0
+        # FIX v0.9.5: leer verdict del JSON (defensa en profundidad).
+        # Solo exit code no basta: antes se fabricaba PASS aunque verdict=BLOCKED.
+        import json
+        audit_path = "termux_sealed/composite_audit.json"
+        real_verdict = "BLOCKED"  # fail-closed default
+        if os.path.exists(audit_path):
+            try:
+                with open(audit_path) as f:
+                    audit = json.load(f)
+                real_verdict = audit.get("verdict", "BLOCKED")
+            except Exception as e:
+                print(f"[WARN] No se pudo leer {audit_path}: {e}. Fail-closed -> BLOCKED")
+        else:
+            print(f"[WARN] {audit_path} no existe. Fail-closed -> BLOCKED")
+        return real_verdict == "PASS"
     return True
 
 if __name__ == "__main__":
@@ -52,6 +66,9 @@ if __name__ == "__main__":
     print("\n" + "█" * 60)
     if is_pass:
         print(" ✅ VEREDICTO FINAL: PASS (Juez: Score Ponderado)")
+        print("█" * 60)
+        sys.exit(0)
     else:
         print(" 🚨 VEREDICTO FINAL: BLOCKED (Juez: Score Ponderado)")
-    print("█" * 60)
+        print("█" * 60)
+        sys.exit(2)  # FIX v0.9.5: exit code real del veredicto
