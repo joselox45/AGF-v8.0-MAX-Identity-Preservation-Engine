@@ -16,7 +16,7 @@ venv/
 # Evidencia local, imágenes de prueba y bóvedas (Privacidad)
 sandbox/
 termux_sealed/
-evidence/
+/evidence/
 *.jpg
 *.jpeg
 *.png
