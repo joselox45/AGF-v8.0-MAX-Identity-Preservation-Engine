@@ -22,10 +22,10 @@ class TestSignImage(unittest.TestCase):
         # Ejecutar la firma
         sign_and_embed(img_path, json_path, out_path)
         
-        # Verificar que el tag EXIF se incrusto
-        img = Image.open(out_path)
-        exif = img.getexif()
-        agf_meta = exif.get(0x9286)
+        # Verificar que el tag EXIF se incrusto (usando context manager)
+        with Image.open(out_path) as img:
+            exif = img.getexif()
+            agf_meta = exif.get(0x9286)
         
         self.assertIsNotNone(agf_meta)
         self.assertIn("AGF_SHA256:", agf_meta)
