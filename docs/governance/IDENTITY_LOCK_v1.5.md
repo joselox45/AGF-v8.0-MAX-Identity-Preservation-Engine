@@ -1101,3 +1101,130 @@ verificación real, formato de 500 líneas como system prompt.
 ---
 
 FIN DEL ANEXO B
+
+---
+
+## ANEXO C — NIVELES DE CONDICIONAMIENTO (WEAK vs STRONG)
+
+### C.0. Estado y alcance del anexo
+
+Este anexo formaliza la diferencia entre el acceso que un LLM tiene a
+imagenes codificadas como base64 (tokens alfanumericos) y el acceso que
+un proceso Python tiene a la matriz real de pixeles (float32[H,W,3]).
+
+Estado: especificacion de referencia. NO modifica el schema v0.9.5.
+Los campos propuestos en C.5 son opcionales: si un implementador los usa,
+debe declararlos en el campo `reason` del JSON existente.
+
+Compatibilidad con kernel v0.9.5:
+- NO cambia el enum de verdict {HUMAN_REVIEW, PENDING_LOCAL_VERIFICATION,
+  BLOCKED}. PASS sigue prohibido.
+- NO cambia el schema agf_strong_conditioning_schema.json.
+- NO introduce campos obligatorios al output.
+- Los conceptos se declaran via `reason` (texto libre ya existente).
+
+### C.1. Definicion
+
+Todo input de imagen en el contexto de chat llega codificado como base64
+(tokens alfanumericos). El LLM NO ve la matriz de pixeles. Esto constituye
+CONDICIONAMIENTO SEMANTICO DEBIL (weak_semantic).
+
+Cuando un proceso Python descomprime la imagen y opera sobre la matriz
+float32[H,W,3], esto constituye CONDICIONAMIENTO FUERTE (strong_pixel).
+
+| Nivel      | Modo de acceso                    | Ejemplo              |
+|------------|-----------------------------------|----------------------|
+| weak       | base64 tokens (alfanumerico)      | LLM en chat          |
+| strong     | float32[H,W,3] descomprimido      | Python + Pillow      |
+| HIL        | hardware fisico + modelos reales  | Termux + ArcFace     |
+
+### C.2. Capacidades reales del LLM con base64
+
+PUEDE:
+- Reconocer patrones token-level (estructura JPEG, WebP, PNG).
+- Inferir contenido aproximado (semantica, no pixeles).
+- Describir lo que el prompt del usuario declara.
+- Invocar herramientas Python externas (cuando esten disponibles).
+
+NO PUEDE:
+- Leer valores RGB/HSV reales.
+- Calcular metricas geometricas en pixeles (distancia interocular,
+  angulo de mandibula, proyeccion de menton).
+- Medir texturas (frecuencias, poros, ruido, artefactos de sintesis).
+- Ejecutar deteccion de caras real (BlazeFace TFLite).
+- Calcular embeddings biometricos (ArcFace ONNX 167MB).
+- Verificar identidad de forma autonoma.
+
+### C.3. Contraste weak vs strong
+
+| Aspecto                  | weak (LLM+base64)     | strong (Python+pixels)   |
+|--------------------------|-----------------------|--------------------------|
+| Acceso a pixeles         | NO                    | Si (float32[H,W,3])      |
+| Deteccion de caras real  | NO (estima)           | Si (BlazeFace TFLite)    |
+| Embedding biometrico     | NO                    | Si (ONNX / TFLite)       |
+| Metricas geometricas     | NO                    | Si (con modelos)         |
+| Verdict de identidad     | HUMAN_REVIEW          | Solo en HIL              |
+| Calculo de SSIM real     | Aproximado            | Si (sobre pixeles)       |
+
+### C.4. Prohibiciones explicitas
+
+El LLM operando en weak_semantic NO debe:
+
+1. Declarar "he visto la imagen" cuando solo recibio base64.
+2. Fabricar valores de pixel_mean, pixel_std, box coordinates, distance,
+   cosine similarity, SSIM o cualquier metrica que requiera acceso a
+   pixeles.
+3. Afirmar deteccion de caras como si fuera real (BlazeFace no ejecuto).
+4. Declarar `metrics_missing: []` si ArcFace, BlazeFace u otro modelo
+   requerido no esta disponible en el entorno.
+5. Emitir PASS como veredicto (kernel v0.9.5 seccion 6 prohibe PASS).
+
+Violacion de cualquiera de las 5 reglas: veredicto minimo HUMAN_REVIEW,
+reason debe declarar la violacion explicitamente.
+
+### C.5. Declaracion en reason (sin schema patch)
+
+El LLM puede declarar su nivel de condicionamiento en el campo reason
+del JSON existente:
+
+    {
+      "kernel_version": "v0.9.5",
+      "phase": "SIL",
+      "verdict": "HUMAN_REVIEW",
+      "metrics_missing": ["arcface", "blazeface", "ssim"],
+      "reason": "conditioning_level: weak_semantic. input_modality: base64_tokens. pixel_access: false. Metricas geometricas requieren HIL.",
+      "hardware_signature": "SYNTHETIC (No CMOS Sensor)"
+    }
+
+Ventaja: usa el campo reason (ya existente), no rompe additionalProperties.
+El schema v0.9.5 permanece intacto.
+
+### C.6. Bridge weak -> strong
+
+Para pasar de condicionamiento debil a fuerte:
+
+1. Declarar `conditioning_level: weak_semantic` en reason.
+2. Invocar herramienta Python externa (cuando exista).
+3. Recibir metricas del tool (NO inventarlas).
+4. Reportar en `metrics_missing` lo que sigue faltando.
+5. Mantener verdict en {HUMAN_REVIEW, PENDING_LOCAL_VERIFICATION, BLOCKED}.
+
+El bridge NO convierte al LLM en strong. Solo importa resultados de un
+proceso strong (Python con pixels reales). El LLM sigue siendo weak.
+
+Nota: `src/agf_retina.py` NO existe aun. Es deuda tecnica futura. El
+bridge puede usar modulos existentes: src/face_detector.py,
+src/face_align.py, src/face_embedding.py.
+
+### C.7. Referencias cruzadas
+
+- Seccion 1 del kernel: "No ves pixeles directos" (formalizado aqui).
+- Seccion 4 del kernel: OUTPUT FINAL OBLIGATORIO (JSON forense).
+- Seccion 7 del kernel: STRONG CONDITIONING (JSON SCHEMA).
+- Anexo A A.1: IMMUTABLE_FEATURES (requieren strong_pixel para medirse).
+- Anexo A A.4: CPEP_IDENTITY_PRESERVATION_FAILED (cuando falta modelo).
+- Anexo B B.1: trace_verification_status (honestidad de la cadena).
+
+---
+
+FIN DEL ANEXO C
