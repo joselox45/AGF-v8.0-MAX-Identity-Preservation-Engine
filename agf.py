@@ -54,9 +54,10 @@ def cmd_doctor(_):
         return True, cryptography.__version__
     check("cryptography", _crypto)
     def _kernel():
-        from prompt_kernel import PromptKernel
+        from prompt_kernel import PromptKernel, KERNEL_VERSION
         b = PromptKernel().build("REPAIR", "ref", "tgt").prompt_block
-        return "[AGF_OPERATION]" in b and "IDENTITY_PRESERVATION = MAX" in b, "kernel v0.7.0 SMHP OK"
+        ok = "[AGF_OPERATION]" in b and "IDENTITY_PRESERVATION = MAX" in b
+        return ok, f"prompt_kernel functional OK ({KERNEL_VERSION})"
     check("prompt_kernel", _kernel)
     def _fsm():
         from chat_runtime import ChatRuntime, RuntimeEvent, State
