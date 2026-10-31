@@ -1,7 +1,7 @@
-# AGF v12.4.5.7 - Identity Preservation Engine (STRONG)
+# AGF v12.4.5.10 - Identity Preservation Engine (STRONG)
 **Fail-Closed. Zero-Fabrication. Human-in-the-Loop.**
 
-> `LEGACY: The repo name says v8.0-MAX. Current version is v12.4.5.7-STRONG. See VERSION_MANIFEST.md.`
+> `LEGACY: The repo name says v8.0-MAX. Current version is v12.4.5.10-STRONG. See VERSION_MANIFEST.md.`
 
 > **Status:** AUDITED (AKADI 22.0 + Grok) · PATCHED (P0+P1) · PHASE-CERTIFIED (MIL/SIL/PIL/HIL)
 > **Independent Benchmark:** UNVERIFIED (honest disclosure)
@@ -156,7 +156,7 @@ This case demonstrates why the Kernel prohibits LLMs from self-validating identi
 ---
 
 ## Current Status
-- **Engine:** v12.4.5.7 (Audited, Phase-Certified, Strong Conditioning)
+- **Engine:** v12.4.5.10 (Audited, Phase-Certified, Strong Conditioning)
 - **Kernel:** v0.9.5 (Strong Conditioning)
 - **Tests:** 120/120 passing
 - **Audits:** AKADI 22.0 (P0+P1 patched) + Grok (versioning + benchmark disclosure)
@@ -204,3 +204,8 @@ Contrato de entrada formalizado:
 5. NO emitir `PASS` (kernel v0.9.5 sección 6).
 
 Ver `docs/governance/IDENTITY_LOCK_v1.5.md` **Anexo C**. `PASS` sigue prohibido.
+
+### Docs adicionales de gobernanza
+
+- `docs/governance/MIL_VS_HIL_VERDICT_SCOPE.md`: aclaracion del alcance de PASS en MIL (prohibido) vs HIL (valido con umbrales + humano).
+- `docs/governance/PRUNE_AUDIT_2026-10-31.md`: auditoria de poda (repo correctamente dimensionado, sin poda de corpus/evidence justificada).
