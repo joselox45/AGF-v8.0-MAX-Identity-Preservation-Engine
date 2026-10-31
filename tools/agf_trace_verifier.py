@@ -1,42 +1,34 @@
 #!/usr/bin/env python3
-"""
-AGF Trace Verifier — Valida trazabilidad 3D (XY + Z + Pose + Rotacion + IDs).
-"""
-import json
-import sys
+"""AGF Trace Verifier — Valida trazabilidad de Entrada (Input) y Salida (Output)."""
+import json, sys
 
-def verify_trace(json_path: str):
-    with open(json_path) as f:
-        trace = json.load(f)
+def calculate_iou(boxA, boxB):
+    xA = max(boxA[0], boxB[0]); yA = max(boxA[1], boxB[1])
+    xB = min(boxA[2], boxB[2]); yB = min(boxA[3], boxB[3])
+    interArea = max(0, xB - xA) * max(0, yB - yA)
+    if interArea == 0: return 0.0
+    boxAArea = (boxA[2] - boxA[0]) * (boxA[3] - boxA[1])
+    boxBArea = (boxB[2] - boxB[0]) * (boxB[3] - boxB[1])
+    return interArea / float(boxAArea + boxBArea - interArea)
 
-    orig_pose = trace.get("original", {}).get("pose", {})
-    gen_pose = trace.get("generated_real", {}).get("pose", {})
-
-    delta_yaw = abs(gen_pose.get("yaw", 0) - orig_pose.get("yaw", 0))
-
-    # Umbral dinámico basado en giro (CPEP vFinal)
-    if delta_yaw < 30:
-        threshold = 0.60
-    elif delta_yaw < 90:
-        threshold = 0.50
-    elif delta_yaw < 170:
-        threshold = 0.40
-    else:
-        threshold = 0.35
-
-    print(f"INFO: Delta yaw {delta_yaw}°, threshold ajustado a {threshold}.")
-
-    arcface = trace.get("identity", {}).get("arcface", 0.0)
-
-    if arcface < threshold:
-        print(f"FALLO: ArcFace {arcface:.2f} < threshold {threshold:.2f}")
-        return False
-
-    print(f"OK: Trazabilidad validada. ArcFace {arcface:.2f} >= {threshold:.2f}.")
+def verify_trace(json_path):
+    with open(json_path) as f: trace = json.load(f)
+    
+    in_claimed = trace.get("input_audit", {}).get("original_claimed_llm", {}).get("face_bbox", [0,0,0,0])
+    in_real = trace.get("input_audit", {}).get("original_real_python", {}).get("face_bbox", [0,0,0,0])
+    iou_in = calculate_iou(in_claimed, in_real)
+    if iou_in < 0.85:
+        print(f"FALLO: Alucinacion de entrada. IoU {iou_in:.2f} < 0.85"); return False
+        
+    out_claimed = trace.get("output_audit", {}).get("generated_claimed_llm", {}).get("face_bbox", [0,0,0,0])
+    out_real = trace.get("output_audit", {}).get("generated_real_python", {}).get("face_bbox", [0,0,0,0])
+    iou_out = calculate_iou(out_claimed, out_real)
+    if iou_out < 0.85:
+        print(f"FALLO: Alucinacion de salida. IoU {iou_out:.2f} < 0.85"); return False
+        
+    print(f"OK: Trazabilidad validada. IoU Input {iou_in:.2f}, IoU Output {iou_out:.2f}.")
     return True
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Uso: python tools/agf_trace_verifier.py trace.json")
-        sys.exit(1)
+    if len(sys.argv) < 2: print("Uso: python tools/agf_trace_verifier.py trace.json"); sys.exit(1)
     verify_trace(sys.argv[1])
