@@ -1,7 +1,7 @@
-# AGF v12.4.5.1 - Identity Preservation Engine (STRONG)
+# AGF v12.4.5.3 - Identity Preservation Engine (STRONG)
 **Fail-Closed. Zero-Fabrication. Human-in-the-Loop.**
 
-> `LEGACY: The repo name says v8.0-MAX. Current version is v12.4.5.1-STRONG. See VERSION_MANIFEST.md.`
+> `LEGACY: The repo name says v8.0-MAX. Current version is v12.4.5.3-STRONG. See VERSION_MANIFEST.md.`
 
 > **Status:** AUDITED (AKADI 22.0 + Grok) · PATCHED (P0+P1) · PHASE-CERTIFIED (MIL/SIL/PIL/HIL)
 > **Independent Benchmark:** UNVERIFIED (honest disclosure)
@@ -156,7 +156,7 @@ This case demonstrates why the Kernel prohibits LLMs from self-validating identi
 ---
 
 ## Current Status
-- **Engine:** v12.4.5.1 (Audited, Phase-Certified, Strong Conditioning)
+- **Engine:** v12.4.5.3 (Audited, Phase-Certified, Strong Conditioning)
 - **Kernel:** v0.9.5 (Strong Conditioning)
 - **Tests:** 120/120 passing
 - **Audits:** AKADI 22.0 (P0+P1 patched) + Grok (versioning + benchmark disclosure)
@@ -178,3 +178,13 @@ Para contratos de identidad que incluyan:
 - Token CPEP_IDENTITY_PRESERVATION_FAILED
 
 Ver `docs/governance/IDENTITY_LOCK_v1.5.md` **Anexo A**. Ese anexo NO redefine veredictos: el enum `verdict` sigue siendo `{HUMAN_REVIEW, PENDING_LOCAL_VERIFICATION, BLOCKED}`. `PASS` sigue prohibido.
+
+### Anexo B — Honestidad epistémica y trazabilidad de cadena
+
+Para honestidad epistémica de cadenas multi-turno:
+- `trace_verification_status`: EXACT / UNVERIFIABLE / PARTIAL
+- `recollection_approximate`: separado de `previous_snapshots`
+- `retroactive_declarations`: cierre honesto de cadenas fabricadas
+- `citations_status`: 5 estados de evidencia externa
+
+Ver `docs/governance/IDENTITY_LOCK_v1.5.md` **Anexo B**. Ese anexo NO modifica veredictos: el enum `verdict` sigue siendo `{HUMAN_REVIEW, PENDING_LOCAL_VERIFICATION, BLOCKED}`. `PASS` sigue prohibido.
