@@ -234,3 +234,13 @@ if __name__ == "__main__":
     with open(output_path, "w") as f:
         json.dump(report, f, indent=4)
     print(f"📄 Evidencia guardada en {output_path}")
+
+    # FIX v0.9.5-compliance: exit code MUST reflect verdict, not always 0
+    # Kernel v0.9.5 seccion 6 prohibe PASS en MIL/SIL. El orquestador
+    # agf_full_9_layers.py interpretaba exit 0 como PASS, fabricandolo
+    # aunque verdict=BLOCKED. Ahora el exit code es el veredicto real.
+    if verdict == "BLOCKED":
+        sys.exit(2)
+    elif verdict == "HUMAN_REVIEW":
+        sys.exit(3)
+    # PASS -> exit 0 (fall-through)
