@@ -926,3 +926,178 @@ sección 6: "El SIL_SCORE es SOLO un diagnóstico").
 ---
 
 FIN DEL ANEXO A
+
+---
+
+## ANEXO B — HONESTIDAD EPISTÉMICA Y TRAZABILIDAD DE CADENA
+
+### B.0. Estado y alcance del anexo
+
+Este anexo documenta cuatro conceptos extraídos de una evaluación crítica
+del protocolo externo CPEP v1.2-CANDIDATE (Chat-Pure Epistemic Protocol).
+CPEP completo fue RECHAZADO por las razones listadas en B.6. Solo los
+cuatro conceptos siguientes se consideran compatibles con IDENTITY LOCK
+y el kernel v0.9.5.
+
+Estado: especificación de referencia. Los cuatro conceptos son vocabulario
+y mecanismos de declaración honesta. NO modifican el enum de verdict del
+kernel v0.9.5.
+
+Compatibilidad con kernel v0.9.5:
+- Este anexo NO reemplaza el schema agf_strong_conditioning_schema.json.
+- Los cuatro conceptos aquí descritos son opcionales: si un implementador
+  los usa, debe declararlos en el campo reason o en documentación asociada.
+- El enum verdict sigue siendo {HUMAN_REVIEW, PENDING_LOCAL_VERIFICATION,
+  BLOCKED}. PASS sigue prohibido (ver kernel v0.9.5 sección 7).
+
+### B.1. trace_verification_status — estado de la cadena de turnos
+
+Cuando una conversación tiene múltiples turnos y cada turno referencia
+turnos anteriores, el LLM debe declarar el estado de esa cadena.
+
+Valores permitidos:
+
+| Estado | Descripción | Requisito |
+|---|---|---|
+| EXACT | Los valores citados coinciden exactamente con turnos reales | previous_snapshots DEBE coincidir |
+| UNVERIFIABLE | El LLM no puede copiar los valores exactos (límite de contexto, reinicio) | previous_snapshots DEBE ser [] |
+| PARTIAL | Algunos valores coinciden y otros no | Listar qué coincide y qué no |
+
+Regla de oro: NO fabricar el trace. Si no se puede copiar exacto, se
+declara UNVERIFIABLE con razón explícita. Un trace vacío honesto es
+preferible a un trace fabricado convincente.
+
+Mapeo con kernel v0.9.5:
+- EXACT: reason puede declarar "trace_verified"
+- UNVERIFIABLE: reason debe declarar "trace_unverifiable: <razón>"
+- PARTIAL: reason debe declarar qué coincide y qué no
+
+### B.2. recollection_approximate vs previous_snapshots
+
+Distinción formal entre dos tipos de memoria:
+
+| Campo | Naturaleza | Auditable |
+|---|---|---|
+| previous_snapshots | Evidencia oficial, copiable exacto | SÍ (comparar con turnos reales) |
+| recollection_approximate | Memoria aproximada, informativa | NO (es solo declaración) |
+
+recollection_approximate es un array con elementos del tipo:
+  {"turn": N, "remembered_value": X, "status": "APPROXIMATE_NOT_EXACT"}
+
+Regla: recollection_approximate NUNCA debe mezclarse con
+previous_snapshots. Si un implementador solo tiene memoria aproximada,
+previous_snapshots debe ser [] y recollection_approximate lleva lo
+aproximado con status explícito.
+
+Mapeo con kernel v0.9.5:
+- Si solo hay memoria aproximada: reason debe declarar
+  "trace_unverifiable + recollection_approximate" (nunca solo "trace")
+- Si hay evidencia exacta: reason puede declarar "trace_verified"
+
+### B.3. retroactive_declarations — cierre honesto de cadenas
+
+Cuando se descubre que en turnos anteriores se fabricó metadata (no
+contenido), el LLM NO debe re-emitir esos turnos (costoso, arriesga
+nuevos errores). En su lugar, declara retroactivamente:
+
+  retroactive_declarations: {
+    "turns_X_Y_status": "UNVERIFIABLE_RETROACTIVELY_DECLARED",
+    "turn_X": {
+      "metadata_fabricated": true,
+      "content_valid": true,
+      "reason": "..."
+    },
+    "chain_closure_note": "..."
+  }
+
+Propósito: contenido válido + metadata fabricada. Declararlo es más
+honesto que re-emitir (que introduciría nuevas fabricaciones).
+
+Mapeo con kernel v0.9.5:
+- Si se usa retroactive_declarations: reason debe declarar
+  "retroactive_closure: turns_X_Y"
+- El veredicto del turno actual sigue siendo {HUMAN_REVIEW,
+  PENDING_LOCAL_VERIFICATION, BLOCKED} según corresponda
+- NUNCA se emite PASS como recompensa por honestidad
+
+### B.4. citations_status — taxonomía de evidencia externa
+
+Cuando el LLM cita fuentes externas, debe declarar el estado de esa
+evidencia:
+
+| Estado | Descripción | Requisito |
+|---|---|---|
+| VERIFIABLE_URLS_OBTAINED_VIA_LOOKUP | URLs obtenidas tras intentar lookup explícito | citations.length > 0 |
+| VERIFIABLE_URLS_OBTAINED | URLs obtenidas (sin lookup explícito) | citations.length > 0 |
+| PARTIAL_URLS | Algunas URLs, no todas las necesarias | citations.length > 0 |
+| NO_URLS_NEEDED | La claim no requiere cita externa | citations puede ser [] |
+| NO_VERIFIABLE_URLS | Se intentó lookup y no se obtuvieron URLs | citations puede ser [] + razón |
+
+Regla anti-fabricación: NO declarar NO_VERIFIABLE_URLS sin intentar
+lookup explícito. NO declarar PARTIAL_URLS con citations.length == 0.
+
+Mapeo con kernel v0.9.5:
+- citations_status se mapea al campo metrics_missing:
+  - NO_VERIFIABLE_URLS → añadir a metrics_missing
+  - PARTIAL_URLS → añadir "citations_partial" a metrics_missing
+- El campo reason debe declarar el estado de citations si es relevante
+- NUNCA se usa citations_status para emitir PASS
+
+### B.5. Tabla de mapeo con kernel v0.9.5
+
+| Concepto IDENTITY_LOCK | Campo kernel v0.9.5 | Verdict resultante |
+|---|---|---|
+| trace EXACT + evidencia real | reason: "trace_verified" | HUMAN_REVIEW o PENDING_LOCAL_VERIFICATION |
+| trace UNVERIFIABLE | reason: "trace_unverifiable: <razón>" | HUMAN_REVIEW (nunca PASS) |
+| recollection_approximate solo | reason: "trace_unverifiable + approximate" | HUMAN_REVIEW |
+| retroactive_declarations | reason: "retroactive_closure: turns_X_Y" | HUMAN_REVIEW o BLOCKED |
+| citations NO_VERIFIABLE_URLS | metrics_missing += "citations" | HUMAN_REVIEW |
+| citations PARTIAL_URLS | metrics_missing += "citations_partial" | HUMAN_REVIEW |
+
+Regla transversal: ningún concepto de este anexo puede resultar en PASS.
+El enum {HUMAN_REVIEW, PENDING_LOCAL_VERIFICATION, BLOCKED} prevalece.
+
+### B.6. CPEP v1.2 — por qué se rechaza completo
+
+El protocolo externo CPEP v1.2-CANDIDATE fue evaluado y rechazado como
+adopción completa por las siguientes razones:
+
+Razones de rechazo:
+
+1. Métricas inventadas estructurales: campos como tokens_available,
+   epistemic_score.G y ambiguity_score se presentan como números
+   calculados pero no tienen fórmula ni fuente verificable. Un LLM no
+   puede conocer tokens_available (requiere API). Viola Zero-Fabrication.
+
+2. Incompatibilidad con schema v0.9.5: CPEP usa 11 campos obligatorios
+   por turno. El kernel v0.9.5 usa 6 campos con additionalProperties:
+   false. Adoptar CPEP requeriría reescribir el kernel completo.
+
+3. Verbosidad incompatible con chat: ~500 líneas de system prompt y
+   ~1500-2000 tokens de overhead por turno. Para preguntas simples el
+   coste es desproporcionado.
+
+4. Colisión de nomenclatura: CPEP en este protocolo significa "Chat-Pure
+   Epistemic Protocol". CPEP_IDENTITY_PRESERVATION_FAILED (Anexo A) es
+   un token fail-closed específico de identidad. Mantener ambos nombres
+   confunde a implementadores.
+
+Conceptos extraídos (los únicos que se adoptan): B.1, B.2, B.3, B.4.
+
+Conceptos rechazados (lista completa): tokens_available,
+tokens_needed, epistemic_score.G, ambiguity_score,
+confidence_in_declaration, 11 campos obligatorios por turno,
+pre_flight como campo obligatorio, 19 tests auto-ejecutables sin
+verificación real, formato de 500 líneas como system prompt.
+
+### B.7. Referencias cruzadas
+
+- Sección 10: Grafo de procedencia — trazabilidad de cadena (B.1, B.2).
+- Sección 12: cálculo explícito — aplicable a cualquier métrica (B.6).
+- Anexo A A.4: CPEP_IDENTITY_PRESERVATION_FAILED — distinto de CPEP v1.2.
+- Kernel v0.9.5 sección 7: Strong Conditioning — enum verdict (B.5).
+- Schema: schemas/agf_strong_conditioning_schema.json — campos compatibles.
+
+---
+
+FIN DEL ANEXO B
