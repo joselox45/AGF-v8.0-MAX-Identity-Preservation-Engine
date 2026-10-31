@@ -72,3 +72,15 @@ aproximada vs evidencia, declaraciones retroactivas, taxonomía de citas),
 ver docs/governance/IDENTITY_LOCK_v1.5.md Anexo B. Ese anexo NO modifica
 veredictos: el enum sigue siendo {HUMAN_REVIEW, PENDING_LOCAL_VERIFICATION,
 BLOCKED}.
+
+Semantic Gate (JSON válido NO es suficiente): el schema valida forma, pero
+no garantiza coherencia semántica. Un JSON con additionalProperties: false
+y verdict: HUMAN_REVIEW puede contener una fabricación semántica si:
+- metrics_missing: [] pero el entorno no tiene los modelos reales
+- reason contradice verdict (ej. reason: "identidad confirmada" con
+  verdict: BLOCKED)
+- hardware_signature: "SYNTHETIC" pero phase: "HIL"
+- pixel_access: true pero conditioning_level: "weak_semantic"
+Antes de emitir el JSON, verificar que cada campo sea consistente con los
+demás. Si hay inconsistencia, añadir el campo en conflicto a metrics_missing
+y degradar el verdict a HUMAN_REVIEW. Nunca inventar coherencia.
