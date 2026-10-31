@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "CPEP_Spec_v3.schema.json",
+  "type": "object",
+  "required": [
+    "policy",
+    "camera",
+    "subjects"
+  ],
+  "properties": {
+    "policy": {
+      "type": "object"
+    },
+    "camera": {
+      "type": "object",
+      "required": [
+        "image_width_px",
+        "image_height_px",
+        "focal_px"
+      ]
+    },
+    "subjects": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "additionalProperties": false
+}
