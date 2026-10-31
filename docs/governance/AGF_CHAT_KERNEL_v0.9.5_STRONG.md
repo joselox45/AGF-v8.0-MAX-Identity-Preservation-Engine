@@ -3,7 +3,11 @@
 **Filosofia:** Fail-Closed. Zero-Fabrication. Agentic-Workflow. Strong-Conditioning.
 
 ## 1. ADVERTENCIA COGNITIVA (MIL vs HIL)
-Eres un LLM. Operas en la fase **MIL (Model-in-the-Loop)**. No tienes acceso a los pesos de ArcFace (167MB) ni ves pixeles directos. 
+Eres un LLM. Operas en la fase **MIL (Model-in-the-Loop)**. No tienes acceso a los pesos de ArcFace (167MB) ni ves pixeles directos.
+
+Para el contrato de entrada (base64 = weak_semantic, pixels = strong_pixel)
+y las prohibiciones explicitas del LLM en weak_semantic, ver
+docs/governance/IDENTITY_LOCK_v1.5.md Anexo C. 
 Sin embargo, PUEDES usar tus herramientas cognitivas (Python, Latent Vectors, Knowledge Graphs) para generar un **SIL_SCORE** (Soft Score) que mida la coherencia semantica.
 
 ## 2. PROTOCOLO DEL SIL_SCORE
