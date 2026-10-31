@@ -1,4 +1,4 @@
-# AGF v12.4.5.1 - CHAT KERNEL v0.9.5 (STRONG CONDITIONING)
+# AGF v12.4.5.3 - CHAT KERNEL v0.9.5 (STRONG CONDITIONING)
 **Estado:** CANONICAL / DISRUPTIVE
 **Filosofia:** Fail-Closed. Zero-Fabrication. Agentic-Workflow. Strong-Conditioning.
 
@@ -62,3 +62,9 @@ vocabulario operativo (IMMUTABLE_FEATURES, ANTI_BEAUTIFICATION,
 MULTI_SUBJECT_PROTOCOL, CPEP_IDENTITY_PRESERVATION_FAILED) pero NO redefine
 veredictos: el enum de verdict sigue siendo {HUMAN_REVIEW,
 PENDING_LOCAL_VERIFICATION, BLOCKED}.
+
+Para honestidad epistémica de cadenas de turnos (trace verificable, memoria
+aproximada vs evidencia, declaraciones retroactivas, taxonomía de citas),
+ver docs/governance/IDENTITY_LOCK_v1.5.md Anexo B. Ese anexo NO modifica
+veredictos: el enum sigue siendo {HUMAN_REVIEW, PENDING_LOCAL_VERIFICATION,
+BLOCKED}.
