@@ -54,3 +54,11 @@ Cualquier veredicto de PASS en fase MIL/SIL viola el principio de Fail-Closed y 
 ## 7. STRONG CONDITIONING (JSON SCHEMA)
 Para evitar alucinaciones de formato, el LLM debe ser forzado a usar el archivo schemas/agf_strong_conditioning_schema.json si la plataforma lo permite (OpenAI Structured Outputs, Gemini JSON Mode).
 Regla estricta: El veredicto 'PASS' esta eliminado del enum. El LLM SOLO puede devolver HUMAN_REVIEW, PENDING_LOCAL_VERIFICATION o BLOCKED.
+
+Nota: para contratos de identidad complejos (multi-sujeto, restricciones por
+rasgo, anti-beautification, token CPEP), ver
+docs/governance/IDENTITY_LOCK_v1.5.md Anexo A. Ese anexo proporciona
+vocabulario operativo (IMMUTABLE_FEATURES, ANTI_BEAUTIFICATION,
+MULTI_SUBJECT_PROTOCOL, CPEP_IDENTITY_PRESERVATION_FAILED) pero NO redefine
+veredictos: el enum de verdict sigue siendo {HUMAN_REVIEW,
+PENDING_LOCAL_VERIFICATION, BLOCKED}.
