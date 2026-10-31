@@ -1,4 +1,4 @@
-# AGF v12.4.6.3 - CHAT KERNEL v0.9.6 (STRONG EPISTEMIC)
+# AGF v12.4.6.3 - CHAT KERNEL v0.9.6 (STRICT TEMPLATE)
 **Estado:** CANONICAL / DISRUPTIVE
 **Filosofia:** Fail-Closed. Zero-Fabrication. Epistemic-Honesty.
 
