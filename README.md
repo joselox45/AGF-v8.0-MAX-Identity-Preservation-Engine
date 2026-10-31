@@ -1,7 +1,7 @@
-# AGF v12.4.5.12 - Identity Preservation Engine (STRONG)
+# AGF v12.4.5.16 - Identity Preservation Engine (STRONG)
 **Fail-Closed. Zero-Fabrication. Human-in-the-Loop.**
 
-> `LEGACY: The repo name says v8.0-MAX. Current version is v12.4.5.12-STRONG. See VERSION_MANIFEST.md.`
+> `LEGACY: The repo name says v8.0-MAX. Current version is v12.4.5.16-STRONG. See VERSION_MANIFEST.md.`
 
 > **Status:** AUDITED (AKADI 22.0 + Grok) · PATCHED (P0+P1) · PHASE-CERTIFIED (MIL/SIL/PIL/HIL)
 > **Independent Benchmark:** UNVERIFIED (honest disclosure)
@@ -156,7 +156,7 @@ This case demonstrates why the Kernel prohibits LLMs from self-validating identi
 ---
 
 ## Current Status
-- **Engine:** v12.4.5.12 (Audited, Phase-Certified, Strong Conditioning)
+- **Engine:** v12.4.5.16 (Audited, Phase-Certified, Strong Conditioning)
 - **Kernel:** v0.9.5 (Strong Conditioning)
 - **Tests:** 120/120 passing
 - **Audits:** AKADI 22.0 (P0+P1 patched) + Grok (versioning + benchmark disclosure)
@@ -190,6 +190,10 @@ Para honestidad epistémica de cadenas multi-turno:
 Ver `docs/governance/IDENTITY_LOCK_v1.5.md` **Anexo B**. Ese anexo NO modifica veredictos: el enum `verdict` sigue siendo `{HUMAN_REVIEW, PENDING_LOCAL_VERIFICATION, BLOCKED}`. `PASS` sigue prohibido.
 
 ### Anexo C — Niveles de condicionamiento (weak vs strong)
+
+### Regla 0 — Anclaje Silencioso del Kernel
+
+El Kernel v0.9.5 incluye una Regla 0 de **anclaje contextual silencioso**. El LLM ejecuta internamente sus reglas de gobernanza (weak_semantic, no PASS, metrics_missing) sin imprimirlas en el output. Esto combate el fenómeno *Lost in the Middle* sin ensuciar la lectura del usuario.
 
 Contrato de entrada formalizado:
 - **weak_semantic**: el LLM recibe base64 (tokens alfanuméricos). Puede inferir semántica aproximada, NO leer píxeles.
