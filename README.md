@@ -1,7 +1,7 @@
-# AGF v12.4.5.3 - Identity Preservation Engine (STRONG)
+# AGF v12.4.5.5 - Identity Preservation Engine (STRONG)
 **Fail-Closed. Zero-Fabrication. Human-in-the-Loop.**
 
-> `LEGACY: The repo name says v8.0-MAX. Current version is v12.4.5.3-STRONG. See VERSION_MANIFEST.md.`
+> `LEGACY: The repo name says v8.0-MAX. Current version is v12.4.5.5-STRONG. See VERSION_MANIFEST.md.`
 
 > **Status:** AUDITED (AKADI 22.0 + Grok) · PATCHED (P0+P1) · PHASE-CERTIFIED (MIL/SIL/PIL/HIL)
 > **Independent Benchmark:** UNVERIFIED (honest disclosure)
@@ -156,7 +156,7 @@ This case demonstrates why the Kernel prohibits LLMs from self-validating identi
 ---
 
 ## Current Status
-- **Engine:** v12.4.5.3 (Audited, Phase-Certified, Strong Conditioning)
+- **Engine:** v12.4.5.5 (Audited, Phase-Certified, Strong Conditioning)
 - **Kernel:** v0.9.5 (Strong Conditioning)
 - **Tests:** 120/120 passing
 - **Audits:** AKADI 22.0 (P0+P1 patched) + Grok (versioning + benchmark disclosure)
