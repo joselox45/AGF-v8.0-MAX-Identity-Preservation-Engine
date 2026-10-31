@@ -1,7 +1,7 @@
-# AGF v12.3.5 - Identity Preservation Engine (INDUSTRIAL)
+# AGF v12.4.5.1 - Identity Preservation Engine (STRONG)
 **Fail-Closed. Zero-Fabrication. Human-in-the-Loop.**
 
-> `LEGACY: The repo name says v8.0-MAX. Current version is v12.3.5-PHASE-CERTIFIED. See VERSION_MANIFEST.md.`
+> `LEGACY: The repo name says v8.0-MAX. Current version is v12.4.5.1-STRONG. See VERSION_MANIFEST.md.`
 
 > **Status:** AUDITED (AKADI 22.0 + Grok) · PATCHED (P0+P1) · PHASE-CERTIFIED (MIL/SIL/PIL/HIL)
 > **Independent Benchmark:** UNVERIFIED (honest disclosure)
@@ -55,7 +55,7 @@ python -m http.server 8080
 # Open in Chrome: http://localhost:8080/agf_ui.html
 ```
 
-## Usage with Chatbots (Kernel v0.8.4)
+## Usage with Chatbots (Kernel v0.9.5)
 To prevent LLMs from ignoring the rules, use Slash Triggers. The LLM must return a JSON declaring it has no physical sensor.
 
 - `/repara` → Activates RESTORATION MODE.
@@ -108,7 +108,7 @@ The API (`api_server.py`) now extracts the exact reason from the scorer's `stdou
 ## AGF Validation Pyramid (X-in-the-Loop)
 The AGF architecture follows the industry-standard X-in-the-Loop validation methodology:
 
-1. **MIL (Model-in-the-Loop):** The Chat Kernel (v0.8.8). The LLM simulates compliance but does not calculate metrics.
+1. **MIL (Model-in-the-Loop):** The Chat Kernel (v0.9.5). The LLM simulates compliance but does not calculate metrics.
 2. **SIL (Software-in-the-Loop):** The Web UI (). Simulates the dashboard for user experience.
 3. **PIL (Processor-in-the-Loop):** The Flask API + ONNX runtime executing on the Android processor.
 4. **HIL (Hardware-in-the-Loop):** The full forensic engine () running with real models (ArcFace, Fourier) on physical hardware.
@@ -156,8 +156,8 @@ This case demonstrates why the Kernel prohibits LLMs from self-validating identi
 ---
 
 ## Current Status
-- **Engine:** v12.3.5 (Audited, Phase-Certified)
-- **Kernel:** v0.9.4 (Cognitive-Integral, SIL Weighted Score)
+- **Engine:** v12.4.5.1 (Audited, Phase-Certified, Strong Conditioning)
+- **Kernel:** v0.9.5 (Strong Conditioning)
 - **Tests:** 120/120 passing
 - **Audits:** AKADI 22.0 (P0+P1 patched) + Grok (versioning + benchmark disclosure)
 - **Repository:** Public for external AI auditing (no biometric data in tree)
@@ -168,3 +168,13 @@ The Kernel now enforces a strict JSON schema for LLM outputs (Hard Conditioning)
 
 ### Cloud-Native Architecture
 A `Dockerfile` and `docker-compose.yml` are included for VPS deployment (AWS, Hetzner, DigitalOcean) with MinIO for evidence storage and Prometheus for monitoring.
+
+### Anexo A — Contratos de identidad complejos
+
+Para contratos de identidad que incluyan:
+- Multi-sujeto (varias personas en la misma imagen)
+- Restricciones por rasgo facial específico
+- Anti-beautification (deriva cosmética)
+- Token CPEP_IDENTITY_PRESERVATION_FAILED
+
+Ver `docs/governance/IDENTITY_LOCK_v1.5.md` **Anexo A**. Ese anexo NO redefine veredictos: el enum `verdict` sigue siendo `{HUMAN_REVIEW, PENDING_LOCAL_VERIFICATION, BLOCKED}`. `PASS` sigue prohibido.
