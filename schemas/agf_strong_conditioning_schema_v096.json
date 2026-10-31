@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AGF Strong Conditioning v0.9.6",
+  "type": "object",
+  "required": [
+    "kernel_version",
+    "phase",
+    "verdict",
+    "metrics_missing",
+    "reason",
+    "hardware_signature",
+    "conditioning_level",
+    "evidence_type",
+    "human_readable_summary"
+  ],
+  "properties": {
+    "kernel_version": {
+      "type": "string",
+      "const": "v0.9.6"
+    },
+    "phase": {
+      "type": "string",
+      "enum": [
+        "MIL",
+        "SIL",
+        "PIL",
+        "HIL"
+      ]
+    },
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "HUMAN_REVIEW",
+        "PENDING_LOCAL_VERIFICATION",
+        "BLOCKED"
+      ]
+    },
+    "metrics_missing": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reason": {
+      "type": "string"
+    },
+    "hardware_signature": {
+      "type": "string",
+      "const": "SYNTHETIC (No CMOS Sensor)"
+    },
+    "conditioning_level": {
+      "type": "string",
+      "enum": [
+        "weak_semantic",
+        "strong_pixel",
+        "strong_text"
+      ]
+    },
+    "evidence_type": {
+      "type": "string",
+      "enum": [
+        "evidence",
+        "declaration",
+        "inference"
+      ]
+    },
+    "human_readable_summary": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}
