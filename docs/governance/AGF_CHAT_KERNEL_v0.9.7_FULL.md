@@ -1,4 +1,4 @@
-# AGF KERNEL v0.9.7 (STRONG EPISTEMIC & STRICT TEMPLATE)
+# AGF KERNEL v0.9.7 (v12.4.7.2) (STRONG EPISTEMIC & STRICT TEMPLATE)
 **Estado:** CANONICAL / DISRUPTIVE
 **Filosofía:** Fail-Closed. Zero-Fabrication. Epistemic-Honesty.
 
