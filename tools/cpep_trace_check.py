@@ -327,6 +327,23 @@ def semantic_errors(inst):
         sha = img.get('sha256', '')
         if not re.match(r'^[0-9a-f]{64}$', sha):
             errs.append(f"/images/{img.get('id','?')}/sha256: debe ser 64 caracteres hex")
+    # S01: contradiccion verdict vs human_readable_summary (regla v0.9.8)
+    if "human_readable_summary" in inst:
+        summary = str(inst["human_readable_summary"]).lower()
+        verdict_state = (inst.get("verdict") or {}).get("state", "")
+        if verdict_state in ("BLOCKED", "FAIL", "INDETERMINATE"):
+            for kw in ("todo ok", "exito", "excelente", "perfecto", "sin problemas"):
+                if kw in summary:
+                    errs.append("S01_CONTRADICTION: human_readable_summary contradice verdict=" + verdict_state)
+                    break
+        # S02: transformacion no declarada (Delta H > 90 y verdict PASS)
+        color_delta = ((inst.get("residual_plan") or {}).get("color_temperature_delta")
+                       or (inst.get("metrics") or {}).get("color_temperature_delta"))
+        if color_delta is not None and abs(color_delta) > 90 and verdict_state == "PASS":
+            for kw in ("preservada", "sin cambios", "identica", "intacta"):
+                if kw in summary:
+                    errs.append("S02_UNDECLARED_TRANSFORMATION: delta=" + str(color_delta) + " pero summary afirma preservacion")
+                    break
     return errs
 
 
