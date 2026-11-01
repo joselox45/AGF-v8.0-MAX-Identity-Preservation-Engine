@@ -15,7 +15,7 @@ cross-validación de modelos.
 
 Estado final:
 - HEAD: 19c2bfc (merge PR #21)
-- Tag: v12.4.6.3-STRONG
+- Tag: v12.4.7.2-STRONG
 - Tests: 125/125 OK
 - Doctor: 9/9 OPERATIVO honesto
 - Ruleset: Frozen-Main-v12.3-minimal (operativo, sin --admin)
@@ -43,18 +43,18 @@ PR #6  (cerrado) validación ruleset
 PR #7  Ruleset v12.3-minimal (sin admin) - GOBERNANZA OPERATIVA
 PR #8  Anexo A (sin admin) - Taxonomías operativas
 PR #9  Referencia kernel → Anexo A (sin admin)
-PR #10 Sync versions v12.4.6.3 (sin admin)
+PR #10 Sync versions v12.4.7.2 (sin admin)
 PR #11 Anexo B (sin admin) - Honestidad epistémica
-PR #12 Sync all surfaces v12.4.6.3 (sin admin)
+PR #12 Sync all surfaces v12.4.7.2 (sin admin)
 PR #13 Doctor honesty fix (sin admin) - BUG v0.7.0 fabricado
-PR #14 Bump v12.4.6.3 (sin admin)
+PR #14 Bump v12.4.7.2 (sin admin)
 PR #15 Anexo C (sin admin) - Conditioning levels
-PR #16 Bump v12.4.6.3 + Anexo C (sin admin)
+PR #16 Bump v12.4.7.2 + Anexo C (sin admin)
 PR #17 Fix orquestador + MIL/HIL (sin admin) - BUG PASS fabricado
 PR #18 Auditoría de poda (sin admin)
-PR #19 Sync v12.4.6.3 + docs nuevos (sin admin)
+PR #19 Sync v12.4.7.2 + docs nuevos (sin admin)
 PR #20 B.8 + C.8 + Semantic Gate (sin admin) - PAPERS ARXIV
-PR #21 Sync v12.4.6.3 + defensas (sin admin)
+PR #21 Sync v12.4.7.2 + defensas (sin admin)
 
 ---
 
@@ -158,9 +158,9 @@ Patrón: auditoría crítica → extracción selectiva → rechazo documentado.
 ## 9. ESTADO FINAL DEL REPO
 
 Main: 19c2bfc
-Tag: v12.4.6.3-STRONG
+Tag: v12.4.7.2-STRONG
 Kernel: v0.9.5 con Semantic Gate
-README/HTML: v12.4.6.3
+README/HTML: v12.4.7.2
 Doctor: 9/9 OPERATIVO honesto
 Tests: 125/125 OK
 Tracked: 47.6 MB
@@ -170,7 +170,7 @@ Ramas: solo main
 Working: limpio
 Deuda: cero
 
-Tags v12.4.5.x: 14 (v12.4.5 a v12.4.6.3)
+Tags v12.4.5.x: 14 (v12.4.5 a v12.4.7.2)
 
 ---
 
