@@ -475,14 +475,37 @@ def run_oracle_tests(spec):
     test("O04", "escala 2m->42m", abs(ratio - 2.0 / 42.0) / (2.0 / 42.0) < 0.05)
 
 def main():
-    ap = argparse.ArgumentParser()
+    ap = argparse.ArgumentParser(description="CPEP Trace v2 / Spec v3: Juez Puro")
     ap.add_argument("--dir", default=str(Path(__file__).resolve().parent))
+    ap.add_argument("--check-record")
+    ap.add_argument("--check-spec")
     a = ap.parse_args()
     d = Path(a.dir)
     try:
         trace, spec = load(d / F_TRACE), load(d / F_SPEC)
     except Exception as e:
         sys.exit("Error cargando esquemas: %s" % e)
+
+    if a.check_record:
+        rec = load(a.check_record)
+        r = verify_record(rec, V(trace))
+        for k in ("schema", "integrity", "verdict_diff"):
+            for line in r[k]:
+                print("[FAIL] %s - %s" % (k, line))
+        if r["recomputed"]:
+            print("Veredicto recalculado:", json.dumps(r["recomputed"], ensure_ascii=False, indent=2))
+        print("[NOT RUN] firma ed25519 - verificacion de firma no implementada aqui")
+        sys.exit(1 if (r["schema"] or r["integrity"] or r["verdict_diff"]) else 0)
+
+    if a.check_spec:
+        sp = load(a.check_spec)
+        e = errors(V(spec), sp)
+        for line in e:
+            print("[FAIL] schema - " + line)
+        if not e:
+            print("Viabilidad:", json.dumps(feasibility(sp), ensure_ascii=False, indent=2))
+        sys.exit(1 if e else 0)
+
     run_schema_tests(trace, spec)
     run_judge_tests(trace)
     run_oracle_tests(spec)
