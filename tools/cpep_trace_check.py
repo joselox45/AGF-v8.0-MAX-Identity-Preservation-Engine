@@ -1,5 +1,5 @@
-import fastjsonschema
 #!/usr/bin/env python3
+import fastjsonschema
 # -*- coding: utf-8 -*-
 import argparse, base64, copy, hashlib, itertools, json, math, re, sys
 from datetime import datetime, timezone
