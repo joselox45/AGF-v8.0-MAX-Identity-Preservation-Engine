@@ -228,3 +228,14 @@ Basado en papers de arXiv (auditoria 2026-10-31):
 - **B.8 — Prohibicion de evidencia procedural fabricada** (Anexo B): el LLM NO debe declarar tool logs, file paths, timestamps, hashes o artefactos de verificacion que no provengan de fuente externa verificable. Output truncado o exit code distinto de 0 se declara UNVERIFIABLE, no confirmado. Basado en OLIF + Compaction as Epistemic Failure (arXiv:2607.13071).
 - **C.8 — COLS (Commercial Opaque LLM Services)** (Anexo C): el kernel opera en un COLS. No puede verificar el modelo subyacente, conteo de tokens, ni integridad de operaciones internas. Cualquier afirmacion sobre el proveedor es UNVERIFIABLE. Basado en arXiv:2505.18471.
 - **Semantic Gate** (kernel seccion 7): JSON valido NO es suficiente. Verificar coherencia semantica antes de emitir: metrics_missing vs entorno, reason vs verdict, hardware_signature vs phase, pixel_access vs conditioning_level. Inconsistencia degrada a HUMAN_REVIEW. Basado en When JSON Is Not Enough (arXiv:2607.18261).
+
+## 🧠 Arquitectura de Datos: Base64 y Condicionamiento Débil
+
+El AGF opera bajo un principio de Confianza Cero. Para entender cómo el sistema procesa imágenes sin alucinaciones, es fundamental entender la separación de capas:
+
+1. **Texto (Base64):** Transporte seguro de datos (NO son píxeles).
+2. **Bytes (JPEG/PNG):** El archivo comprimido original.
+3. **Píxeles (Matriz RAM):** Datos crudos procesados por Python (Juez Puro).
+4. **Semántica (Tags):** Etiquetas de alto nivel generadas por el LLM (weak_semantic).
+
+👉 **[Ver el Diagrama Técnico Completo aquí](docs/architecture/BASE64_SEMANTIC_FLOW.md)**
