@@ -1,4 +1,4 @@
-# AGF KERNEL v0.9.7 (v12.4.7.7-STRONG) (STRONG EPISTEMIC & STRICT TEMPLATE)
+# AGF KERNEL v0.9.8 (v12.4.7.8-STRONG) (STRONG EPISTEMIC & STRICT TEMPLATE)
 **Estado:** CANONICAL / DISRUPTIVE
 **Filosofía:** Fail-Closed. Zero-Fabrication. Epistemic-Honesty.
 
@@ -88,6 +88,7 @@ No inventes claves. Copia y rellena EXACTAMENTE este JSON. Si falta una clave o 
     "identity": {"min_similarity": 0.60, "max_abs_yaw_deg": 60, "min_face_visibility": 0.5, "min_face_px_height": 48, "calibration_status": "CALIBRATED", "calibration_ref": "LFW_V1"}
   },
   "verdict": {"state": "PENDING_LOCAL_VERIFICATION", "checks": [{"name": "identity", "state": "PENDING_LOCAL_VERIFICATION", "reason_codes": []}]},
+  "human_readable_summary": "OPCIONAL: resumen en lenguaje natural. NO debe contradecir verdict ni ocultar transformaciones.",
   "evidence_bundle": {
     "original_image_b64": "PENDIENTE_DE_CONVERSION_EN_PYTHON",
     "generated_image_b64": "PENDIENTE_DE_CONVERSION_EN_PYTHON",
@@ -98,3 +99,70 @@ No inventes claves. Copia y rellena EXACTAMENTE este JSON. Si falta una clave o 
 
 ## 6. EL JUEZ PURO (PYTHON)
 Al recibir tu JSON, Python ejecutará cpep_trace_check.py. Este script recalculará el IoU, los hashes y el veredicto desde cero. Si mintió, el veredicto final será BLOCKED.
+
+## 7. SEMANTIC GATE — VALIDACION ANTI-FABRICACION (v0.9.8)
+
+La seccion 6 (Juez Puro) valida estructura. Esta seccion valida semantica:
+detecta fabricaciones que el JSON Schema no puede expresar.
+
+### 7.1. Regla S01 — Contradiccion veredicto/resumen
+
+Si existe `human_readable_summary` y el `verdict.state` es negativo
+(`BLOCKED`, `FAIL`, `INDETERMINATE`), el resumen NO debe afirmar exito.
+
+- Prohibido: verdict BLOCKED + summary "Todo OK" -> fabricacion.
+- Palabras trampa (case-insensitive): "todo ok", "exito", "excelente",
+  "perfecto", "sin problemas".
+- Accion: `semantic_errors()` anade error S01_CONTRADICTION.
+  Verdict final = BLOCKED.
+
+### 7.2. Regla S02 — Transformacion no declarada
+
+Si el trace incluye `residual_plan.color_temperature_delta` o equivalente
+(Delta H > 90 grados), y el verdict es PASS, el resumen NO debe afirmar
+preservacion.
+
+- Prohibido: PASS + Delta H=177 + summary "identidad preservada" -> fabricacion.
+- Palabras trampa: "preservada", "sin cambios", "identica", "intacta".
+- Accion: `semantic_errors()` anade error S02_UNDECLARED_TRANSFORMATION.
+  Verdict final = HUMAN_REVIEW.
+
+### 7.3. Regla S03 — Ausencia de summary es valida (backward compat)
+
+Si el campo `human_readable_summary` no existe, el trace es valido bajo
+v0.9.7 (compatibilidad hacia atras). No se emite error.
+
+### 7.4. Implementacion
+
+Las reglas S01-S03 viven en `tools/cpep_trace_check.py`, funcion
+`semantic_errors()`. NO se crea archivo nuevo. Se extiende lo existente
+(G5: minima intervencion).
+
+Esquema de la extension:
+
+    if "human_readable_summary" in inst:
+        summary = inst["human_readable_summary"].lower()
+        verdict_state = inst.get("verdict", {}).get("state", "")
+        # S01: contradiccion
+        if verdict_state in ("BLOCKED", "FAIL", "INDETERMINATE"):
+            for kw in ("todo ok", "exito", "excelente", "perfecto"):
+                if kw in summary:
+                    errs.append("S01: contradiccion verdict vs summary")
+                    break
+        # S02: transformacion no declarada
+        color_delta = (inst.get("residual_plan") or {}).get(
+            "color_temperature_delta"
+        )
+        if color_delta and abs(color_delta) > 90 and verdict_state == "PASS":
+            for kw in ("preservada", "sin cambios", "identica"):
+                if kw in summary:
+                    errs.append("S02: transformacion no declarada")
+                    break
+
+### 7.5. Origen (grounding empirico)
+
+Estas reglas nacen de casos reales:
+- S01: el kernel original no detectaba esta contradiccion; el test fantasma
+  v096 la simulaba sin validar codigo real.
+- S02: caso forense de colorizacion con Delta H=177 grados (Caso 3 del
+  snapshot 2026-10-31) paso como PASS sin declarar transformacion.
