@@ -1,0 +1,62 @@
+{
+  "bundle_id": "AGF_EVIDENCE_2026-11-01T013128Z",
+  "generated_at": "2026-11-01T01:31:28Z",
+  "kernel": "AGF_CHAT_RUNTIME v0.3 + Strong Conditioning v0.9.7",
+  "operation": "REPAIR",
+  "phase": "MIL/SIL",
+  "execution_mode": "CHAT_ONLY",
+  "verdict": "HUMAN_REVIEW | PENDING_LOCAL_VERIFICATION",
+  "metrics_missing": [
+    "arcface",
+    "fourier2d",
+    "ssim_pixel",
+    "edge_shazam"
+  ],
+  "hardware_signature": "NONE",
+  "images": {
+    "original_reference": {
+      "filename": "original_reference.jpg",
+      "sha256": "83beefd0c7462adc1000e835de506d778070015f964782c54bb76a6c6cecb5c4",
+      "sha512": "434ef5998bb64580e2efc81f46978664ca0cc94311fcd87d69fc52f6900ebaccee4f8524c0f5206d7665ed5105e6904208de0aefbb654570982bdb5cf847e7bd",
+      "size_bytes": 212898,
+      "dimensions": [
+        1253,
+        1796
+      ]
+    },
+    "restored_output": {
+      "filename": "restored_output.jpg",
+      "sha256": "8b793c8708621193bc5314896ee7ac318293f09678c51c77a9e43d8df2399746",
+      "sha512": "a8a57099ba6114d7a1894a55a5e0729e3c27f8f4508bdd02fbdd2e071201769e11f81c7932bac5dd1537976007db51d8345e9112141571465ee383378190abde",
+      "size_bytes": 225392,
+      "dimensions": [
+        848,
+        1216
+      ]
+    }
+  },
+  "verification_report": {
+    "CHANGES": [
+      "Reducción de grano y textura de papel residual de escaneo",
+      "Recuperación de continuidad en bordes faciales y cuello",
+      "Limpieza local de micro-manchas/dust spots",
+      "Corrección menor de unevenness de exposición en zonas de sombra",
+      "Mejora de nitidez local limitada a regiones con pérdida de detalle"
+    ],
+    "JUSTIFICATION": "Intervenciones limitadas a artefactos de captura/escaneo. Rasgos naturales intactos. Principio de intervención mínima.",
+    "PROVENANCE": "RECOVERED (mayoría) + RECONSTRUCTED (zonas de grano severo, limitado)",
+    "CONFIDENCE": "media (estimación semántica; sin embedder biométrico local)",
+    "UNCERTAIN_AREAS": "zonas de sombra profunda en cuello y laterales del cabello"
+  },
+  "notes": [
+    "Resolution change observed (1253x1796 -> 848x1216). Recorded, not claimed as identity-preserving metric.",
+    "This bundle is a SAMPLE from chat window. True attestation requires local HIL execution of agf.py closure or agf.sh.",
+    "Zero-Fabrication: no biometric scores fabricated."
+  ],
+  "governance": {
+    "fail_closed": true,
+    "zero_fabrication": true,
+    "human_in_the_loop": true,
+    "reference_anchored": true
+  }
+}
