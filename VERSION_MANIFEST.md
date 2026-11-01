@@ -7,18 +7,18 @@
 
 | Component | Version | File |
 | :--- | :--- | :--- |
-| **Engine Core** | v12.3.5 | `agf.py`, `tools/agf_composite_scorer.py` |
+| **Engine Core** | v12.4.7.7-STRONG | `agf.py`, `tools/agf_composite_scorer.py` |
 | **Chat Kernel** | v0.9.0-DISRUPTIVE | `docs/governance/AGF_CHAT_KERNEL_v0.9.0_DISRUPTIVE.md` |
-| **Frontend UI** | v12.3.5-PHASE-CERTIFIED | `agf_ui.html` |
-| **Backend API** | v12.3.4-TRANSPARENT | `api_server.py` |
+| **Frontend UI** | v12.4.7.7-STRONG-CERTIFIED | `agf_ui.html` |
+| **Backend API** | v12.4.7.7-STRONG | `api_server.py` |
 | **Tiling Detector** | Capa 0 | `tools/agf_tiling_detector.py` |
 | **Repository Name** | v8.0-MAX (legacy) | github.com/joselox45/... |
 
 ## Naming Convention (Resolution)
 
-The repository name `AGF-v8.0-MAX` is **LEGACY** and should be ignored. The current production version is **v12.3.5-PHASE-CERTIFIED**.
+The repository name `AGF-v8.0-MAX` is **LEGACY** and should be ignored. The current production version is **v12.4.7.7-STRONG-CERTIFIED**.
 
-**If you read "v8.0-MAX" anywhere, mentally translate it to "v12.3.5".**
+**If you read "v8.0-MAX" anywhere, mentally translate it to "v12.4.7.7-STRONG".**
 
 ## Model Dependencies (External)
 
