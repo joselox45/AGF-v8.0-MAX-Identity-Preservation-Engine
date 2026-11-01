@@ -239,3 +239,9 @@ El AGF opera bajo un principio de Confianza Cero. Para entender cómo el sistema
 4. **Semántica (Tags):** Etiquetas de alto nivel generadas por el LLM (weak_semantic).
 
 👉 **[Ver el Diagrama Técnico Completo aquí](docs/architecture/BASE64_SEMANTIC_FLOW.md)**
+
+## v0.9.9 TOKEN-BRIDGE (2026-11-01) - HIL mide tokens SIL
+- CAPA 4.5: Token Forensic - Len ratio 1.059 = 5.9% deriva token vs 6.27% overlay pixel
+- PASS 0.9489 doblemente sellado: ArcFace 0.9662 + Fourier 0.9976 + 【entity-Shazam¦canonical_name=Shazam】 0.8606
+- Schema: schemas/kernel_v0.9.8.json con L0 inalterable
+
