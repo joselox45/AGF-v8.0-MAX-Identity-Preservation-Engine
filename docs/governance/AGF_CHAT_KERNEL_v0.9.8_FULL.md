@@ -172,3 +172,36 @@ Estas reglas nacen de casos reales:
 ### 7.6. Regla S04 — Entropia fabricada por el chat
 
 Si `entropy_gate.provenance.source.kind == "llm_chat"` -> BLOCKED (S04_FABRICATED_ENTROPY).
+
+### 7.7. Regla S05 — RECIBO incompleto
+
+Si existe `entropy_gate.receipt_line` y no es "PENDIENTE_DE_PYTHON", pero
+falta algun campo obligatorio (spec=v2, P=, K=, part=, log=, suavQ=,
+tol=, alpha=, target=, reference_Q=), `semantic_errors()` anade error
+S05_INCOMPLETE_RECEIPT. Verdict final = INDETERMINATE.
+
+### 7.8. Regla S06 — Entropia no puede PASS
+
+Si `entropy_gate.verdict.state == "PASS"` -> S06_ENTROPY_CANNOT_PASS.
+Verdict final = HUMAN_REVIEW. Coherente con seccion 3.4 y R6.
+
+### 7.9. Regla S07 — Baja entropia + afirmacion visual no medida (OPT-IN)
+
+Si `entropy_gate.s07_enabled == true`:
+
+- Requiere `entropy_gate.tol_baja_H1` (float). Si falta -> S07_MISCONFIGURED.
+- Extrae H1 de `receipt_line` (patron H1=<float>).
+- Si H1 < tol_baja_H1 Y `human_readable_summary` contiene palabras trampa
+  visuales ("veo", "observo", "la imagen muestra", "el rostro", "el color",
+  "se puede ver", "claramente", "definitivamente", "sin duda")
+  Y existe al menos una observacion con provenance.status != "MEASURED"
+  -> S07_LOW_ENTROPY_OVERCLAIM. Verdict final = HUMAN_REVIEW.
+
+POR QUE OPT-IN: S07 requiere calibracion de tol_baja_H1 con datos reales.
+Sin calibracion, produce falsos positivos. Desactivado por defecto.
+
+### 7.10. Origen (Fase 3)
+
+- S05/S06: cierran huecos del contrato `entropy_gate` (RECIBO completo,
+  sin PASS). Coherentes con R3 y R6.
+- S07: opt-in. No se activa sin calibracion explicita de tol_baja_H1.
