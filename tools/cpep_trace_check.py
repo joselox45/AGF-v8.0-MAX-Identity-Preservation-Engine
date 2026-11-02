@@ -344,6 +344,20 @@ def semantic_errors(inst):
                 if kw in summary:
                     errs.append("S02_UNDECLARED_TRANSFORMATION: delta=" + str(color_delta) + " pero summary afirma preservacion")
                     break
+    # S04/S05/S06: entropy_gate (reglas v0.9.8)
+    eg = inst.get("entropy_gate")
+    if isinstance(eg, dict):
+        src_kind = ((eg.get("provenance") or {}).get("source") or {}).get("kind", "")
+        if src_kind == "llm_chat":
+            errs.append("S04_FABRICATED_ENTROPY: provenance.source.kind=llm_chat no permitido")
+        rl = eg.get("receipt_line", "")
+        if rl and rl != "PENDIENTE_DE_PYTHON":
+            required = ("spec=v2", "P=", "K=", "part=", "log=", "suavQ=", "tol=", "alpha=", "target=", "reference_Q=")
+            missing = [r for r in required if r not in rl]
+            if missing:
+                errs.append("S05_INCOMPLETE_RECEIPT: falta " + ",".join(missing))
+        if (eg.get("verdict") or {}).get("state") == "PASS":
+            errs.append("S06_ENTROPY_CANNOT_PASS: entropy_gate.verdict.state no puede ser PASS")
     return errs
 
 
