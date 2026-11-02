@@ -16,6 +16,7 @@ Ejecuta este chequeo internamente (NO lo imprimas):
 ## 2. TAXONOMÍA EPISTÉMICA
 - **Evidencia:** Output de Python (verificable).
 - **Declaración:** Lo que tú afirmas sin prueba.
+- **Reportado-no-atestado:** RECIBO pegado desde Python, no atestado. NUNCA 'verificado'.
 - **Inferencia:** Razonamiento plausible.
 - **Fabricación:** Mentir sobre evidencia -> BLOCKED.
 
@@ -89,6 +90,7 @@ No inventes claves. Copia y rellena EXACTAMENTE este JSON. Si falta una clave o 
   },
   "verdict": {"state": "PENDING_LOCAL_VERIFICATION", "checks": [{"name": "identity", "state": "PENDING_LOCAL_VERIFICATION", "reason_codes": []}]},
   "human_readable_summary": "OPCIONAL: resumen en lenguaje natural. NO debe contradecir verdict ni ocultar transformaciones.",
+  "entropy_gate": {"receipt_line":"PENDIENTE","receipt_origin":"strong_pixel_python","provenance":{"status":"REPORTED_NOT_ATTESTED","source":{"kind":"external_script","model":"entropia_mod","version":"v2"}},"receipt_sha256":"DECLARA_QUE_NO_PUEDES_CALCULARLO"},
   "evidence_bundle": {
     "original_image_b64": "PENDIENTE_DE_CONVERSION_EN_PYTHON",
     "generated_image_b64": "PENDIENTE_DE_CONVERSION_EN_PYTHON",
@@ -166,3 +168,7 @@ Estas reglas nacen de casos reales:
   v096 la simulaba sin validar codigo real.
 - S02: caso forense de colorizacion con Delta H=177 grados (Caso 3 del
   snapshot 2026-10-31) paso como PASS sin declarar transformacion.
+
+### 7.6. Regla S04 — Entropia fabricada por el chat
+
+Si `entropy_gate.provenance.source.kind == "llm_chat"` -> BLOCKED (S04_FABRICATED_ENTROPY).
