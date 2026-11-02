@@ -9,6 +9,11 @@
 **Fail-Closed. Zero-Fabrication. Human-in-the-Loop.**
 
 
+## MAXCAP RAW v3 (Maximum Deepening & Spectral Signature)
+Empirical proof of scale invariance and entropy behavior across a 2m to 42m distance transition.
+*   [View MAXCAP RAW v3 Analysis](docs/MAXCAP_RAW_TXT_V3.md)
+
+
 ## White Paper V1.4 (Deep Technical Traceability)
 Read the complete formal specification of how ArcFace and SSIM interact to preserve identity while transforming context.
 *   [Read the White Paper](docs/WHITE_PAPER_IDENTITY_PRESERVATION.md)
