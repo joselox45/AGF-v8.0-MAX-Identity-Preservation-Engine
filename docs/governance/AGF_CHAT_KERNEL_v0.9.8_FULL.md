@@ -467,3 +467,10 @@ El Kernel exige que la trazabilidad no dependa de archivos externos. La imagen g
 
 ### 14.3. Regla S08 (Futura)
 Si una imagen no contiene la firma multicapa requerida, el sistema la marcará como `UNVERIFIABLE` y bloqueará el paso a PASS, a menos que se use el Evidence Bundle tradicional (ZIP).
+
+
+### 14.4. Protocolo AgenteEstego v4.0 (Referencia Interna)
+El sistema operativo de inserción se rige por el **Protocolo AgenteEstego v4.0** (propiedad intelectual privada). 
+- El LLM debe actuar como un "AgenteEstego", analizando la imagen y seleccionando dinámicamente entre LSB, DCT o Semántica.
+- Las reglas de oro incluyen: no alterar lo visible, distribuir el mensaje en ≥4 regiones y adaptar la capacidad al tipo de imagen.
+- *(El prompt exacto de ejecución no es público para proteger la propiedad intelectual, pero sus principios teóricos están integrados en este Kernel).*
