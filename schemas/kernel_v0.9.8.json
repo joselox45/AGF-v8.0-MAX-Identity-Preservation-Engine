@@ -10,10 +10,6 @@
     "overlay_ref": "6.27%",
     "token_diff_ref": "6.12% = 18/294",
     "hil_score_ref": "0.9489 PASS"
-  }
+  },
+  "notes": "Schema v0.9.8 TOKEN-BRIDGE - Puente SIL-HIL, CAPA 4.5 Token Forensic, L0 inalterable sellado, correlación 6.12% token vs 6.27% pixel PASS 0.9489"
 }
-#=================================================================
-# Que se realizó: Schema v0.9.8 TOKEN-BRIDGE - Puente SIL-HIL, CAPA 4.5 Token Forensic, L0 inalterable sellado, correlación 6.12% token vs 6.27% pixel PASS 0.9489
-#=================================================================
-# regla inalterable: DECLARO que accedo a mi corpus interno → EJECUTO dentro de mi corpus real → VERIFICO contra mi corpus
-#=================================================================
