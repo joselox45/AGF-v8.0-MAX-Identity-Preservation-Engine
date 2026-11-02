@@ -1,0 +1,29 @@
+======================================================================
+ 🧪 AGF TEST CONTAINER - INICIANDO AUDITORÍA
+ Fecha: Mon Nov  2 12:40:22 -05 2026
+ Log: test_results_20261102_124022.log
+======================================================================
+
+[1] COMPILANDO HERRAMIENTAS (tools/)
+  Resultado: 50 OK / 0 FAIL
+
+[2] EJECUTANDO TESTS UNITARIOS (tests/)
+----------------------------------------------------------------------
+Ran 137 tests in 2.350s
+
+OK
+[OK] Imagen firmada y vinculada al JSON. Hash: b5d6d1cee25fbbdb...
+
+[3] EJECUTANDO EL JUEZ PURO (cpep_trace_check.py)
+[PASS] O03 - visibilidad yaw
+[PASS] O04 - escala 2m->42m
+RESUMEN PRUEBAS: PASS=22 FAIL=0
+
+[4] VERIFICANDO EL KERNEL
+  -> Líneas: 452
+  -> Reglas S04: 2
+  -> Reglas S07: 1
+
+======================================================================
+ ✅ AUDITORÍA COMPLETADA
+======================================================================
