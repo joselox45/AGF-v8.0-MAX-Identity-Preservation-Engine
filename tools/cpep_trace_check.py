@@ -358,6 +358,31 @@ def semantic_errors(inst):
                 errs.append("S05_INCOMPLETE_RECEIPT: falta " + ",".join(missing))
         if (eg.get("verdict") or {}).get("state") == "PASS":
             errs.append("S06_ENTROPY_CANNOT_PASS: entropy_gate.verdict.state no puede ser PASS")
+        # S07: baja H1 + afirmacion visual no medida (opt-in, requiere calibracion)
+        if eg.get("s07_enabled") is True:
+            tol_baja = eg.get("tol_baja_H1")
+            if tol_baja is None:
+                errs.append("S07_MISCONFIGURED: s07_enabled=true pero falta tol_baja_H1")
+            else:
+                rl = eg.get("receipt_line", "")
+                m_h1 = re.search(r"\bH1=([0-9.]+)", rl)
+                if m_h1:
+                    try:
+                        h1 = float(m_h1.group(1))
+                    except ValueError:
+                        h1 = None
+                    if h1 is not None and h1 < float(tol_baja):
+                        summary = str(inst.get("human_readable_summary", "")).lower()
+                        traps = ("veo", "observo", "la imagen muestra", "el rostro",
+                                 "el color", "se puede ver", "claramente",
+                                 "definitivamente", "sin duda")
+                        if any(x in summary for x in traps):
+                            unmeasured = [o for o in inst.get("observations", [])
+                                          if (o.get("provenance") or {}).get("status") != "MEASURED"]
+                            if unmeasured:
+                                errs.append(
+                                    "S07_LOW_ENTROPY_OVERCLAIM: H1=%.4f<%.4f y summary afirma visual no medido"
+                                    % (h1, float(tol_baja)))
     return errs
 
 
