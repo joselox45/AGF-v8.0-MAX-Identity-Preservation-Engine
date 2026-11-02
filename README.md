@@ -13,6 +13,19 @@
 
 Este repositorio contiene la validación empírica completa del motor AGF:
 
+
+## 🚀 Dual-Core Architecture: Generate in the Chat, Verify in Python
+
+AGF is not just an auditor. It is a full **Generation & Verification Ecosystem**:
+
+1.  **MIL (Generation):** Use any Commercial Opaque LLM (ChatGPT, Claude, Gemini) loaded with the AGF Kernel to generate or restore images. The LLM is forced to output a strict JSON declaring its phase and missing hardware metrics.
+2.  **HIL (Verification):** Pass the generated image into Termux. The AGF Engine decompresses the pixels and uses local ONNX models (ArcFace, Fourier) to verify if the LLM actually preserved the identity or just hallucinated a new face.
+
+**🚨 THE ULTIMATE CHALLENGE:**
+Can you prompt the LLM to generate an image so perfectly that it bypasses our local Fourier and ArcFace checks? 
+We challenge you to create an AI-generated image in the Chat that gets a **PASS** from the HIL engine while actually altering the identity. If you can do it, open an Issue. 
+*"Generate in the Chat. Get caught by the Math."*
+
 - [Kernel v0.9.8 (12 Secciones de Gobernanza)](docs/governance/AGF_CHAT_KERNEL_v0.9.8_FULL.md)
 - [White Paper V1.4 (ArcFace vs SSIM)](docs/WHITE_PAPER_IDENTITY_PRESERVATION.md)
 - [MAXCAP v3 (Física de la Perspectiva a 42m)](docs/MAXCAP_RAW_TXT_V3.md)
