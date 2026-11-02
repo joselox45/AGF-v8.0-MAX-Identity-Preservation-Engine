@@ -274,3 +274,79 @@ PIXELS: [■▨□░]
 --- FIRMA ESPECTRAL --------------------------------------------
 H0=[PENDIENTE_HIL] H1=[PENDIENTE_HIL] H2=[PENDIENTE_HIL] Hinf=[PENDIENTE_HIL] | q=[PENDIENTE_HIL] | D=[PENDIENTE_HIL]
 ---------------------------------------------------------------
+
+## 10. EL PUENTE "QUE" — VÍNCULO MEDICIÓN → SIGNIFICADO (FULL)
+
+══════════════════════════════════════════════════════════════
+INTEGRACIÓN COMPLETA: "QUE" — VÍNCULO MEDICIÓN → SIGNIFICADO
+Versión: 1.0 | Formato: TXT PLANO
+══════════════════════════════════════════════════════════════
+
+──────────────────────────────────────────────────────────────
+NIVEL 1 — LEXICO · QUÉ DICE
+──────────────────────────────────────────────────────────────
+| Qué se emite como secuencia de palabras/tokens
+| → Mide: variedad, repetición, novedad bruta
+| → Pregunta: ¿Qué palabras usa y cómo se repiten?
+PIXELS: ■▨□░
+■ Qué dice = [LEX:CONTEO] | repeticion = [LEX:H2]
+
+──────────────────────────────────────────────────────────────
+NIVEL 2 — SEMÁNTICO · QUÉ SIGNIFICA
+──────────────────────────────────────────────────────────────
+| Qué significado agrupa esas palabras; a qué familia pertenecen
+| → Mide: cohesión, distancia, pertenencia conceptual
+| → Pregunta: ¿De qué trata y qué tan coherente es su significado?
+PIXELS: ■▨□░
+▨ Qué significa = [SEM:CONCEPTO] | cohesion = [SEM:COHESION]
+
+──────────────────────────────────────────────────────────────
+NIVEL 3 — COGNITIVO · QUÉ PROCESO USA
+──────────────────────────────────────────────────────────────
+| Qué patrón de razonamiento está operando detrás de las palabras
+| → Mide: estructura de procesamiento, tipo de inferencia
+| → Pregunta: ¿Cómo está pensando cuando dice lo que dice?
+PIXELS: ■▨□░
+■ Qué proceso usa = [COG:PATRON] | perfil = [COG:PERFIL]
+
+──────────────────────────────────────────────────────────────
+NIVEL 4 — EPISTÉMICO · QUÉ DERECHO TIENE AFIRMARLO
+──────────────────────────────────────────────────────────────
+| Con qué fundamento, justificación y estatus sostiene lo que dice
+| → Mide: apertura, justificación, reconocimiento de límites
+| → Pregunta: ¿Sabe que lo sabe, cree que lo sabe, o finge saberlo?
+PIXELS: ■▨□░
+□ Qué derecho tiene = [EPI:GRADO] | apertura = [EPI:Q]
+
+──────────────────────────────────────────────────────────────
+NIVEL 5 — DINÁMICO · QUÉ CAMBIA Y HACIA DÓNDE EVOLUCIONA
+──────────────────────────────────────────────────────────────
+| Qué estabilidad mantiene; qué cambia en el tiempo; hacia dónde converge
+| → Mide: trayectoria, saltos, consistencia temporal
+| → Pregunta: ¿Se mantiene constante o se transforma mientras habla?
+PIXELS: ■▨□░
+░ Qué evoluciona = [DIN:TENDENCIA] | salto = [DIN:SALTO]
+
+──────────────────────────────────────────────────────────────
+NIVEL 6 — ESPECTRAL COMPLETO · QUÉ ES EN SÍ MISMO
+──────────────────────────────────────────────────────────────
+| Huella completa: no una medición, sino la firma estructural del sistema
+| → Mide: perfil H(α), divergencias, toda la curva como unidad
+| → Pregunta: ¿Qué clase de sistema es este, más allá de una respuesta?
+FIRMA: H0=[NUM:H0] H1=[NUM:H1] H2=[NUM:H2] Hinf=[NUM:Hinf] q=[NUM:Q] D=[NUM:D]
+
+══════════════════════════════════════════════════════════════
+LA INTEGRACIÓN FINAL:
+══════════════════════════════════════════════════════════════
+
+| NO SOLO MIDE → SINO QUE REVELA
+| NO SOLO RESPONDE → SINO QUE MUESTRA CÓMO LLEGA A ELLO
+| NO SOLO DETECTA ERRORES → SINO QUE COMPRENDE SU ORIGEN ESTRUCTURAL
+
+| "Que" = el puente:
+|   DATO OBSERVADO  →  QUÉ SIGNIFICA SOBRE EL SISTEMA
+|   (medición)          (comprensión independiente)
+
+══════════════════════════════════════════════════════════════
+FIN DEL DOCUMENTO · INTEGRACIÓN COMPLETA
+══════════════════════════════════════════════════════════════
