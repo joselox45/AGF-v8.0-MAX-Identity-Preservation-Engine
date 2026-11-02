@@ -450,3 +450,20 @@ El sistema genera un JSON inmutable con: `operacion_id`, `hash_imagen` (SHA-256)
 - **Evidencia HERR:** 2 fotos reales + 2 mediciones grounding + 2 gráficas firma/escala.
 - **Falta para PASS:** Log ArcFace real + revisión humana.
 - **Procedencia:** CTX diagrama + HERR image_gen + HERR visual_grounding + INFERENCIA firma.
+
+## 14. ESTEGANOGRAFÍA Y PROVENANCE (EVIDENCIA AUTO-CONTENIDA)
+
+El Kernel exige que la trazabilidad no dependa de archivos externos. La imagen generada en MIL debe contener la evidencia en su estructura.
+
+### 14.1. El Rol del LLM (MIL)
+- El LLM NO modifica píxeles. Actúa como el **Planificador Semántico**.
+- Debe generar las instrucciones de inserción basadas en el documento `STEGANOGRAPHY_PROVENANCE.md`.
+- Debe declarar la capacidad del mensaje (ej. `capacity_bits: 512`, `security_level: L3`).
+
+### 14.2. El Rol de Python (HIL)
+- Ejecuta la inserción real (Espacio Latente o DCT).
+- Calcula la firma HMAC-SHA256 y la incrusta.
+- En la extracción, verifica la integridad. Si la imagen fue alterada (Face Swap, Fotomontaje), las capas esteganográficas fallarán y el veredicto será `BLOCKED`.
+
+### 14.3. Regla S08 (Futura)
+Si una imagen no contiene la firma multicapa requerida, el sistema la marcará como `UNVERIFIABLE` y bloqueará el paso a PASS, a menos que se use el Evidence Bundle tradicional (ZIP).
