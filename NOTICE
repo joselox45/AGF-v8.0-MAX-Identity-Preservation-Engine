@@ -1,0 +1,119 @@
+AGF v12.4.7.8-STRONG — NOTICE
+================================================================================
+This file contains attribution notices required for distribution of this
+repository. Inspired by Soup's NOTICE quality, enhanced with forensic
+governance that Soup does not have.
+
+1. AGF Identity Preservation Engine
+   Original: https://github.com/joselox45/AGF-v8.0-MAX-Identity-Preservation-Engine
+   Copyright (c) 2026 joselox45 / AKADI Pinas Ec
+   License: MIT License (see LICENSE)
+   Status: AUDITED (AKADI 22.0 + Grok) · PATCHED (P0+P1) · PHASE-CERTIFIED
+           (MIL/SIL/PIL/HIL) · Independent Benchmark: UNVERIFIED (honest disclosure)
+
+   Description:
+   Forensic-grade identity verification engine — Fail-Closed, Zero-Fabrication,
+   Human-in-the-Loop. Audits AI-generated images (Meta AI, Grok, ChatGPT,
+   Stable Diffusion) locally in Termux, does not trust what LLM claims.
+
+2. Forensic Architecture (Sovereign Weighted Score) — Valor Real
+
+   5 mathematical layers + 2 diagnostics, in order of weight (P0 normalized):
+
+   1. ArcFace 40% (0.381) — 3D facial identity — Extreme VETO: <0.30 => BLOCKED
+   2. Fourier 2D 30% (0.2857) — Frequency signature / anti-hallucination — VETO: <0.40 => BLOCKED
+   3. Edge Shazam 20% (0.1905) — Facial edge constellation
+   4. SSIM 10% (0.0952) — Structural pixel similarity
+   5. Color Fingerprint 5% (0.0476) — HSV chromatic hue
+
+   Plus:
+   - Metadata (XMP) — Warns AI signature, does not block
+   - Overlay Diff — Visual heatmap for human review
+   - Layer 0: Tiling Detection 3x3 + NMS — For full-body/group photos
+   - Layer 4.5: Token-Bridge v0.9.9 — Measures token drift vs pixel drift
+   - Juez Puro: tools/cpep_trace_check.py — Recalculates verdict from zero
+
+   Formula: score = Σ(metric * weight)
+   Thresholds heuristic (calibrated on ~30 images, NOT statistically significant):
+   PASS >=0.7825, HUMAN_REVIEW 0.6325-0.7825, BLOCKED <0.6325, IDENTITY_FLOOR 0.30
+
+3. Governance Rules — Lo que Soup no tiene
+
+   #1 LLMs lie: Never trust a PASS that a chatbot gives itself.
+   #2 Local Verification: All metrics must be computed in Termux (HIL).
+   #3 Human-in-the-Loop: If system says HUMAN_REVIEW, you decide.
+
+   Additional:
+   - Regla 0: Anclaje Silencioso del Kernel (Silent Anchoring)
+   - 5 prohibitions weak_semantic (no "saw image", no fabricate metrics, etc.)
+   - Semantic Gate + Anexo B/C COLS (Commercial Opaque LLM Services)
+   - Phase Certification Protocol v0.9.8: MIL/SIL/PIL/HIL self-classification
+   - Evidence Bundle .zip/Base64 + SHA-256 audit trail
+
+   Only HIL and Digital Twin results are valid. MIL/SIL are for development.
+
+4. Third-Party Components (not included per .gitignore, but referenced)
+
+   - InsightFace / ArcFace / buffalo_l / antelopev2 / arcface.onnx 167MB
+     License: Non-commercial (model weights)
+     Note: Must be downloaded manually via tools/fetch_models.sh, SHA-256 verified
+     BLOCKED for paid services when using InsightFace-based embedders
+
+   - PhotoMaker V1 (OpenCLIP ViT-H/14)
+     License: Apache-2.0 — Commercial-safe, NO InsightFace
+     Note: Only SDXL identity stack safe for commercial per Soup docs
+
+   - PhotoMaker V2, IP-Adapter FaceID, InstantID, PuLID, Arc2Face
+     License: Inherit InsightFace non-commercial — BLOCKED for paid services
+
+   - ONNX Runtime, tflite-runtime, Pillow, NumPy, OpenCV, scikit-image
+     License: Respective open-source — see vendor repos
+
+   - Llama-3.1-8B-Instruct, Qwen, Gemma, etc. (if using Soup submodule)
+     License: Respective model licenses on HuggingFace Hub
+
+5. Audit & Compliance
+
+   Audits: AKADI 22.0 (P0 Critical: API Fail-Closed, Crash handling, Identity Floor,
+           Weights sum 1.0 + P1 Technical Debt: Fourier aligns BlazeFace before FFT)
+           + Grok (versioning + benchmark disclosure)
+
+   Tests: 120/120 passing
+   Version: v12.4.7.8-STRONG (LEGACY name says v8.0-MAX, see VERSION_MANIFEST.md)
+   Repository Privacy: PRIVATE — anonymous raw.githubusercontent returns 404 intentional
+   Benchmark: UNVERIFIED — FAR/FRR not measured on LFW/CFP/AgeDB, no adversarial test
+               vs FaceSwap/DeepFaceLab, corpus ~30 images
+
+   What this means: Production-ready for single-operator family restoration workflow,
+   NOT certified for enterprise KYC/eKYC until independent benchmarks published.
+
+6. Trademark & Derivation Policy
+
+   "AGF" and "AKADI" are trademarks of joselox45 project.
+   This repository uses Git tags for versioning. GPG signing not currently implemented.
+   Forks and open derivations allowed under MIT License. See DERIVATIONS.md.
+   Private repository. Biometric models in .gitignore. Physical schemas in schemas/.
+
+   Do not use the names "AGF", "AKADI" or contributor names to endorse derived
+   products without permission.
+
+7. How to comply when redistributing
+
+   - Keep this NOTICE file and LICENSE file with every copy
+   - Keep LICENSE-WEIGHTS.md with every copy
+   - Mark files you changed with prominent notice:
+     # Modificado por: [tu nombre] | Fecha: [YYYY-MM-DD] | Cambio: [descripción]
+     # Original: [URL] | Licencia: MIT
+   - For Apache-2.0 parts (Soup submodule): include copy of Apache License 2.0
+     and retain NOTICE from Soup
+   - Do not claim original authorship of unmodified AGF files
+
+8. Contact & Support
+
+   Bugs and feature requests: issue tracker on GitHub
+   Security reports: see SECURITY.md
+   Email: team@trysoup.dev for Soup, joselox45 for AGF
+
+================================================================================
+END OF NOTICE — Better than Soup because it includes forensic governance,
+phase certification, and honest UNVERIFIED disclosure that Soup's NOTICE lacks.
