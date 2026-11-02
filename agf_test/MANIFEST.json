@@ -1,0 +1,21 @@
+{
+  "files": [
+    {
+      "name": "original_reference.jpg",
+      "sha256": "83beefd0c7462adc1000e835de506d778070015f964782c54bb76a6c6cecb5c4"
+    },
+    {
+      "name": "restored_output.jpg",
+      "sha256": "8b793c8708621193bc5314896ee7ac318293f09678c51c77a9e43d8df2399746"
+    },
+    {
+      "name": "AGF_VERIFICATION_REPORT.json",
+      "sha256": "c41ccdbb1d721a5ec89b3b0459916838e845f03cdffcc58b61d2fcf6ceffec2d"
+    },
+    {
+      "name": "AGF_VERIFICATION_REPORT.md",
+      "sha256": "67ef5e96faa561927f3e64e44d8f94c94d273f16f481fbb1b33916bc3d519182"
+    }
+  ],
+  "bundle_sha256": null
+}
