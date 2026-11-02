@@ -9,6 +9,11 @@
 **Fail-Closed. Zero-Fabrication. Human-in-the-Loop.**
 
 
+## Case Study: Fourier Texture Hallucination Block
+Real evidence of the engine blocking an AI restoration because it failed the frequency texture audit (Fourier 0.000).
+*   [Read the Fourier Block Case Study](docs/CASE_STUDY_FOURIER_BLOCK.md)
+
+
 ## MAXCAP RAW v3 (Maximum Deepening & Spectral Signature)
 Empirical proof of scale invariance and entropy behavior across a 2m to 42m distance transition.
 *   [View MAXCAP RAW v3 Analysis](docs/MAXCAP_RAW_TXT_V3.md)
