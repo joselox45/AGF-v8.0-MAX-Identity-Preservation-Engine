@@ -9,6 +9,11 @@
 **Fail-Closed. Zero-Fabrication. Human-in-the-Loop.**
 
 
+## White Paper V1.4 (Deep Technical Traceability)
+Read the complete formal specification of how ArcFace and SSIM interact to preserve identity while transforming context.
+*   [Read the White Paper](docs/WHITE_PAPER_IDENTITY_PRESERVATION.md)
+
+
 ## Technical Specification (V1.2)
 Read the deep technical breakdown of how the system balances creativity with identity preservation.
 *   [View Identity Preservation Specification](docs/IDENTITY_PRESERVATION_SPECIFICATION.md)
