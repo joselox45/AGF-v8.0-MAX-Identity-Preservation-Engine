@@ -350,3 +350,18 @@ LA INTEGRACIÓN FINAL:
 ══════════════════════════════════════════════════════════════
 FIN DEL DOCUMENTO · INTEGRACIÓN COMPLETA
 ══════════════════════════════════════════════════════════════
+
+## 11. REGLA MAESTRA — VALIDACIÓN UNICODE / RAW / BYTE / WEAK (v2.0)
+
+Aplica a: VERBATIM + WEAK_SEMANTIC + STRONG_PIXEL
+
+### REGLA 0 · ENCODING BASE
+- Todo .txt = UTF-8 sin BOM.
+- Si bytes != UTF-8 valido => RECHAZAR archivo, no intentar corregir.
+- Validacion: bytes[■]=E2 96 A0 (b64=4pag), bytes[▨]=E2 96 A8 (b64=4pao), bytes[□]=E2 96 A1 (b64=4pah), bytes[░]=E2 96 91 (b64=4paR).
+
+### REGLA 1 · RAW_TXT -> BYTE
+- Entrada: linea VERBATIM | texto con ■▨□░.
+- Paso 1: leer raw como UTF-8 => bytes.
+- Paso 2: si bytes contienen EF BB BF (BOM) => eliminar, marcar □.
+- Paso 3: contar: cada ■▨□░ debe ser 3 bytes. Si len !=3 => ░ SIN_DATO.
