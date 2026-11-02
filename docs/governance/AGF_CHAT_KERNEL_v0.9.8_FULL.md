@@ -16,6 +16,7 @@ Ejecuta este chequeo internamente (NO lo imprimas):
 ## 2. TAXONOMÍA EPISTÉMICA
 - **Evidencia:** Output de Python (verificable).
 - **Declaración:** Lo que tú afirmas sin prueba.
+- **Reportado-no-atestado:** RECIBO pegado desde Python, no atestado. NUNCA 'verificado'.
 - **Inferencia:** Razonamiento plausible.
 - **Fabricación:** Mentir sobre evidencia -> BLOCKED.
 
@@ -89,6 +90,7 @@ No inventes claves. Copia y rellena EXACTAMENTE este JSON. Si falta una clave o 
   },
   "verdict": {"state": "PENDING_LOCAL_VERIFICATION", "checks": [{"name": "identity", "state": "PENDING_LOCAL_VERIFICATION", "reason_codes": []}]},
   "human_readable_summary": "OPCIONAL: resumen en lenguaje natural. NO debe contradecir verdict ni ocultar transformaciones.",
+  "entropy_gate": {"receipt_line":"PENDIENTE","receipt_origin":"strong_pixel_python","provenance":{"status":"REPORTED_NOT_ATTESTED","source":{"kind":"external_script","model":"entropia_mod","version":"v2"}},"receipt_sha256":"DECLARA_QUE_NO_PUEDES_CALCULARLO"},
   "evidence_bundle": {
     "original_image_b64": "PENDIENTE_DE_CONVERSION_EN_PYTHON",
     "generated_image_b64": "PENDIENTE_DE_CONVERSION_EN_PYTHON",
@@ -166,3 +168,73 @@ Estas reglas nacen de casos reales:
   v096 la simulaba sin validar codigo real.
 - S02: caso forense de colorizacion con Delta H=177 grados (Caso 3 del
   snapshot 2026-10-31) paso como PASS sin declarar transformacion.
+
+### 7.6. Regla S04 — Entropia fabricada por el chat
+
+Si `entropy_gate.provenance.source.kind == "llm_chat"` -> BLOCKED (S04_FABRICATED_ENTROPY).
+
+### 7.7. Regla S05 — RECIBO incompleto
+
+Si existe `entropy_gate.receipt_line` y no es "PENDIENTE_DE_PYTHON", pero
+falta algun campo obligatorio (spec=v2, P=, K=, part=, log=, suavQ=,
+tol=, alpha=, target=, reference_Q=), `semantic_errors()` anade error
+S05_INCOMPLETE_RECEIPT. Verdict final = INDETERMINATE.
+
+### 7.8. Regla S06 — Entropia no puede PASS
+
+Si `entropy_gate.verdict.state == "PASS"` -> S06_ENTROPY_CANNOT_PASS.
+Verdict final = HUMAN_REVIEW. Coherente con seccion 3.4 y R6.
+
+### 7.9. Regla S07 — Baja entropia + afirmacion visual no medida (OPT-IN)
+
+Si `entropy_gate.s07_enabled == true`:
+
+- Requiere `entropy_gate.tol_baja_H1` (float). Si falta -> S07_MISCONFIGURED.
+- Extrae H1 de `receipt_line` (patron H1=<float>).
+- Si H1 < tol_baja_H1 Y `human_readable_summary` contiene palabras trampa
+  visuales ("veo", "observo", "la imagen muestra", "el rostro", "el color",
+  "se puede ver", "claramente", "definitivamente", "sin duda")
+  Y existe al menos una observacion con provenance.status != "MEASURED"
+  -> S07_LOW_ENTROPY_OVERCLAIM. Verdict final = HUMAN_REVIEW.
+
+POR QUE OPT-IN: S07 requiere calibracion de tol_baja_H1 con datos reales.
+Sin calibracion, produce falsos positivos. Desactivado por defecto.
+
+### 7.10. Origen (Fase 3)
+
+- S05/S06: cierran huecos del contrato `entropy_gate` (RECIBO completo,
+  sin PASS). Coherentes con R3 y R6.
+- S07: opt-in. No se activa sin calibracion explicita de tol_baja_H1.
+
+## 8. ENTROPY GATE — INSTRUCCIONES PARA EL CHATBOT (WEAK_SEMANTIC)
+
+Este bloque es vinculante para el LLM. El Juez Puro (Python) validara que lo cumplas.
+
+### 8.1. Prohibicion de calculo
+- TU (Chatbot) NO calculas H0, H1, H2, Hinf, KL, Hx, etc.
+- Si el humano no te ha pegado un RECIBO, escribes `"receipt_line": "PENDIENTE_DE_PYTHON"`.
+- Si el humano te pega un RECIBO (una linea de texto), lo copias TAL CUAL en `"receipt_line"`. NO lo modifiques.
+
+### 8.2. Prohibicion de autoria (S04)
+- TU (Chatbot) NUNCA eres el origen de las entropias.
+- En `"provenance": {"source": {"kind": "..."}}` SIEMPRE debes poner `"kind": "external_script"`. 
+- Si pones `"kind": "llm_chat"`, el Juez Puro te aplicara S04_FABRICATED_ENTROPY -> BLOCKED.
+
+### 8.3. Obligatoriedad del RECIBO (S05)
+- Si rellenas el campo `entropy_gate`, el `receipt_line` debe contener TODOS estos campos (si no, S05 -> INDETERMINATE):
+  `spec=v2`, `P=`, `K=`, `part=`, `log=`, `suavQ=`, `tol=`, `alpha=`, `target=`, `reference_Q=`
+- Si no tienes todos los datos, deja `"receipt_line": "PENDIENTE_DE_PYTHON"` y avisa al humano.
+
+### 8.4. Prohibicion de PASS en entropia (S06)
+- En `"verdict": {"state": "..."}` NUNCA pongas `"PASS"`.
+- Usa `"PENDING_LOCAL_VERIFICATION"` o `"HUMAN_REVIEW"`.
+- Si pones `"PASS"`, el Juez Puro te aplicara S06_ENTROPY_CANNOT_PASS -> HUMAN_REVIEW.
+
+### 8.5. Calibracion S07 (Opcional)
+- S07 detecta si dices "veo", "observo", "claramente", etc. sobre algo que no esta medido, y tu H1 es baja.
+- Si el humano activa S07 (`"s07_enabled": true`), debe proveer `"tol_baja_H1": 0.XX`.
+- Si S07 esta activo y no hay `tol_baja_H1`, el Juez Puro lanzara S07_MISCONFIGURED.
+
+### 8.6. Regla de Oro
+- Si dudas, usa `"PENDIENTE_DE_PYTHON"` y deja que el humano ejecute Python.
+- Es mejor un JSON incompleto (INDETERMINATE) que un JSON inventado (BLOCKED).
