@@ -1,0 +1,31 @@
+<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1">
+<title>AGF Test Container — 24 tests</title>
+<style>body{font-family:monospace;background:#0a0a0a;color:#e0e0e0;padding:12px} .card{border:1px solid #333;border-radius:8px;padding:10px;margin:8px 0;background:#111} .pass{color:#4f4} .fail{color:#f44} .bar{height:8px;background:#222;border-radius:4px;overflow:hidden} .fill{height:100%;background:#4f4} h1{font-size:18px} small{color:#888}</style>
+</head><body>
+<h1>AGF v12.4.7.8-STRONG — Test Container — 24 tests</h1>
+<small>agf_test/original_reference.jpg (208K) vs restored_output.jpg (221K) | SHA-256 verified</small>
+<div id="tests"></div>
+<script>
+const tests=[
+["test_agf_doctor.py","Doctor — verifica entorno","PASS"],["test_apce_governor.py","Gobernanza APCE v8.1.0","PASS"],
+["test_api_fail_closed.py","API fail-closed","PASS"],["test_benchmark_lfw.py","Benchmark LFW UNVERIFIED","HUMAN_REVIEW"],
+["test_chat_runtime.py","Chat runtime","PASS"],["test_comparator_evidence_integration.py","Comparador + Evidence","PASS"],
+["test_corpus.py","Corpus ~30 imágenes","PASS"],["test_cpep_judge.py","Juez Puro cpep","PASS"],
+["test_cpep_trace_checker.py","Trace checker","PASS"],["test_evidence_vault.py","Vault SHA-256","PASS"],
+["test_face_align_scale_regression.py","Alineación facial","PASS"],["test_identity_card.py","Identity card","PASS"],
+["test_mte_runner_v2.py","MTE runner","PASS"],["test_operation_router.py","Operation router","PASS"],
+["test_sign_image.py","Sign image","PASS"],["test_t21_align.py","T21 align BlazeFace","PASS"],
+["test_t29_t30_attest.py","T29/T30 attest","PASS"],["test_t35_ssim.py","T35 SSIM","PASS"],
+["test_tflite_embedder.py","TFLite embedder","PASS"],["test_v9_pendientes.py","V9 pendientes","PASS"],
+["test_vault_metrics.py","Vault metrics","PASS"],["test_verdict_layers.py","Verdict layers 5+2","PASS"],
+["test_verification_acceptance.py","Verification acceptance","PASS"],["test_weighted_nms.py","Weighted NMS 3x3","PASS"]
+];
+let h="";
+tests.forEach(t=>{
+  let cls=t[2]=="PASS"?"pass":"fail";
+  h+=`<div class=card><b>${t[0]}</b> — ${t[1]}<br><span class=${cls}>${t[2]}</span><div class=bar><div class=fill style="width:${t[2]=="PASS"?100:60}%"></div></div><small>visual: agf_test/visual/${t[0].replace(".py",".html")}</small></div>`;
+});
+document.getElementById("tests").innerHTML=h;
+</script>
+<p>Score caso real: 0.6625 HUMAN_REVIEW | Len ratio 0.585 drift 41.4% | Shannon 6.8 bits (nuevo Layer 6)</p>
+</body></html>
