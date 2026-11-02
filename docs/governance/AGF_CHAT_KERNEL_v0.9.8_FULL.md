@@ -365,3 +365,41 @@ Aplica a: VERBATIM + WEAK_SEMANTIC + STRONG_PIXEL
 - Paso 1: leer raw como UTF-8 => bytes.
 - Paso 2: si bytes contienen EF BB BF (BOM) => eliminar, marcar □.
 - Paso 3: contar: cada ■▨□░ debe ser 3 bytes. Si len !=3 => ░ SIN_DATO.
+
+## 12. ESPECIFICACIÓN TÉCNICA V1.2 — PRESERVACIÓN DE IDENTIDAD
+
+### 12.1. El Preámbulo (El Equilibrio)
+> En la generación de imágenes hay dos fuerzas que suelen oponerse: la creatividad de cambiar el contexto, y la fidelidad a quien es la persona. Sin reglas claras, la creatividad se come a la identidad. Esta materialización es el equilibrio: que el fondo y la ropa cambien, pero la persona siga siendo ella misma.
+
+### 12.2. Conceptos Fundamentales
+- **Identidad Facial:** La huella estructural única que define ese rostro (proporciones, ángulos, distancias relativas, vector numérico). No es una etiqueta ni una opinión.
+- **Cambio Permitido ✅:** Nueva camiseta, otro fondo, luz diferente, estilo artístico, ángulo leve.
+- **Pérdida de Identidad ❌:** Ojos de otra persona, forma de mandíbula distinta, rasgos fusionados, similitud bajo el umbral.
+> El sistema NO bloquea cambios —bloquea que esos cambios alteren quién es la persona.
+
+### 12.3. Principios Operativos (P1 - P5)
+- **P1 | Independencia de Capas:** Identidad (Invariable), Apariencia (Variables leves), Contexto (Libre).
+- **P2 | Lo que se mide se puede gestionar:** Similitud vectorial = número entre 0 y 1. Comparable y repetible.
+- **P3 | Referencia antes que decisión:** Definir umbrales después de ver datos reales.
+- **P4 | Transparencia del fallo:** No decir solo "FAIL" — decir QUÉ falló y POR QUÉ.
+- **P5 | Humano en el bucle:** INDETERMINATE = "Revisión humana necesaria".
+
+### 12.4. Arquitectura del Sistema (Etapas A, B, C, D)
+- **ETAPA A (Referencia):** Delimitación de regiones (R_ID, R_ATT, R_BG), extracción de firma de identidad (ArcFace V_ID) y contexto.
+- **ETAPA B (Generación):** Construcción de máscaras (rostro 0% editable), generación bajo restricción.
+- **ETAPA C (Comparación):** Cálculo de S_ID (Similitud Coseno), 1-S_ATT (Cambio de atuendo), 1-S_BG (Cambio de fondo), D_LMK (Desviación de puntos clave).
+- **ETAPA D (Decisión):**
+  - **PASS ✅:** S_ID ≥ 0.70, 1-S_ATT ≥ 0.15, 1-S_BG ≥ 0.15, D_LMK < 0.05.
+  - **INDETERMINATE ⏳:** S_ID entre 0.60 y 0.69. Requiere revisión visual humana.
+  - **FAIL ❌:** S_ID < 0.60 o D_LMK > 0.10. No confiable.
+
+### 12.5. Límites y Verdad (Honestidad Epistémica)
+- **Lo que SÍ puede decir:** "Mantiene la firma facial", "El fondo se ha transformado", "Similitud en zona segura".
+- **Lo que NUNCA puede decir:** "Es exactamente la misma persona" (biológicamente), "La imagen es real" (veracidad de origen), "Es imposible que sea otra persona".
+- **Falsos Positivos/Negativos:** El sistema sabe cuándo está inseguro y avisa (INDETERMINATE).
+
+### 12.6. Trazabilidad (Evidence Bundle)
+El sistema genera un JSON inmutable con: `operacion_id`, `hash_imagen` (SHA-256), `metricas` (S_ID, D_LMK), `decision` (PASS/FAIL/INDETERMINATE) y `auditoria` (versión del sistema).
+
+### 12.7. Síntesis Final
+> No buscamos que la imagen generada sea idéntica a la original. Buscamos que la persona en ella sea la misma persona. Todo lo demás puede —y debe— transformarse libremente.
