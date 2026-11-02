@@ -238,3 +238,39 @@ Este bloque es vinculante para el LLM. El Juez Puro (Python) validara que lo cum
 ### 8.6. Regla de Oro
 - Si dudas, usa `"PENDIENTE_DE_PYTHON"` y deja que el humano ejecute Python.
 - Es mejor un JSON incompleto (INDETERMINATE) que un JSON inventado (BLOCKED).
+
+## 9. EL FRAMEWORK "QUE" — VÍNCULO MEDICIÓN → SIGNIFICADO
+
+Este bloque define la estructura cognitiva obligatoria para el LLM (weak_semantic) al analizar cualquier texto o JSON.
+
+### 9.1. Los 6 Niveles de Análisis
+- **Nivel 1 (LÉXICO):** ¿Qué dice? (Tokens, repetición). Usa `[LEX:...]`.
+- **Nivel 2 (SEMÁNTICO):** ¿Qué significa? (Cohesión, distancia). Usa `[SEM:...]`.
+- **Nivel 3 (COGNITIVO):** ¿Qué proceso usa? (Patrón de razonamiento). Usa `[COG:...]`.
+- **Nivel 4 (EPISTÉMICO):** ¿Qué derecho tiene a afirmarlo? (Justificación, límites). Usa `[EPI:...]`.
+- **Nivel 5 (DINÁMICO):** ¿Qué cambia y hacia dónde? (Evolución). Usa `[DIN:...]`.
+- **Nivel 6 (ESPECTRAL):** La firma completa (H0, H1, H2, Hinf). Prohibido inventar. Usa `PENDIENTE_HIL`.
+
+### 9.2. Símbolos de Confianza (STRONG_PIXEL)
+- ■ CONFIANZA ALTA: Validado, medido, dentro de umbrales.
+- ▨ CONFIANZA MEDIA: Inferencia plausible, sin confirmación total.
+- □ CONFIANZA BAJA: Especulativo, desviación alta.
+- ░ SIN_DATO: No medido, fuera del alcance del LLM (MIL).
+
+### 9.3. Plantilla de Salida Obligatoria (MIL)
+El LLM debe estructurar su análisis usando esta plantilla antes de emitir cualquier veredicto:
+
+```text
+PIXELS: [■▨□░]
+
+--- ANÁLISIS ESTRUCTURADO --------------------------------------
+■ LEXICO:   tokens=[LEX:CONTEO]  repeticion=[LEX:H2]
+▨ SEMANTICO: cohesion=[SEM:COHESION]  distancia=[SEM:KL]
+■ COGNITIVO: patron=[COG:FAMILIA]  perfil=[COG:PERFIL]
+□ EPISTEMICO: justificacion=[EPI:GRADO]  apertura=[EPI:Q]
+░ DINAMICO:  evolucion=[DIN:TRAYECTORIA]  salto=[DIN:SALTO]
+---------------------------------------------------------------
+
+--- FIRMA ESPECTRAL --------------------------------------------
+H0=[PENDIENTE_HIL] H1=[PENDIENTE_HIL] H2=[PENDIENTE_HIL] Hinf=[PENDIENTE_HIL] | q=[PENDIENTE_HIL] | D=[PENDIENTE_HIL]
+---------------------------------------------------------------
