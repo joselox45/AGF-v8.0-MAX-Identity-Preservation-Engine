@@ -205,3 +205,36 @@ Sin calibracion, produce falsos positivos. Desactivado por defecto.
 - S05/S06: cierran huecos del contrato `entropy_gate` (RECIBO completo,
   sin PASS). Coherentes con R3 y R6.
 - S07: opt-in. No se activa sin calibracion explicita de tol_baja_H1.
+
+## 8. ENTROPY GATE — INSTRUCCIONES PARA EL CHATBOT (WEAK_SEMANTIC)
+
+Este bloque es vinculante para el LLM. El Juez Puro (Python) validara que lo cumplas.
+
+### 8.1. Prohibicion de calculo
+- TU (Chatbot) NO calculas H0, H1, H2, Hinf, KL, Hx, etc.
+- Si el humano no te ha pegado un RECIBO, escribes `"receipt_line": "PENDIENTE_DE_PYTHON"`.
+- Si el humano te pega un RECIBO (una linea de texto), lo copias TAL CUAL en `"receipt_line"`. NO lo modifiques.
+
+### 8.2. Prohibicion de autoria (S04)
+- TU (Chatbot) NUNCA eres el origen de las entropias.
+- En `"provenance": {"source": {"kind": "..."}}` SIEMPRE debes poner `"kind": "external_script"`. 
+- Si pones `"kind": "llm_chat"`, el Juez Puro te aplicara S04_FABRICATED_ENTROPY -> BLOCKED.
+
+### 8.3. Obligatoriedad del RECIBO (S05)
+- Si rellenas el campo `entropy_gate`, el `receipt_line` debe contener TODOS estos campos (si no, S05 -> INDETERMINATE):
+  `spec=v2`, `P=`, `K=`, `part=`, `log=`, `suavQ=`, `tol=`, `alpha=`, `target=`, `reference_Q=`
+- Si no tienes todos los datos, deja `"receipt_line": "PENDIENTE_DE_PYTHON"` y avisa al humano.
+
+### 8.4. Prohibicion de PASS en entropia (S06)
+- En `"verdict": {"state": "..."}` NUNCA pongas `"PASS"`.
+- Usa `"PENDING_LOCAL_VERIFICATION"` o `"HUMAN_REVIEW"`.
+- Si pones `"PASS"`, el Juez Puro te aplicara S06_ENTROPY_CANNOT_PASS -> HUMAN_REVIEW.
+
+### 8.5. Calibracion S07 (Opcional)
+- S07 detecta si dices "veo", "observo", "claramente", etc. sobre algo que no esta medido, y tu H1 es baja.
+- Si el humano activa S07 (`"s07_enabled": true`), debe proveer `"tol_baja_H1": 0.XX`.
+- Si S07 esta activo y no hay `tol_baja_H1`, el Juez Puro lanzara S07_MISCONFIGURED.
+
+### 8.6. Regla de Oro
+- Si dudas, usa `"PENDIENTE_DE_PYTHON"` y deja que el humano ejecute Python.
+- Es mejor un JSON incompleto (INDETERMINATE) que un JSON inventado (BLOCKED).
