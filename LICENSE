@@ -1,6 +1,7 @@
-MIT License
-
-Copyright (c) 2026 joselox45 / AGF v8 MAX
+MIT License — AGF v12.4.7.8-STRONG Identity Preservation Engine
+================================================================================
+Original repository: https://github.com/joselox45/AGF-v8.0-MAX-Identity-Preservation-Engine
+Copyright (c) 2026 joselox45 / AKADI Pinas Ec — Piñas, El Oro, Ecuador
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +20,23 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+--------------------------------------------------------------------------------
+Third-Party Model Weights — Separate License (see LICENSE-WEIGHTS.md)
+--------------------------------------------------------------------------------
+Biometric models (arcface.onnx 167MB, buffalo_l, antelopev2, etc.) are NOT
+included in this repository per .gitignore. They are governed by their own
+licenses:
+
+- InsightFace / ArcFace: Non-commercial for model weights
+- PhotoMaker V1: Apache-2.0 commercial-safe (OpenCLIP ViT-H/14)
+- PhotoMaker V2, IP-Adapter FaceID, InstantID, PuLID, Arc2Face: inherit
+  InsightFace non-commercial and are BLOCKED for paid services.
+
+See LICENSE-WEIGHTS.md for full matrix.
+
+--------------------------------------------------------------------------------
+Sections 4 and 6 of Apache-2.0 (when using Soup as submodule) apply if you
+redistribute Soup or a modified copy: keep LICENSE and NOTICE with every copy,
+mark the files you changed, and do not use the Soup name beyond saying where
+the work comes from.
