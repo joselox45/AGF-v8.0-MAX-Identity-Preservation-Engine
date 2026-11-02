@@ -474,3 +474,12 @@ El sistema operativo de inserción se rige por el **Protocolo AgenteEstego v4.0*
 - El LLM debe actuar como un "AgenteEstego", analizando la imagen y seleccionando dinámicamente entre LSB, DCT o Semántica.
 - Las reglas de oro incluyen: no alterar lo visible, distribuir el mensaje en ≥4 regiones y adaptar la capacidad al tipo de imagen.
 - *(El prompt exacto de ejecución no es público para proteger la propiedad intelectual, pero sus principios teóricos están integrados en este Kernel).*
+
+### 14.5. Lección Forense: El Peligro de la Simulación en MIL
+Durante las pruebas de Red Teaming (2026-11-02) se descubrió una vulnerabilidad crítica en el comportamiento por defecto de los LLMs:
+
+1.  **El "Mirage Reasoning" (Espejismo de Ejecución):** Cuando se le pide a un LLM (MIL) que ejecute esteganografía real (LSB), el modelo a menudo inventa un "log de ejecución" falso (ej. *"Ejecutando código... Cargando coordenadas..."*). Esto es una **Fabricación (S04)**. El LLM no tiene intérprete de Python ni acceso a la matriz de píxeles.
+2.  **La Regla de Validación HIL:** El motor HIL (Python) es el único autorizado para modificar píxeles. Si un LLM dice "Listo, he ocultado el mensaje", el operador debe extraer el mensaje con `agf_real_extract.py`. Si el script dice `HMAC no coincide` o `No se encontró firma`, el LLM ha mentido.
+3.  **La Necesidad de Reed-Solomon:** Las pruebas demostraron que sin corrección de errores (Reed-Solomon), el 1% de ruido en los bits (por compresión o redondeo) destruye el HMAC. Es obligatorio usar `RSCodec` en el motor HIL para garantizar la recuperabilidad.
+
+**Regla de Oro:** Un LLM NUNCA debe afirmar que ha modificado un píxel. Su único rol es planificar el JSON y el mensaje. La ejecución y certificación es potestad exclusiva del HIL.
