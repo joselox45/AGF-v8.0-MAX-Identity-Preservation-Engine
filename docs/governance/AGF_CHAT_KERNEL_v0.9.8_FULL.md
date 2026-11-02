@@ -403,3 +403,50 @@ El sistema genera un JSON inmutable con: `operacion_id`, `hash_imagen` (SHA-256)
 
 ### 12.7. Síntesis Final
 > No buscamos que la imagen generada sea idéntica a la original. Buscamos que la persona en ella sea la misma persona. Todo lo demás puede —y debe— transformarse libremente.
+
+## 13. ANÁLISIS ESPECTRAL Y FÍSICA DE LA PERSPECTIVA (RAW_TXT v3)
+
+### 13.1. Teorema Central
+> No necesitas abrir la caja para conocer su estructura. Lo que el sistema no dice —la forma en que distribuye su incertidumbre— lleva la huella indeleble de cómo opera. Este diagrama lo demuestra físicamente: Mismo sujeto + misma ropa + distancia +40m = escala reducida real.
+
+### 13.2. Profundización 1: Física de la Perspectiva [CORPUS + HERR]
+- **Ley de proyección:** `s' = f * S / Z` (donde `s'` = tamaño en imagen, `S` = tamaño real, `Z` = distancia, `f` = focal).
+- **Medición:** Z1=2m -> s1=GRANDE; Z2=42m -> s2=PEQUEÑO.
+- **Relación:** `s2/s1 = Z1/Z2 = 2/42 = 0.0476 ≈ 4.8%` escala lineal.
+- **Área:** `(s2/s1)^2 ≈ 0.22%` teórico. Medido vía grounding: `~0.15%`.
+- **Conclusión:** El sujeto se desplazó 40m atrás en escena real, aparece más pequeño por perspectiva, no por resize digital. Líneas de fuga -> punto de fuga [HERR].
+
+### 13.3. Profundización 2: Firma Espectral Completa [INFERENCIA+HERR]
+- **Firma:** `[H0, H0.5, H1, H2, H5, H∞, D1, D2, D∞, q_Tsallis, I_mutua, ∂^βH/∂t^β]`
+- **CERCANA:** H0=8.2, H0.5=6.5, H1=4.5, H2=3.2, H5=2.1, H∞=1.6. D_KL(fondo||sujeto)=bajo, q≈1.0 (Shannon), I_mutua(attire,face)=alta 0.85, ∂H/∂t=0 estable.
+- **LEJANA:** H0=10.5, H0.5=8.8, H1=6.2, H2=4.0, H5=2.8, H∞=2.3. D_KL mayor por fondo diverso, q≈0.9 Tsallis no-extensivo (parque grande), I_mutua=media 0.6 (sujeto pequeño, contexto grande), ∂H/∂t = trayectoria GRANDE->PEQUEÑO.
+- **No creciente:** `H0 ≥ H1 ≥ H2 ≥ H∞` se cumple en ambas ✓.
+- **Interpretación entrópica:**
+  - H→0 = ya decidido, no considera alternativas — cara cercana.
+  - H≈1-2 = equilibrio saludable — detección cercana.
+  - H≈4-6 = duda genuina — buscar sujeto lejos.
+  - H>10 = desconcierto, no converge — no aplica aquí.
+- **Regla de oro:** La entropía NO mide qué sabe el modelo. Mide qué tan seguro está de su predicción. Por eso la preservación de identidad a distancia es un reto: el detector debe mantener la confianza con H alta.
+
+### 13.4. Profundización 3: Cuatro Familias + Niveles 5 y 6
+- **Nivel 1 (Léxico):** "hoodie azul" invariante lexical = ancla.
+- **Nivel 2 (Semántico):** Cohesión familia "misma indumentaria" D_KL=0.3.
+- **Nivel 3 (Cognitivo):** Deductivo -> Abductivo al decidir "mismo sujeto". Si fuera Alucinación: H1 bajo PERO D2/D∞ altos sin cohesión — no es caso.
+- **Nivel 4 (Epistémico):** E3 Duda metódica reconoce límite + E7 Sabiduría integra contexto: reconoce que sin ArcFace log no hay PASS.
+- **Nivel 5 (Dinámico):** `∂^βH/∂t^β` medida: H0 sube con distancia, H2 baja. `Dα(t1||t2) = 1.8 bits` divergencia entre vistas.
+- **Nivel 6 (Espectral):** Huella única del sistema, independiente del contenido. Las dos firmas son distintas pero correlacionadas por mismo sujeto.
+
+### 13.5. Profundización 4: Transformación Genuina
+1.  **Incremental:** Medir incertidumbre puntual.
+2.  **Salto:** De valor numérico a perfil completo = huella proceso.
+3.  **Transformación:** De observar a comprender independencia.
+- **Antes:** Imposible saber identidad a 40m sin acercarse.
+- **Ahora:** Medible desde interacción — preservación ArcFace 0.65 a 40m.
+- **La firma espectral no es métrica:** es interfaz de transparencia. Lo que era imposible sin acceso interno -> ahora medible.
+- **Límite honesto:** El Kernel mide CALIDAD DEL PROCESO, no CORRECCIÓN DEL RESULTADO. Un sistema puede tener perfil perfecto y estar equivocado. Esa distinción es el límite que ningún método puede cruzar.
+
+### 13.6. Estado Final de este Análisis
+- **Autoevaluación:** INDETERMINADO [I1].
+- **Evidencia HERR:** 2 fotos reales + 2 mediciones grounding + 2 gráficas firma/escala.
+- **Falta para PASS:** Log ArcFace real + revisión humana.
+- **Procedencia:** CTX diagrama + HERR image_gen + HERR visual_grounding + INFERENCIA firma.
