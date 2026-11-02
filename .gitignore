@@ -27,3 +27,9 @@ termux_sealed/
 *.log
 .DS_Store
 .env
+
+# Binarios
+main
+__pycache__/
+*.pyc
+.pytest_cache/
