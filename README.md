@@ -9,6 +9,18 @@
 **Fail-Closed. Zero-Fabrication. Human-in-the-Loop.**
 
 
+## 📑 Índice de Evidencias Forenses
+
+Este repositorio contiene la validación empírica completa del motor AGF:
+
+- [Kernel v0.9.8 (12 Secciones de Gobernanza)](docs/governance/AGF_CHAT_KERNEL_v0.9.8_FULL.md)
+- [White Paper V1.4 (ArcFace vs SSIM)](docs/WHITE_PAPER_IDENTITY_PRESERVATION.md)
+- [MAXCAP v3 (Física de la Perspectiva a 42m)](docs/MAXCAP_RAW_TXT_V3.md)
+- [Caso de Estudio: Fourier 0.000 (Bloqueo de Alucinación)](docs/CASE_STUDY_FOURIER_BLOCK.md)
+- [Caso de Estudio: MIL vs HIL (El militar)](docs/CASE_REAL_MIL_VS_HIL.md)
+
+
+
 ## Case Study: Fourier Texture Hallucination Block
 Real evidence of the engine blocking an AI restoration because it failed the frequency texture audit (Fourier 0.000).
 *   [Read the Fourier Block Case Study](docs/CASE_STUDY_FOURIER_BLOCK.md)
