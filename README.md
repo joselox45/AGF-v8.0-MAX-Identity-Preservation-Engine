@@ -295,3 +295,14 @@ El AGF opera bajo un principio de Confianza Cero. Para entender cómo el sistema
 - CAPA 4.5: Token Forensic - Len ratio 1.059 = 5.9% deriva token vs 6.27% overlay pixel
 - PASS 0.9489 doblemente sellado: ArcFace 0.9662 + Fourier 0.9976 + 【entity-Shazam¦canonical_name=Shazam】 0.8606
 - Schema: schemas/kernel_v0.9.8.json con L0 inalterable# Repo configurado sin PRs forzosos
+
+## 🧠 Kernel de Ejecución Silenciosa (v8.0)
+El sistema ahora cuenta con un router Bash (`tools/kernel_silencioso.sh`) que despliega herramientas en segundo plano sin exponer los logs técnicos al usuario.
+
+### Herramientas desplegadas:
+- **Esteganografía LSB:** Oculta textos en imágenes sin alterar su visualización (`tools/stego_image.py`).
+- **Backup RS:** Empaqueta el repositorio con Reed-Solomon (`tools/agf_backup.py`).
+- **Restore RS:** Recupera y verifica la integridad de los archivos (`tools/agf_rs_restore.py`).
+
+*Toda la telemetría y logs internos se guardan en la "Caja Negra" (`~/tmp_agf/agf_kernel_internal.log`) para auditoría, manteniendo la interfaz limpia.*
+
