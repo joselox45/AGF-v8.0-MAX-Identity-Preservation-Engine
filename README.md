@@ -14,6 +14,12 @@
 Este repositorio contiene la validación empírica completa del motor AGF:
 
 
+## 🧬 Traceability Vector (v0.9.8)
+We define the mathematical flow of evidence from MIL (Chat) to HIL (Python). 
+*   [View Traceability Vector](docs/architecture/TRACEABILITY_VECTOR.md)
+*   Run the demo: `./tools/agf_demo_vector.sh`
+
+
 ## 🚀 Dual-Core Architecture: Generate in the Chat, Verify in Python
 
 AGF is not just an auditor. It is a full **Generation & Verification Ecosystem**:
