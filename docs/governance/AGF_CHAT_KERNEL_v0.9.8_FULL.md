@@ -483,3 +483,23 @@ Durante las pruebas de Red Teaming (2026-11-02) se descubrió una vulnerabilidad
 3.  **La Necesidad de Reed-Solomon:** Las pruebas demostraron que sin corrección de errores (Reed-Solomon), el 1% de ruido en los bits (por compresión o redondeo) destruye el HMAC. Es obligatorio usar `RSCodec` en el motor HIL para garantizar la recuperabilidad.
 
 **Regla de Oro:** Un LLM NUNCA debe afirmar que ha modificado un píxel. Su único rol es planificar el JSON y el mensaje. La ejecución y certificación es potestad exclusiva del HIL.
+
+## 17. CORRECCIÓN DE ERRORES: REED-SOLOMON Y INTERCALADO
+
+La esteganografía LSB y DCT son frágiles ante la compresión y el ruido. Para garantizar la recuperabilidad, el Kernel exige el uso de códigos de corrección de errores (ECC) en el motor HIL.
+
+### 17.1. Fundamento Matemático
+Se utiliza **Reed-Solomon** sobre el campo finito GF(256). A diferencia de los códigos binarios, RS opera sobre símbolos de 8 bits (bytes), lo que permite corregir tanto errores aleatorios como ráfagas de datos corruptos.
+
+### 17.2. El Algoritmo (Berlekamp-Massey)
+El decodificador HIL debe:
+1. Calcular los síndromes.
+2. Encontrar el polinomio localizador de errores (Berlekamp-Massey).
+3. Encontrar las raíces (posiciones de error).
+4. Calcular las magnitudes (Algoritmo de Forney) y corregir.
+
+### 17.3. Intercalado (Interleaving)
+Para sobrevivir a cortes o recortes de imagen, los datos se distribuyen en múltiples bloques (ej. 4 vías). Si un bloque falla, los otros sobreviven. El Kernel exige que el motor HIL implemente intercalado antes de guardar la imagen final.
+
+### 17.4. Regla de Gobernanza
+El LLM (MIL) **no puede** calcular Reed-Solomon en su ventana de chat. Solo puede incluir el mensaje en el JSON. El motor HIL (Python) es el único autorizado para aplicar la codificación RS, el intercalado y la validación final del HMAC. La configuración exacta de paridad (ej. RS(255,183)) es propiedad privada del sistema.
