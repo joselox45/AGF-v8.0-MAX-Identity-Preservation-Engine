@@ -594,20 +594,21 @@ Si el humano pierde el Archivo 2, el motor HIL puede reconstruir la foto usando 
 ### 26.3. Regla de Gobernanza
 El LLM (MIL) no puede ejecutar esta paridad. El motor HIL (Python) es el único autorizado para calcular el XOR, verificar el hash y certificar que la foto recuperada es idéntica bit a bit.
 
-## 27. SONDA MARIANAS E ÍNDICE DE PROFUNDIDAD (IPM)
+## 27. GESTOR ADAPTATIVO DE CAPAS (SISTEMA DE PROFUNDIDAD)
 
 El Kernel exige que el motor HIL mida la adversidad del canal antes de activar capas de corrección. No se debe usar el "Modo Máximo" en un canal perfecto (sobrecarga innecesaria).
 
-### 27.1. El Índice IPM
-`IPM = (p_ruido * 150) + (p_rafaga * 300) + (p_perdida_fragmento * 400)`
-- IPM < 200: Superficie (Modo Mínimo).
-- IPM < 4000: Batial (Modo Estándar/Robusto).
-- IPM < 6000: Abisal (Modo Turbo).
-- IPM >= 6000: Challenger Deep (Modo Máximo: Polar + RS + Turbo/LDPC + Raptor).
+### 27.1. Principio de Adaptabilidad
+El sistema calcula un **Índice de Profundidad** basado en tres métricas: probabilidad de ruido, probabilidad de ráfagas y probabilidad de pérdida de fragmentos. Según el resultado, se activan dinámicamente las capas de corrección necesarias.
 
-### 27.2. Regla de Gobernanza
-El LLM (MIL) no puede calcular el IPM ni decidir las capas. El motor HIL (Python) es el único que mide las probabilidades del canal y aplica la lógica del Gestor de Capas Universal.
+### 27.2. Niveles de Profundidad (Abstractos)
+- **Nivel Superficie:** Canal perfecto → Modo Mínimo (solo compresión).
+- **Nivel Batial:** Canal con ruido moderado → Modo Estándar/Robusto.
+- **Nivel Abisal:** Canal con alta adversidad → Modo Turbo.
+- **Nivel Challenger Deep:** Canal extremo → Modo Máximo (4 capas activas).
 
+### 27.3. Regla de Gobernanza y Confidencialidad
+El LLM (MIL) no puede calcular el Índice de Profundidad ni decidir las capas. El motor HIL (Python) es el único autorizado. **Los coeficientes exactos de la fórmula, los umbrales numéricos y los pesos de cada métrica son PROPIEDAD PRIVADA del sistema AGF y no se distribuyen en este documento público.**
 ## 28. ANILLO LIMBAL E IDEMPOTENCIA DE VERIFICACIÓN (NIVEL 5)
 
 El Kernel adopta la analogía del Foso de las Marianas para definir los niveles de profundidad en el análisis de texto y evidencia (VERBATIM).
