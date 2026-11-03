@@ -1,6 +1,8 @@
 
 # 🛡️ AGF v8.0-MAX: The Universal LLM Honesty Protocol
 
+> **Status:** v1.4.0 - 28 Sections (Anillo Limbal, Sonda Marianas, MAXCAP)
+
 > **We don't just audit images. We audit the truth.**
 >
 > The AGF Kernel is a Governance Framework that forces ANY LLM (with or without sandbox) to stop hallucinating and declare its limits. 
