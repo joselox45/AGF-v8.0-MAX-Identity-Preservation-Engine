@@ -573,3 +573,23 @@ El Kernel exige que el motor HIL implemente una arquitectura de inserción de 5 
 
 ### 25.3. Regla de Gobernanza
 El LLM (MIL) **no puede** ejecutar la inserción de 5 capas en su ventana. Solo puede planificar y sugerir el método. El motor HIL (Python) es el único autorizado para aplicar la arquitectura de 5 capas, calcular el HMAC y validar la integridad.
+
+## 26. MULTIPORTADOR P3 Y PARIDAD XOR (TOLERANCIA A FALLOS)
+
+El Kernel exige que las fotos irremplazables sean blindadas con el perfil P3, que implementa un esquema de tolerancia a fallos basado en paridad XOR.
+
+### 26.1. El Algoritmo (Redundancia de Datos)
+1.  El flujo de datos protegido por Reed-Solomon (`F`) se divide en dos mitades: `A` y `B`.
+2.  Se calcula un bloque de paridad `P` usando la operación lógica XOR: `P = A XOR B`.
+3.  Se genera el **Archivo 1** con `A + P`.
+4.  Se genera el **Archivo 2** con `B + P`.
+
+### 26.2. Recuperación ante Pérdida de un Archivo
+Si el humano pierde el Archivo 2, el motor HIL puede reconstruir la foto usando solo el Archivo 1:
+*   Tiene `A` y `P`.
+*   Calcula `B = A XOR P`.
+*   Junta `A + B` para reconstruir el flujo `F`.
+*   Aplica Reed-Solomon para corregir errores, descomprime y verifica el SHA-256.
+
+### 26.3. Regla de Gobernanza
+El LLM (MIL) no puede ejecutar esta paridad. El motor HIL (Python) es el único autorizado para calcular el XOR, verificar el hash y certificar que la foto recuperada es idéntica bit a bit.
