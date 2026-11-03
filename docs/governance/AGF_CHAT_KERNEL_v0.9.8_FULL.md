@@ -607,3 +607,24 @@ El Kernel exige que el motor HIL mida la adversidad del canal antes de activar c
 
 ### 27.2. Regla de Gobernanza
 El LLM (MIL) no puede calcular el IPM ni decidir las capas. El motor HIL (Python) es el único que mide las probabilidades del canal y aplica la lógica del Gestor de Capas Universal.
+
+## 28. ANILLO LIMBAL E IDEMPOTENCIA DE VERIFICACIÓN (NIVEL 5)
+
+El Kernel adopta la analogía del Foso de las Marianas para definir los niveles de profundidad en el análisis de texto y evidencia (VERBATIM).
+
+### 28.1. Los 6 Niveles de Profundidad
+- **Nivel 0 – Superficie:** Resumen o paráfrasis (pierde verbatim).
+- **Nivel 1 – Limpio:** Contenido esencial preservado.
+- **Nivel 2 – Estándar:** Palabras preservadas, estructura visible.
+- **Nivel 3 – Strict Verbatim:** Texto 100% literal (presión alta).
+- **Nivel 4 – Verbatimétrico:** Texto + contexto + metadatos (medición de presión).
+- **Nivel 5 – Anillo Limbal (Challenger Deep):** Fondo máximo. Integridad verbatim + Identidad sellada + Canal encubierto + Verificación Hash.
+
+### 28.2. El Principio de Idempotencia
+Alcanzar el Nivel 5 implica que la verificación es **idempotente**. Una vez que el Juez Puro (HIL) certifica el hash y el verbatim, repetir el descenso (la verificación) **no cambia la ubicación** (el resultado). 
+- Si el hash coincide, siempre coincidirá.
+- Si el texto es verbatim, siempre lo será.
+- Repetir la operación no altera el soporte físico.
+
+### 28.3. Regla de Gobernanza
+El LLM (MIL) no puede simular el Nivel 5. Si el motor HIL no ha verificado el hash y el verbatim, el texto se queda en Nivel 0 o 1. El Nivel 5 solo lo certifica Python.
