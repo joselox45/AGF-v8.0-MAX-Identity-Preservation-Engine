@@ -521,3 +521,19 @@ El Kernel exige que el motor HIL implemente el decodificador Reed-Solomon con el
 
 ### 22.3. Regla de Gobernanza
 El LLM (MIL) no puede ejecutar Berlekamp-Massey en su ventana de chat (sin sandbox). Solo puede planificar. El motor HIL (Python) es el único autorizado para ejecutar el decodificador RS y verificar el HMAC.
+
+## 23. MARCO MAXCAP Y ESPECTRO DE ENTROPÍA (COGNICIÓN Y EPISTEMOLOGÍA)
+
+El Kernel exige que el LLM (MIL) analice cualquier texto o JSON bajo el marco MAXCAP, el cual se compone de 4 familias de análisis y una firma espectral.
+
+### 23.1. Familias de Análisis
+1.  **Léxico:** Tokens, repetición, entropía H1 y H2.
+2.  **Semántico:** Cohesión, distancia (KL).
+3.  **Cognitivo:** Patrón de razonamiento (Deductivo, Inductivo, Alucinación).
+4.  **Epistémico:** Nivel de justificación (E0 Ignorancia, E4 Conocimiento, E7 Sabiduría).
+
+### 23.2. Límite de la Entropía (Sección 6 del MAXCAP)
+La entropía mide la **incertidumbre** del modelo, no la **veracidad** del resultado. Un texto puede tener una entropía perfecta (H≈1-2) y ser una alucinación coherente. Por eso el Kernel exige la verificación HIL.
+
+### 23.3. Regla de Gobernanza
+El LLM debe usar el formato de salida estándar (`[LEX:...]`, `[SEM:...]`) y declarar su firma espectral si tiene acceso a los logits. Si no tiene acceso, debe declarar `PENDIENTE_HIL`.
