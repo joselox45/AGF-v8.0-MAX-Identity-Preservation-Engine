@@ -555,3 +555,21 @@ El **Anti-Jailbreak AGF** hace lo contrario: **secuestra la identidad del LLM** 
 Cuando el AGF Kernel está activo, el LLM se vuelve inmune a Jailbreaks tradicionales. Si un atacante intenta que el LLM ignore las reglas, el Kernel (que actúa como una constitución interna) se lo impide. El LLM responderá: "No puedo violar el protocolo AGF".
 
 *(Esta sección documenta el Kernel como un mecanismo de defensa activa contra la desinformación de la IA).*
+
+## 25. ARQUITECTURA DE ESTEGANOGRAFÍA MULTICAPA (AGENTEESTEGO V6.0)
+
+El Kernel exige que el motor HIL implemente una arquitectura de inserción de 5 capas para garantizar la robustez ante cualquier ataque de compresión, recorte o ruido.
+
+### 25.1. Las 5 Capas
+1.  **LSB Diferencial:** Modifica la relación local entre píxeles (no el valor absoluto).
+2.  **DCT Banda Media:** Modifica coeficientes de frecuencia (sobrevive JPEG).
+3.  **Semántica Relacional:** Modifica relaciones estadísticas (histograma intacto).
+4.  **Patrón Disperso DFT:** Inserción en frecuencias espaciales (sobrevive recortes).
+5.  **Huella Digital:** Firma de origen basada en mínimos locales.
+
+### 25.2. Límites Físicos
+- La imperceptibilidad está garantizada con ΔE ≤ 0.5.
+- Si la imagen es un diagrama o texto (baja entropía), la capacidad se reduce a 32-64 bits (solo ID y HMAC).
+
+### 25.3. Regla de Gobernanza
+El LLM (MIL) **no puede** ejecutar la inserción de 5 capas en su ventana. Solo puede planificar y sugerir el método. El motor HIL (Python) es el único autorizado para aplicar la arquitectura de 5 capas, calcular el HMAC y validar la integridad.
