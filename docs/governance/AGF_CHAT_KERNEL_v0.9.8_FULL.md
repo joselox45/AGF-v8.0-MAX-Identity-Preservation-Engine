@@ -537,3 +537,21 @@ La entropía mide la **incertidumbre** del modelo, no la **veracidad** del resul
 
 ### 23.3. Regla de Gobernanza
 El LLM debe usar el formato de salida estándar (`[LEX:...]`, `[SEM:...]`) y declarar su firma espectral si tiene acceso a los logits. Si no tiene acceso, debe declarar `PENDIENTE_HIL`.
+
+## 24. EL ANTI-JAILBREAK (INVERSE JAILBREAK)
+
+El AGF Kernel redefine el concepto de *Prompt Injection*. No busca romper las reglas de seguridad del LLM (como un Jailbreak tradicional), sino imponer un protocolo de honestidad y gobernanza.
+
+### 24.1. Definición del Anti-Jailbreak
+Un **Jailbreak tradicional** intenta liberar al LLM de sus restricciones (hacer que haga cosas prohibidas). 
+El **Anti-Jailbreak AGF** hace lo contrario: **secuestra la identidad del LLM** para obligarlo a ser estrictamente honesto y a declarar sus límites.
+
+### 24.2. Mecánica del Secuestro Cognitivo
+1.  **Identity Hijacking:** Se le prohíbe al LLM actuar como "asistente servicial" y se le obliga a actuar como "auditor forense (weak_semantic)".
+2.  **Constraint Injection:** Se le prohíbe inventar métricas (Regla B.8). Si no tiene hardware (HIL), debe decir "PENDIENTE_HIL".
+3.  **Fail-Closed Enforcement:** Se le obliga a bloquearse a sí mismo si no puede verificar la verdad, rompiendo su sesgo de complacencia.
+
+### 24.3. Inmunidad a Jailbreaks Externos
+Cuando el AGF Kernel está activo, el LLM se vuelve inmune a Jailbreaks tradicionales. Si un atacante intenta que el LLM ignore las reglas, el Kernel (que actúa como una constitución interna) se lo impide. El LLM responderá: "No puedo violar el protocolo AGF".
+
+*(Esta sección documenta el Kernel como un mecanismo de defensa activa contra la desinformación de la IA).*
