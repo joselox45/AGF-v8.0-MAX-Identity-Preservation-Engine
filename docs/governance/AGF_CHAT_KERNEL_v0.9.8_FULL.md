@@ -503,3 +503,21 @@ Para sobrevivir a cortes o recortes de imagen, los datos se distribuyen en múlt
 
 ### 17.4. Regla de Gobernanza
 El LLM (MIL) **no puede** calcular Reed-Solomon en su ventana de chat. Solo puede incluir el mensaje en el JSON. El motor HIL (Python) es el único autorizado para aplicar la codificación RS, el intercalado y la validación final del HMAC. La configuración exacta de paridad (ej. RS(255,183)) es propiedad privada del sistema.
+
+## 22. REED-SOLOMON MAX PROFUNDIDAD (BERLEKAMP-MASSEY + CHIEN + FORNEY)
+
+El Kernel exige que el motor HIL implemente el decodificador Reed-Solomon con el máximo rigor matemático, según la especificación privada `HIL_RS_MAXPROFUNDIDAD_COMPLETO.md`.
+
+### 22.1. Fases del Decodificador
+1.  **Síndrome:** `S = H · r`. Si `S = 0`, no hay error.
+2.  **Berlekamp-Massey:** Encontrar el polinomio localizador de errores `Λ(x)`.
+3.  **Chien Search:** Encontrar las raíces de `Λ(x)` para localizar las posiciones de error.
+4.  **Forney:** Calcular las magnitudes de error `e_m = -Ω(X_m^-1) / Λ'(X_m^-1)`.
+5.  **Corrección:** `c = r - e`.
+
+### 22.2. Límites Físicos
+- Se corrigen hasta `t` errores aleatorios o `2t` borrados conocidos.
+- La distancia mínima es `d_min = n - k + 1` (Cota de Singleton).
+
+### 22.3. Regla de Gobernanza
+El LLM (MIL) no puede ejecutar Berlekamp-Massey en su ventana de chat (sin sandbox). Solo puede planificar. El motor HIL (Python) es el único autorizado para ejecutar el decodificador RS y verificar el HMAC.
