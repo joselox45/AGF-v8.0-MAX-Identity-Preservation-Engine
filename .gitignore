@@ -39,3 +39,4 @@ docs/architecture/REED_SOLOMON_PRIVATE_SPEC.md
 restored_repo.tar.gz
 docs/architecture/HIL_RS_MAXPROFUNDIDAD_COMPLETO.md
 docs/architecture/AGENTEESTEGO_V6_PRIVATE.md
+tools/hil_test/sonda_marianas.py
