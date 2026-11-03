@@ -40,3 +40,21 @@ restored_repo.tar.gz
 docs/architecture/HIL_RS_MAXPROFUNDIDAD_COMPLETO.md
 docs/architecture/AGENTEESTEGO_V6_PRIVATE.md
 tools/hil_test/sonda_marianas.py
+
+# === IP VALIOSA (Lógica propietaria) ===
+docs/architecture/SISTEMA_CUADRUPLE_CAPA_v1.3_FOSO_MARIANAS.md
+docs/architecture/SISTEMA_CUADRUPLE_CAPA_v1.1.txt
+docs/architecture/AGENTEESTEGO_V6_PRIVATE.md
+docs/architecture/HIL_RS_MAXPROFUNDIDAD_COMPLETO.md
+tools/hil_test/test_cuadruple_capa_HIL.py
+tools/hil_test/sonda_marianas.py
+
+# === ARCHIVOS TEMPORALES DE PRUEBA ===
+original.jpg
+generada.jpg
+gato_original.png
+gato_estego.png
+imagen_chatbot.png
+out_hil/
+out_p3_test/
+out_corrupcion/
