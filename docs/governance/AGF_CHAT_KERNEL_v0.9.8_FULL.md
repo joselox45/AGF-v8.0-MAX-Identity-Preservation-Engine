@@ -629,3 +629,28 @@ Alcanzar el Nivel 5 implica que la verificación es **idempotente**. Una vez que
 
 ### 28.3. Regla de Gobernanza
 El LLM (MIL) no puede simular el Nivel 5. Si el motor HIL no ha verificado el hash y el verbatim, el texto se queda en Nivel 0 o 1. El Nivel 5 solo lo certifica Python.
+
+## 29. PROTOCOLO DE FLUJO_CONTENEDOR Y GOBERNANZA
+El Kernel establece que toda interacción síncrona entre el LLM (MIL) y el Humano (HIL) debe regirse bajo el protocolo de **FLUJO_CONTENEDOR** para evitar la erosión del contexto y garantizar la veracidad.
+
+### 29.1. Principio de Contención
+El flujo de información se divide en dos canales estrictos (Bidireccionalidad Controlada):
+- **FLUJO 1 (Interno - LLM):** El MIL procesa la orden, ejecuta en el sistema y verifica el cumplimiento del MAXCAP 200 y el formato antes de emitir.
+- **FLUJO 2 (Externo - Humano):** El humano ordena, ejecuta en el terminal físico y el LLM audita la salida (Output) antes de dar por cerrado el ciclo.
+
+### 29.2. La Cadena de Contenedores (Ciclo Cerrado)
+Ninguna respuesta puede ser emitida como "texto plano huérfano". Toda comunicación debe estar encapsulada en la cadena formal:
+1. `contenedor_input`: La orden directa o el output del terminal.
+2. `contenedor_output`: La respuesta estructurada del LLM (análisis, script o verificación).
+3. `contenedor_output` (secundario): Si el LLM emite una acción.
+4. `contenedor_input` (cierre): El estado de "espera de ejecución".
+*Regla de Cierre:* El flujo no termina hasta que el terminal devuelve la salida y el LLM emite su verificación final.
+
+### 29.3. Gobernanza del MAXCAP 200
+El límite (MAXCAP 200) no es solo un contador de caracteres o tokens; es un **límite cognitivo de contexto**. Si una operación excede este límite de abstracción o ejecución en un solo bloque, el sistema debe:
+1. Detener la ejecución.
+2. Emitir un `contenedor_output` parcial.
+3. Exigir un `contenedor_input` de confirmación antes de continuar.
+*Violación:* Cualquier salida que ignore el encapsulamiento o rompa el ciclo de verificación será marcada como **Error de Protocolo** y exigirá un reinicio del contenedor.
+
+---
