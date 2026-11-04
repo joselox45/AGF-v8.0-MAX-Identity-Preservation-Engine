@@ -30,11 +30,12 @@ agf tools/hil_test/test_cuadruple_capa_HIL.py
 *   **Verificación:** Prueba de Oro (Clon Fresco) confirma 0 rastros en el árbol principal y tags.
 *   **Nota de Soporte:** Pendiente purga de refs/pull/N/head por GitHub Support.
 
+---
+---
+*Documento actualizado el 2026-11-03 bajo la gobernanza de la Sección 23.*
 ## 📂 Estructura del Proyecto
 *   docs/governance/ — Kernel, reglas y boot prompts.
 *   docs/evidence/ — Snapshot de sesión (Input/Output containers).
-*   tools/ — Scripts HIL (Solo auditoría, sin esteganografía ni Reed-Solomon).
+*   src/ — Gobernanza, políticas y capas de veredicto.
+*   tools/ — Auditoría forense y Juez Puro. (Los motores de esteganografía y biometría han sido removidos por seguridad de IP).
 *   agf_ui.html — Interfaz visual estática (No ejecutable / Solo referencia de diseño).
-
----
-*Documento actualizado el 2026-11-03 bajo la gobernanza de la Sección 23.*
