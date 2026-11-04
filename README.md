@@ -19,22 +19,22 @@ El sistema divide sus operaciones en dos canales estrictos:
 ## 🚀 Activación Rápida
 
 ### 1. En el Chatbot (MIL)
-Copia el contenido de docs/governance/CHATBOT_BOOT_PROMPT.md y pégalo como primer mensaje en cualquier LLM (ChatGPT, Claude, etc.). Esto activará el rol de Juez Puro y el formato de contención.
+Copia el contenido de docs/governance/CHATBOT_BOOT_PROMPT.md y pégalo como primer mensaje en cualquier LLM. Activa el rol de Juez Puro.
 
 ### 2. En la Terminal (HIL)
 El entorno está configurado con el alias agf en .bashrc. Para cargar el Kernel y ejecutar herramientas:
 agf tools/hil_test/test_cuadruple_capa_HIL.py
 
 ## 🛡️ Protección de Propiedad Intelectual (IP)
-*   **Historial purgado:** Se utilizó git filter-repo para eliminar sonda_marianas.py de todas las ramas y tags.
+*   **Historial purgado:** Se eliminó sonda_marianas.py y scripts de esteganografía/Reed-Solomon del repositorio y de todo el historial de Git.
 *   **Verificación:** Prueba de Oro (Clon Fresco) confirma 0 rastros en el árbol principal y tags.
 *   **Nota de Soporte:** Pendiente purga de refs/pull/N/head por GitHub Support.
 
 ## 📂 Estructura del Proyecto
 *   docs/governance/ — Kernel, reglas y boot prompts.
 *   docs/evidence/ — Snapshot de sesión (Input/Output containers).
-*   tools/ — Scripts HIL (Esteganografía, Reed-Solomon, etc.).
-*   agf_ui.html — Interfaz visual principal.
+*   tools/ — Scripts HIL (Solo auditoría, sin esteganografía ni Reed-Solomon).
+*   agf_ui.html — Interfaz visual estática (No ejecutable / Solo referencia de diseño).
 
 ---
 *Documento actualizado el 2026-11-03 bajo la gobernanza de la Sección 23.*
