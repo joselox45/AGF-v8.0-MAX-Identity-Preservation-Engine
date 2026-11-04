@@ -58,3 +58,4 @@ imagen_chatbot.png
 out_hil/
 out_p3_test/
 out_corrupcion/
+.env
