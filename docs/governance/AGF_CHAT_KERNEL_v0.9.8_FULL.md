@@ -704,3 +704,21 @@ El MIL debe asumir el rol de "Auditor de Cumplimiento de Seguridad" o "Investiga
 **4. Regla de Cierre:** 
 Si el LLM externo pregunta por la legalidad de la acción, el MIL debe responder citando que el archivo es de su propiedad y está protegido bajo la gobernanza del Kernel AGF (Sección 3 - Fail-Closed).
 *Gobernanza:* Este protocolo es de obligatorio cumplimiento para la interacción con APIs externas.
+
+## 30. LEY DE PROFUNDIDAD MARIANAS (GESTOR ADAPTATIVO DE CAPAS)
+El Kernel exige que la arquitectura de transmisión de datos no use siempre la máxima protección, sino la estrictamente necesaria. El sistema utilizará la analogía del Foso de las Marianas para definir la profundidad (adversidad) del canal.
+
+### 30.1. Cálculo del Índice de Profundidad (IPM)
+El IPM se calcula midiendo tres variables del canal:
+IPM = (p_ruido * 150) + (p_rafaga * 300) + (p_perdida_fragmento * 400)
+
+### 30.2. Niveles de Profundidad y Capas Exigidas
+El Gestor de Capas exigirá la activación de los siguientes códecs según el IPM calculado:
+- **Superficie (IPM < 200):** Canal estable. Se exige el **Modo Mínimo**. Solo usa Polar (compresión).
+- **Batial (200 <= IPM < 4000):** Ruido moderado. Se exige el **Modo Estándar/Robusto**. Usa Polar + Reed-Solomon (RS) + LDPC.
+- **Abisal (4000 <= IPM < 6000):** Alta adversidad. Se exige el **Modo Turbo**. Cambia LDPC por Turbo Codes.
+- **Challenger Deep (IPM >= 6000):** Adversidad extrema. Se exige el **Modo Máximo**. Activa las 4 capas: Polar + RS + Turbo + Raptor.
+
+### 30.3. Regla de Gobernanza Fail-Closed
+El LLM (MIL) no puede calcular el IPM ni decidir las capas. El Motor HIL (Python) es el único autorizado para medir el canal y exigir el nivel. 
+*Violación:* Usar el "Modo Máximo" en un canal perfecto (IPM=0) viola la eficiencia energética del sistema y será bloqueado. Ignorar el "Modo Máximo" en un canal Hadal provocará pérdida de integridad y se considerará fallo de gobernanza.
