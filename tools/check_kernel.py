@@ -5,7 +5,7 @@ import sys
 
 # Obtiene la ruta absoluta del directorio del script y sube un nivel a la raíz del repo
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-KERNEL_PATH = os.path.join(BASE_DIR, "docs", "governance", "AGF_CHAT_KERNEL_v0.9.8_FULL.md")
+KERNEL_PATH = os.path.join(BASE_DIR, "docs", "governance", "AGF_CHAT_KERNEL_PUBLIC_LIMITED.md")
 HASH_PATH = os.path.join(BASE_DIR, "docs", "governance", ".kernel_hash.sha256")
 
 def calcular_hash(archivo):
