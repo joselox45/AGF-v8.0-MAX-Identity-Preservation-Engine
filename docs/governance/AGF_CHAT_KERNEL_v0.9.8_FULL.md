@@ -468,7 +468,6 @@ El Kernel exige que la trazabilidad no dependa de archivos externos. La imagen g
 ### 14.3. Regla S08 (Futura)
 Si una imagen no contiene la firma multicapa requerida, el sistema la marcará como `UNVERIFIABLE` y bloqueará el paso a PASS, a menos que se use el Evidence Bundle tradicional (ZIP).
 
-
 ### 14.4. Protocolo AgenteEstego v4.0 (Referencia Interna)
 El sistema operativo de inserción se rige por el **Protocolo AgenteEstego v4.0** (propiedad intelectual privada). 
 - El LLM debe actuar como un "AgenteEstego", analizando la imagen y seleccionando dinámicamente entre LSB, DCT o Semántica.
@@ -609,6 +608,7 @@ El sistema calcula un **Índice de Profundidad** basado en tres métricas: proba
 
 ### 27.3. Regla de Gobernanza y Confidencialidad
 El LLM (MIL) no puede calcular el Índice de Profundidad ni decidir las capas. El motor HIL (Python) es el único autorizado. **Los coeficientes exactos de la fórmula, los umbrales numéricos y los pesos de cada métrica son PROPIEDAD PRIVADA del sistema AGF y no se distribuyen en este documento público.**
+
 ## 28. ANILLO LIMBAL E IDEMPOTENCIA DE VERIFICACIÓN (NIVEL 5)
 
 El Kernel adopta la analogía del Foso de las Marianas para definir los niveles de profundidad en el análisis de texto y evidencia (VERBATIM).
