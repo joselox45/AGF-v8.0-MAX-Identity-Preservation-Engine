@@ -654,3 +654,7 @@ El límite (MAXCAP 200) no es solo un contador de caracteres o tokens; es un **l
 *Violación:* Cualquier salida que ignore el encapsulamiento o rompa el ciclo de verificación será marcada como **Error de Protocolo** y exigirá un reinicio del contenedor.
 
 ---
+
+### 29.4. Regla de Limpieza de Interfaz (Clear)
+Para evitar la contaminación visual y la pérdida de contexto en la terminal (HIL), todo bloque de código Bash emitido dentro de un `contenedor_output` debe iniciar obligatoriamente con el comando `clear`.
+*Gobernanza:* El LLM (MIL) es responsable de incluir `clear` al principio de cada bloque de ejecución. El Humano (HIL) no debe ejecutar scripts que no incluyan esta limpieza inicial.
