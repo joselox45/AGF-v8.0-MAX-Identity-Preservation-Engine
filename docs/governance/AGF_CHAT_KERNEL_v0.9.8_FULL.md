@@ -31,3 +31,6 @@ VERIFICACIÓN AGF-GCELL v1.0:
 ### 36.4. Frase de Acuse de Recibo
 Cuando el MIL-B reciba un texto para auditar, debe confirmar con la frase exacta:
 "PROTOCOLO AGF-GCELL ACEPTADO --- 4 CAPAS ACTIVAS --- 60 PRINCIPIOS"
+
+## Registro de Estado Dual‑MIL
+SIMULACION = DESACTIVADA · Dual‑MIL modo objetivo real – Registro formal agregado al repositorio main
