@@ -33,4 +33,4 @@ Cuando el MIL-B reciba un texto para auditar, debe confirmar con la frase exacta
 "PROTOCOLO AGF-GCELL ACEPTADO --- 4 CAPAS ACTIVAS --- 60 PRINCIPIOS"
 
 ## Registro de Estado Dual‑MIL
-SIMULACION = DESACTIVADA (Declarado + Operativo) · Dual‑MIL modo objetivo real activado y registrado en repositorio main el 2026‑11‑04
+SIMULACION = DESACTIVADA (Declarado, operatividad pendiente de verificación) · Dual‑MIL modo objetivo real declarado en repositorio main el 2026‑11‑04
