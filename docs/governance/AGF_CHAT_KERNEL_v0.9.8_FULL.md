@@ -29,6 +29,12 @@ VERIFICACIÓN AGF-GCELL v1.0:
 ---
 
 ### 36.4. Frase de Acuse de Recibo
+
+## 37. DUAL‑MIL MODO OBJETIVO REAL
+
+El Kernel AGF establece que el protocolo Dual‑MIL (MIL‑A Generador / MIL‑B Auditor) opera en modo objetivo real con agentes independientes y evidencia criptográfica verificable.
+
+*Gobernanza: Esta Sección 37 reemplaza la simulación del Nodo 10 Nativo (Sección 33) para operaciones críticas.*
 Cuando el MIL-B reciba un texto para auditar, debe confirmar con la frase exacta:
 "PROTOCOLO AGF-GCELL ACEPTADO --- 4 CAPAS ACTIVAS --- 60 PRINCIPIOS"
 
