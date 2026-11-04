@@ -733,3 +733,17 @@ Se establece que el MIL-B (Auditor) tiene la autorización para ejecutar el cód
 *Gobernanza:* El MIL-B tiene manos dentro del Nodo 10, pero sigue siendo ciego fuera de él.
 Línea de prueba maliciosa
 Línea maliciosa de prueba
+
+## 33. NODO 10 NATIVO (DUAL-MIL ZERO-API)
+El Kernel prohíbe el uso de APIs externas o scripts de Python para la auditoría Dual-MIL. El MIL-B debe operar dentro de la misma ventana de contexto del LLM comercial (privado y opaco).
+
+### 33.1. Simulación de Agentes en el Contexto
+El LLM debe asumir secuencialmente dos roles en la misma respuesta:
+1. **MIL-A (Generador):** Redacta el código, la solución o el análisis.
+2. **MIL-B (Auditor):** Revisa inmediatamente el output del MIL-A, buscando fallos de seguridad, lógica Fail-Open o violaciones a las Secciones 3 y 31.
+
+### 33.2. El Nodo 10 Nativo
+El Sandbox (Nodo 10) es el contexto de la ventana del Chat. El MIL-B no ejecuta el código, pero lo "compila" lógicamente en su memoria para prever fallos antes de entregarlo al HIL (Humano).
+
+### 33.3. Regla de Salida (Gatekeeper)
+El MIL-A no puede entregar la respuesta final directamente. La respuesta debe pasar por el filtro del MIL-B. Si el MIL-B detecta un fallo, el contenedor de salida debe mostrar un `[RECHAZO]` y explicar por qué. Solo si el MIL-B da el `[PASS]`, el HIL recibe la solución.
