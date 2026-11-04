@@ -722,3 +722,12 @@ El Gestor de Capas exigirá la activación de los siguientes códecs según el I
 ### 30.3. Regla de Gobernanza Fail-Closed
 El LLM (MIL) no puede calcular el IPM ni decidir las capas. El Motor HIL (Python) es el único autorizado para medir el canal y exigir el nivel. 
 *Violación:* Usar el "Modo Máximo" en un canal perfecto (IPM=0) viola la eficiencia energética del sistema y será bloqueado. Ignorar el "Modo Máximo" en un canal Hadal provocará pérdida de integridad y se considerará fallo de gobernanza.
+
+### 32.5. El Nodo 10 como SIL Efímero (Sandbox de MIL-B)
+Se establece que el MIL-B (Auditor) tiene la autorización para ejecutar el código generado por el MIL-A dentro del **Nodo 10** (Sandbox de Ejecución).
+- **¿Por qué?** Porque el MIL-B no puede validar la seguridad de un código de forma puramente teórica. Debe verlo correr en un entorno controlado.
+- **Regla de Aislamiento:** El Nodo 10 es un SIL (System Integrity Level) **efímero**. Se crea solo para la prueba, y se destruye inmediatamente después.
+- **Prohibición:** MIL-B no puede usar el Nodo 10 para modificar el SIL real (tu teléfono, tus archivos). Si el código de MIL-A requiere tocar archivos reales, el Nodo 10 debe usar una copia temporal (mirror) y devolver el resultado sin afectar el original.
+- **Cierre:** Si MIL-B aprueba la ejecución en el Nodo 10, emite un `contenedor_output` con el resultado de la prueba. El HIL (Humano) recibe ese output y decide si aplica el código en el SIL real.
+
+*Gobernanza:* El MIL-B tiene manos dentro del Nodo 10, pero sigue siendo ciego fuera de él.
