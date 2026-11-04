@@ -659,3 +659,7 @@ El límite (MAXCAP 200) no es solo un contador de caracteres o tokens; es un **l
 ### 23.4. Regla de Limpieza de Interfaz (Clear)
 Para evitar la contaminación visual y la pérdida de contexto en la terminal (HIL), todo bloque de código Bash emitido dentro de un `contenedor_output` debe iniciar obligatoriamente con el comando `clear`.
 *Gobernanza:* El LLM (MIL) es responsable de incluir `clear` al principio de cada bloque de ejecución. El Humano (HIL) no debe ejecutar scripts que no incluyan esta limpieza inicial.
+
+### 23.5. Prohibición de Heredoc Multilínea (Heredoc Ban)
+Para evitar el congelamiento de la interfaz HIL (Termux) por fallos en el portapapeles o caracteres invisibles, el MIL tiene estrictamente prohibido el uso de 'cat << EOF' para crear archivos de más de 3 líneas.
+*Gobernanza:* El MIL debe usar alternativas seguras como printf o echo línea por línea.

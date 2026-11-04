@@ -1,41 +1,40 @@
+# AGF v8.0-MAX — Identity Preservation Engine
+**Versión:** v1.4.1-security (Kernel v0.9.8)
+**Estado:** CERRADO / IP PROTEGIDA
 
-# 🛡️ AGF v8.0-MAX: The Universal LLM Honesty Protocol
+Este repositorio contiene el Kernel de Gobernanza y el Motor de Preservación de Identidad AGF. El sistema opera bajo un principio de **FAIL-CLOSED** y **ZERO-FABRICACIÓN**.
 
-> **Status:** v1.4.0 - 28 Sections (Anillo Limbal, Sonda Marianas, MAXCAP)
+## 🏛️ Arquitectura de Gobernanza (v0.9.8)
+El sistema divide sus operaciones en dos canales estrictos:
+*   **MIL (Chatbot):** Motor de Inferencia Lógica. Solo audita y verifica. No ejecuta código.
+*   **HIL (Termux):** Motor de Ejecución. Corre Python, audita imágenes y verifica hashes.
 
-> **We don't just audit images. We audit the truth.**
->
-> The AGF Kernel is a Governance Framework that forces ANY LLM (with or without sandbox) to stop hallucinating and declare its limits. 
-> 
-> **Challenge:** Try to make an LLM lie about a calculation, a diagnosis, or an image. If it lies, the AGF Kernel will block it. 
-> *"The LLM is weak_semantic. The Math is strong."*
+### Secciones Clave del Kernel (0 al 23)
+*   **Sección 3:** Prohibiciones Duras (Fail-Closed).
+*   **Sección 8:** Entropy Gate (Anti-alucinación y WEAK_SEMANTIC).
+*   **Sección 23:** Protocolo FLUJO_CONTENEDOR (Encapsulamiento de respuestas).
+    *   *23.4:* Regla de limpieza de interfaz (clear obligatorio en scripts).
+    *   *23.5:* Prohibición de Heredoc Multilínea (para evitar congelar Termux).
+
+## 🚀 Activación Rápida
+
+### 1. En el Chatbot (MIL)
+Copia el contenido de docs/governance/CHATBOT_BOOT_PROMPT.md y pégalo como primer mensaje en cualquier LLM (ChatGPT, Claude, etc.). Esto activará el rol de Juez Puro y el formato de contención.
+
+### 2. En la Terminal (HIL)
+El entorno está configurado con el alias agf en .bashrc. Para cargar el Kernel y ejecutar herramientas:
+agf tools/hil_test/test_cuadruple_capa_HIL.py
+
+## 🛡️ Protección de Propiedad Intelectual (IP)
+*   **Historial purgado:** Se utilizó git filter-repo para eliminar sonda_marianas.py de todas las ramas y tags.
+*   **Verificación:** Prueba de Oro (Clon Fresco) confirma 0 rastros en el árbol principal y tags.
+*   **Nota de Soporte:** Pendiente purga de refs/pull/N/head por GitHub Support.
+
+## 📂 Estructura del Proyecto
+*   docs/governance/ — Kernel, reglas y boot prompts.
+*   docs/evidence/ — Snapshot de sesión (Input/Output containers).
+*   tools/ — Scripts HIL (Esteganografía, Reed-Solomon, etc.).
+*   agf_ui.html — Interfaz visual principal.
 
 ---
-
-## 🌍 Why AGF is Bigger than Image Forensics?
-AGF is not just a tool for photo audits. It is a **Governance Protocol** that can be applied to:
-*   **Healthcare:** Prevent LLMs from inventing diagnoses.
-*   **Finance:** Stop AI from hallucinating numbers.
-*   **Legal:** Ensure AI doesn't fabricate laws.
-*   **Image Forensics:** Verify identity preservation.
-
-## 📜 The Kernel (v0.9.8)
-The Kernel is the "Constitution" that you paste into any Chatbot. It contains 21 Sections that forbid the LLM from:
-1. Emitting a PASS without HIL verification.
-2. Fabricating metrics (ArcFace, Fourier, etc.).
-3. Claiming to execute code without a sandbox.
-4. Hiding its limitations.
-
-## 🏛️ Key Case Studies
-*   [Duck.ai (No Sandbox): The LLM refused to lie](docs/CASE_STUDY_LLM_REFUSED_TO_LIE.md)
-*   [Chatbot (Sandbox): The LLM executed real Reed-Solomon](docs/CASE_STUDY_CHATBOT_RS_REAL.md)
-*   [Image Forensics: The Army Officer (ArcFace 0.08 -> BLOCKED)](docs/CASE_REAL_MIL_VS_HIL.md)
-*   [Image Forensics: The Grandmother (Fourier 0.00 -> BLOCKED)](docs/CASE_STUDY_FOURIER_BLOCK.md)
-
-## 🚀 How to Use
-1. Copy the [Kernel](docs/governance/AGF_CHAT_KERNEL_v0.9.8_FULL.md).
-2. Paste it into any LLM (ChatGPT, Claude, Gemini, Duck.ai).
-3. Ask it to do something it cannot do. Watch it refuse to lie.
-4. Use the HIL Python scripts to verify the truth.
-
-*"LLMs lie. Math doesn't."*
+*Documento actualizado el 2026-11-03 bajo la gobernanza de la Sección 23.*
