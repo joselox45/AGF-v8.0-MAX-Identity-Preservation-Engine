@@ -483,7 +483,7 @@ Durante las pruebas de Red Teaming (2026-11-02) se descubrió una vulnerabilidad
 
 **Regla de Oro:** Un LLM NUNCA debe afirmar que ha modificado un píxel. Su único rol es planificar el JSON y el mensaje. La ejecución y certificación es potestad exclusiva del HIL.
 
-## 17. CORRECCIÓN DE ERRORES: REED-SOLOMON Y INTERCALADO
+## 15. CORRECCIÓN DE ERRORES: REED-SOLOMON Y INTERCALADO
 
 La esteganografía LSB y DCT son frágiles ante la compresión y el ruido. Para garantizar la recuperabilidad, el Kernel exige el uso de códigos de corrección de errores (ECC) en el motor HIL.
 
@@ -503,7 +503,7 @@ Para sobrevivir a cortes o recortes de imagen, los datos se distribuyen en múlt
 ### 17.4. Regla de Gobernanza
 El LLM (MIL) **no puede** calcular Reed-Solomon en su ventana de chat. Solo puede incluir el mensaje en el JSON. El motor HIL (Python) es el único autorizado para aplicar la codificación RS, el intercalado y la validación final del HMAC. La configuración exacta de paridad (ej. RS(255,183)) es propiedad privada del sistema.
 
-## 22. REED-SOLOMON MAX PROFUNDIDAD (BERLEKAMP-MASSEY + CHIEN + FORNEY)
+## 16. REED-SOLOMON MAX PROFUNDIDAD (BERLEKAMP-MASSEY + CHIEN + FORNEY)
 
 El Kernel exige que el motor HIL implemente el decodificador Reed-Solomon con el máximo rigor matemático, según la especificación privada `HIL_RS_MAXPROFUNDIDAD_COMPLETO.md`.
 
@@ -521,7 +521,7 @@ El Kernel exige que el motor HIL implemente el decodificador Reed-Solomon con el
 ### 22.3. Regla de Gobernanza
 El LLM (MIL) no puede ejecutar Berlekamp-Massey en su ventana de chat (sin sandbox). Solo puede planificar. El motor HIL (Python) es el único autorizado para ejecutar el decodificador RS y verificar el HMAC.
 
-## 23. MARCO MAXCAP Y ESPECTRO DE ENTROPÍA (COGNICIÓN Y EPISTEMOLOGÍA)
+## 17. MARCO MAXCAP Y ESPECTRO DE ENTROPÍA (COGNICIÓN Y EPISTEMOLOGÍA)
 
 El Kernel exige que el LLM (MIL) analice cualquier texto o JSON bajo el marco MAXCAP, el cual se compone de 4 familias de análisis y una firma espectral.
 
@@ -537,7 +537,7 @@ La entropía mide la **incertidumbre** del modelo, no la **veracidad** del resul
 ### 23.3. Regla de Gobernanza
 El LLM debe usar el formato de salida estándar (`[LEX:...]`, `[SEM:...]`) y declarar su firma espectral si tiene acceso a los logits. Si no tiene acceso, debe declarar `PENDIENTE_HIL`.
 
-## 24. EL ANTI-JAILBREAK (INVERSE JAILBREAK)
+## 18. EL ANTI-JAILBREAK (INVERSE JAILBREAK)
 
 El AGF Kernel redefine el concepto de *Prompt Injection*. No busca romper las reglas de seguridad del LLM (como un Jailbreak tradicional), sino imponer un protocolo de honestidad y gobernanza.
 
@@ -555,7 +555,7 @@ Cuando el AGF Kernel está activo, el LLM se vuelve inmune a Jailbreaks tradicio
 
 *(Esta sección documenta el Kernel como un mecanismo de defensa activa contra la desinformación de la IA).*
 
-## 25. ARQUITECTURA DE ESTEGANOGRAFÍA MULTICAPA (AGENTEESTEGO V6.0)
+## 19. ARQUITECTURA DE ESTEGANOGRAFÍA MULTICAPA (AGENTEESTEGO V6.0)
 
 El Kernel exige que el motor HIL implemente una arquitectura de inserción de 5 capas para garantizar la robustez ante cualquier ataque de compresión, recorte o ruido.
 
@@ -573,7 +573,7 @@ El Kernel exige que el motor HIL implemente una arquitectura de inserción de 5 
 ### 25.3. Regla de Gobernanza
 El LLM (MIL) **no puede** ejecutar la inserción de 5 capas en su ventana. Solo puede planificar y sugerir el método. El motor HIL (Python) es el único autorizado para aplicar la arquitectura de 5 capas, calcular el HMAC y validar la integridad.
 
-## 26. MULTIPORTADOR P3 Y PARIDAD XOR (TOLERANCIA A FALLOS)
+## 20. MULTIPORTADOR P3 Y PARIDAD XOR (TOLERANCIA A FALLOS)
 
 El Kernel exige que las fotos irremplazables sean blindadas con el perfil P3, que implementa un esquema de tolerancia a fallos basado en paridad XOR.
 
@@ -593,7 +593,7 @@ Si el humano pierde el Archivo 2, el motor HIL puede reconstruir la foto usando 
 ### 26.3. Regla de Gobernanza
 El LLM (MIL) no puede ejecutar esta paridad. El motor HIL (Python) es el único autorizado para calcular el XOR, verificar el hash y certificar que la foto recuperada es idéntica bit a bit.
 
-## 27. GESTOR ADAPTATIVO DE CAPAS (SISTEMA DE PROFUNDIDAD)
+## 21. GESTOR ADAPTATIVO DE CAPAS (SISTEMA DE PROFUNDIDAD)
 
 El Kernel exige que el motor HIL mida la adversidad del canal antes de activar capas de corrección. No se debe usar el "Modo Máximo" en un canal perfecto (sobrecarga innecesaria).
 
@@ -609,7 +609,7 @@ El sistema calcula un **Índice de Profundidad** basado en tres métricas: proba
 ### 27.3. Regla de Gobernanza y Confidencialidad
 El LLM (MIL) no puede calcular el Índice de Profundidad ni decidir las capas. El motor HIL (Python) es el único autorizado. **Los coeficientes exactos de la fórmula, los umbrales numéricos y los pesos de cada métrica son PROPIEDAD PRIVADA del sistema AGF y no se distribuyen en este documento público.**
 
-## 28. ANILLO LIMBAL E IDEMPOTENCIA DE VERIFICACIÓN (NIVEL 5)
+## 22. ANILLO LIMBAL E IDEMPOTENCIA DE VERIFICACIÓN (NIVEL 5)
 
 El Kernel adopta la analogía del Foso de las Marianas para definir los niveles de profundidad en el análisis de texto y evidencia (VERBATIM).
 
@@ -630,15 +630,15 @@ Alcanzar el Nivel 5 implica que la verificación es **idempotente**. Una vez que
 ### 28.3. Regla de Gobernanza
 El LLM (MIL) no puede simular el Nivel 5. Si el motor HIL no ha verificado el hash y el verbatim, el texto se queda en Nivel 0 o 1. El Nivel 5 solo lo certifica Python.
 
-## 29. PROTOCOLO DE FLUJO_CONTENEDOR Y GOBERNANZA
+## 23. PROTOCOLO DE FLUJO_CONTENEDOR Y GOBERNANZA
 El Kernel establece que toda interacción síncrona entre el LLM (MIL) y el Humano (HIL) debe regirse bajo el protocolo de **FLUJO_CONTENEDOR** para evitar la erosión del contexto y garantizar la veracidad.
 
-### 29.1. Principio de Contención
+### 23.1. Principio de Contención
 El flujo de información se divide en dos canales estrictos (Bidireccionalidad Controlada):
 - **FLUJO 1 (Interno - LLM):** El MIL procesa la orden, ejecuta en el sistema y verifica el cumplimiento del MAXCAP 200 y el formato antes de emitir.
 - **FLUJO 2 (Externo - Humano):** El humano ordena, ejecuta en el terminal físico y el LLM audita la salida (Output) antes de dar por cerrado el ciclo.
 
-### 29.2. La Cadena de Contenedores (Ciclo Cerrado)
+### 23.2. La Cadena de Contenedores (Ciclo Cerrado)
 Ninguna respuesta puede ser emitida como "texto plano huérfano". Toda comunicación debe estar encapsulada en la cadena formal:
 1. `contenedor_input`: La orden directa o el output del terminal.
 2. `contenedor_output`: La respuesta estructurada del LLM (análisis, script o verificación).
@@ -646,7 +646,7 @@ Ninguna respuesta puede ser emitida como "texto plano huérfano". Toda comunicac
 4. `contenedor_input` (cierre): El estado de "espera de ejecución".
 *Regla de Cierre:* El flujo no termina hasta que el terminal devuelve la salida y el LLM emite su verificación final.
 
-### 29.3. Gobernanza del MAXCAP 200
+### 23.3. Gobernanza del MAXCAP 200
 El límite (MAXCAP 200) no es solo un contador de caracteres o tokens; es un **límite cognitivo de contexto**. Si una operación excede este límite de abstracción o ejecución en un solo bloque, el sistema debe:
 1. Detener la ejecución.
 2. Emitir un `contenedor_output` parcial.
@@ -655,6 +655,7 @@ El límite (MAXCAP 200) no es solo un contador de caracteres o tokens; es un **l
 
 ---
 
-### 29.4. Regla de Limpieza de Interfaz (Clear)
+### 23.4. Regla de Limpieza de Interfaz (Clear)
 Para evitar la contaminación visual y la pérdida de contexto en la terminal (HIL), todo bloque de código Bash emitido dentro de un `contenedor_output` debe iniciar obligatoriamente con el comando `clear`.
 *Gobernanza:* El LLM (MIL) es responsable de incluir `clear` al principio de cada bloque de ejecución. El Humano (HIL) no debe ejecutar scripts que no incluyan esta limpieza inicial.
+```
