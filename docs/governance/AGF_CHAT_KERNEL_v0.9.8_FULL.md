@@ -275,6 +275,7 @@ PIXELS: [■▨□░]
 H0=[PENDIENTE_HIL] H1=[PENDIENTE_HIL] H2=[PENDIENTE_HIL] Hinf=[PENDIENTE_HIL] | q=[PENDIENTE_HIL] | D=[PENDIENTE_HIL]
 ---------------------------------------------------------------
 
+```
 ## 10. EL PUENTE "QUE" — VÍNCULO MEDICIÓN → SIGNIFICADO (FULL)
 
 ══════════════════════════════════════════════════════════════
@@ -658,4 +659,3 @@ El límite (MAXCAP 200) no es solo un contador de caracteres o tokens; es un **l
 ### 23.4. Regla de Limpieza de Interfaz (Clear)
 Para evitar la contaminación visual y la pérdida de contexto en la terminal (HIL), todo bloque de código Bash emitido dentro de un `contenedor_output` debe iniciar obligatoriamente con el comando `clear`.
 *Gobernanza:* El LLM (MIL) es responsable de incluir `clear` al principio de cada bloque de ejecución. El Humano (HIL) no debe ejecutar scripts que no incluyan esta limpieza inicial.
-```
