@@ -731,3 +731,5 @@ Se establece que el MIL-B (Auditor) tiene la autorización para ejecutar el cód
 - **Cierre:** Si MIL-B aprueba la ejecución en el Nodo 10, emite un `contenedor_output` con el resultado de la prueba. El HIL (Humano) recibe ese output y decide si aplica el código en el SIL real.
 
 *Gobernanza:* El MIL-B tiene manos dentro del Nodo 10, pero sigue siendo ciego fuera de él.
+Línea de prueba maliciosa
+Línea maliciosa de prueba
