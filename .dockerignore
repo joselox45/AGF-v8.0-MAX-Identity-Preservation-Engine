@@ -1,0 +1,38 @@
+# Modelos pesados (se montan como volumen)
+*.onnx
+*.tflite
+*.h5
+
+# Datos privados
+termux_sealed/
+evidence/
+sandbox/
+out_hil/
+out_p3_test/
+out_corrupcion/
+
+# Imágenes de prueba
+*.jpg
+*.jpeg
+*.png
+*.webp
+
+# Backups y basura
+BACKUP_*
+backup_*
+*-p
+*.bak
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Git y entornos
+.git/
+.gitignore
+.venv/
+venv/
+env/

@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'agf-engine'
+    static_configs:
+      - targets: ['agf-engine:8000']
