@@ -75,7 +75,7 @@ docker compose up -d
 
 ---
 
-## Motor de 5 Capas Ponderadas
+## Motor de 9 Capas Forenses
 
 | Capa | Peso | Umbral |
 |---|---|---|

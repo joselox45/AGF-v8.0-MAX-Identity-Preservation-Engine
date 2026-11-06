@@ -72,3 +72,7 @@ SISTEMA_CUADRUPLE*
 # Evidencias generadas por el API
 termux_sealed/
 arcface.onnx
+
+# Backups locales (no subir a Git)
+*.bak
+*.bak.*

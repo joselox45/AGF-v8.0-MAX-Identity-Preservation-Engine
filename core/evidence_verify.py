@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import json
 
-from .evidence_ledger import digest_text, canonical_json
+from evidence_ledger import digest_text, canonical_json
 
 
 def verify_ledger(path: str) -> dict:

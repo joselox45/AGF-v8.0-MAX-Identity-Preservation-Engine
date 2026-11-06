@@ -230,3 +230,29 @@ Este kernel es una **especificación de gobernanza**, no un sistema operativo.
 ---
 
 *Documento actualizado el 2026-11-06 con correcciones de deuda técnica.*
+
+---
+
+## 41. ACTUALIZACIÓN v12.4.7.8-STRONG — 9 CAPAS FORENSES
+
+El motor evolucionó de las **4 capas GCELL** (Epistémica, Cognitiva, Lingüística, Ética) a las **9 capas forenses** del motor `agf_full_9_layers.py`:
+
+**Capas ponderadas (deciden PASS/BLOCKED):**
+1. ArcFace (40%)
+2. Fourier 2D (30%)
+3. Shazam (20%)
+4. SSIM (10%)
+5. Color (5%)
+
+**Capas de diagnóstico (no ponderan):**
+6. Metadata
+7. Tiling
+8. Lighting
+9. Base64 Differential
+
+Las 4 capas GCELL originales siguen vigentes como **protocolo de auditoría del MIL-B** (el LLM en el chat). Las 9 capas forenses son la **implementación real del motor HIL** (Python). Ambas coexisten:
+
+- **MIL-B** aplica GCELL (4 capas) para auditar el texto del usuario.
+- **HIL** aplica 9 capas forenses para auditar las imágenes.
+
+No son lo mismo, y no deben confundirse.
