@@ -1,30 +1,126 @@
 # AGF v8.0-MAX — Identity Preservation Engine
-**Versión:** v1.4.1-security (Kernel v0.9.8)
-**Estado:** CERRADO / IP PROTEGIDA / OPEN CORE
 
-Este repositorio contiene el Kernel de Gobernanza y el Motor de Preservación de Identidad AGF.
-
-## 🏛️ Arquitectura de Gobernanza (v0.9.8)
-- **MIL (Chatbot):** Motor de Inferencia Lógica. Audita bajo las Secciones 33 y 36.
-- **HIL (Termux):** Motor de Ejecución. Único autorizado a tocar el SIL.
-
-## 📜 Secciones Clave del Kernel
-- **Sección 3:** Fail-Closed.
-- **Sección 8:** Entropy Gate.
-- **Sección 23:** FLUJO_CONTENEDOR.
-- **Sección 30:** Ley Marianas (IPM).
-- **Sección 31:** Aislamiento de Ejecución (MIL/HIL).
-- **Sección 32:** Dual-MIL (MIL-A/MIL-B).
-- **Sección 33:** Nodo 10 Nativo (Zero-API).
-- **Sección 34:** Colegiatura (Niveles de Confianza).
-- **Sección 35:** Límites de Exposición.
-- **Sección 36:** Fusión AGF-GCELL (Auditoría Epistémica y Lingüística).
-
-## 🚀 Activación
-Copia el contenido de `docs/governance/CHATBOT_BOOT_PROMPT.md` en cualquier LLM comercial para activar el modo MIL-B.
-
-## 🔒 Protección de IP
-El repositorio público es "Open Core". El código de ejecución (biometría, cifrado, esteganografía) reside en una bóveda privada (HIL).
+**Versión:** v12.4.7.8-STRONG (Kernel v0.9.8)
+**Estado:** Open Core · IP Privada Protegida
 
 ---
-*Documento actualizado el 2026-11-04 bajo la gobernanza de la Sección 23.*
+
+## ¿Qué es AGF?
+
+Motor de auditoría forense de imágenes generadas por IA. Verifica si una imagen generada preserva la identidad de la persona original usando matemáticas locales (ArcFace + Fourier + SSIM), no la palabra de un chatbot.
+
+**Filosofía:** *"Generate in the Chat. Get caught by the Math."*
+
+---
+
+## Arquitectura Dual (MIL/SIL/HIL)
+
+| Rol | Dónde corre | Qué hace |
+|-----|-------------|----------|
+| **MIL-A** | Chatbot | Genera imágenes y texto |
+| **MIL-B** | Chatbot con Boot Prompt | Audita la evidencia JSON |
+| **HIL** | Termux / VPS | Procesa píxeles reales con ArcFace |
+
+**Regla de oro:** Un LLM nunca dice `PASS`. Solo el HIL (Python) certifica identidad.
+
+---
+
+## Contenido del Open Core
+
+### Motor Forense
+- `tools/agf_full_9_layers.py` — Motor de 5 capas ponderadas + 4 de diagnóstico
+- `agf_full.sh` — Orquestador CLI
+- `api_server.py` — API Flask con `/health` y `/audit`
+
+### Infraestructura
+- `Dockerfile` — Imagen Python 3.11 + OpenCV
+- `docker-compose.yml` — Stack completo (AGF + MinIO + Prometheus + Grafana)
+- `prometheus.yml` — Scraping de métricas
+- `requirements.txt` — Dependencias Python
+
+### Gobernanza
+- `docs/governance/AGF_CHAT_KERNEL_v0.9.8_FULL.md`
+- `docs/governance/CHATBOT_BOOT_PROMPT.md`
+- `tools/check_kernel.py`
+
+---
+
+## IP Privada (Bóveda Local, NO en GitHub)
+
+- `arcface.onnx` (174 MB) — Modelo de reconocimiento facial
+- `blaze_face_full_range.tflite` — Detector de rostros
+- `SISTEMA_CUADRUPLE_CAPA_v1.3_FOSO_MARIANAS.txt` — Especificación IPM
+
+Se montan como volúmenes en el VPS.
+
+---
+
+## Instalación
+
+### Local (Termux / Linux)
+```bash
+git clone https://github.com/joselox45/AGF-v8.0-MAX-Identity-Preservation-Engine.git
+cd AGF-v8.0-MAX-Identity-Preservation-Engine
+pip install -r requirements.txt
+./agf_full.sh original.jpg generada.jpg preservation
+
+### VPS con Docker
+```bash
+git clone https://github.com/joselox45/AGF-v8.0-MAX-Identity-Preservation-Engine.git
+cd AGF-v8.0-MAX-Identity-Preservation-Engine
+scp arcface.onnx usuario@IP_VPS:~/
+docker compose up -d
+```
+
+---
+
+## Motor de 5 Capas Ponderadas
+
+| Capa | Peso | Umbral |
+|---|---|---|
+| ArcFace (Identidad) | 40% | >= 0.65 (Hard Gate) |
+| Fourier 2D | 30% | >= 0.40 |
+| Shazam (Bordes) | 20% | >= 0.50 |
+| SSIM (Pixeles) | 10% | >= 0.70 |
+| Color Fingerprint | 5% | Delta H <= 90 grados |
+
+---
+
+## API Endpoints
+
+| Endpoint | Metodo | Descripcion |
+|---|---|---|
+| `/health` | GET | Health check |
+| `/audit` | POST | Recibe 2 imagenes, devuelve veredicto |
+
+```bash
+curl -X POST http://localhost:8000/audit -F "original=@original.jpg" -F "generated=@generada.jpg"
+```
+
+---
+
+## Observabilidad
+
+- **Prometheus:** `http://localhost:9090`
+- **Grafana:** `http://localhost:3000` (admin/agf_grafana_2026)
+- **MinIO:** `http://localhost:9001` (agfadmin/agf_secure_2026)
+
+---
+
+## Limites Declarados
+
+- **FAR/FRR:** No medidos en datasets estandar.
+- **Corpus:** ~30 imagenes (no estadisticamente significativo).
+- **Benchmark:** `UNVERIFIED / PENDING EXTERNAL`.
+
+AGF es production-ready para un operador individual. NO certificado para verificacion empresarial.
+
+---
+
+## Licencia
+
+MIT - Open Core, IP privada protegida.
+
+---
+
+*Actualizado el 2026-11-06 bajo gobernanza del Kernel v0.9.8.*
