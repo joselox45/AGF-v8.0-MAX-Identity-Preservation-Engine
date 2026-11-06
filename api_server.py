@@ -21,8 +21,10 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from tools.acta_final import generar_acta, guardar_acta
 from core.agf_ledger import registrar_evidencia
+from core.governance_middleware import GovernanceMiddleware
 
 app = Flask(__name__)
+governance = GovernanceMiddleware(maxcap_chars=MAXCAP_INPUT_CHARS)
 CORS(app)
 
 # ─────────────────────────────────────────────────────────────
@@ -125,6 +127,13 @@ def audit():
             "detalle": "Se requieren 'original' y 'generated'."
         }), 400
 
+    # 1. Validar con el middleware de gobernanza (código, no solo prompt)
+    input_str = str(request.form) + str(request.files)
+    ok, error = governance.validate_input(input_str)
+    if not ok:
+        return jsonify(error), 413
+
+    # 2. Validar con la función local (imágenes)
     ok, error = validar_input(request.form, request.files)
     if not ok:
         return jsonify(error), 413
