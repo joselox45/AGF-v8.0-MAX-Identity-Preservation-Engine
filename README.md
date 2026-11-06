@@ -87,7 +87,17 @@ docker compose up -d
 
 **Total: 100%**
 
+### Ledger de evidencia
+Ledger en core/evidence_ledger.py. Archivo core/agf_ledger.py existe en repo. Archivo autoritativo pendiente de decision HIL.
+
 ### Capas de Diagnóstico (no ponderan)
+
+| Capa | Funcion |
+|---|---|
+| Metadata (XMP / EXIF) | Revisar metadatos |
+| Tiling (OpenCV Haar) | Detectar rostros / mosaico |
+| Lighting (PIL + NumPy) | Consistencia de luz |
+| Base64 Differential (hashlib) | Diferencia entre originales |
 
 | # | Capa | Función |
 |---|------|---------|
