@@ -112,30 +112,6 @@ Ejemplo: `2026-11-04 | 685fd4b… | Nivel 2 | Verificación local completa`
 ### 39.4. Regla de acción ante verificación inválida
 Detener cualquier nueva edición hasta restaurar el Kernel a la última versión válida y recalcular el hash correcto.
 
-## 40 LÍMITE OPERATIVO - PROFUNDIDAD MÁXIMA SELLADO KERNEL
-Conjunto cerrado de condiciones bajo las cuales se garantiza idempotencia y estado cerrado del kernel; fuera de el se emite ACTA_FUERA_DE_LIMITE y se aplica Fail‑Closed
-### 40.1 Condiciones validas dentro del Limite Operativo
-1. Longitud entrada ≤ 200 caracteres N10 / ≤ 100 N20 tras PASS / ≤ 50 N30 tras confirmacion HIL
-2. Cadena de nodos respetada sin saltos salvo override S34 valido
-3. Orden validaciones S33 → S8 → S35 → S36 invariable
-4. Hash‑Chain C1‑C4 calculado con SHA‑256 invariable
-5. Roles, umbrales MAXCAP y requisitos S34 no modificados
-### 40.2 Violaciones Detectables por el Kernel
-- Entrada > 200 caracteres antes N10
-- Reordenamiento cadena nodos
-- Modificacion umbrales MAXCAP
-- Salto nodo sin override S34 valido
-- Override MAXCAP = 0 sin firma colegiada N20 + N30
-- Cambio funcion hash C1‑C4
-### 40.3 Acta Fuera de Limite Formato Obligatorio Kernel
-Timestamp | Nodo detector | Vector ruptura | Hash estado kernel | Accion ejecutada | Firma SHA‑256 | Archivo guardado en docs/evidence/FUERA_DE_LIMITE_<TIMESTAMP>.md
-### 40.4 Restauracion al Estado Sellado
-1. Corregir violacion detectada
-2. Ejecutar tools/check_kernel.py validando integridad hash kernel
-3. Emitir ACTA_DE_RESTAURACION registrada en docs/evidence/
-4. Reiniciar flujo valido desde N0
-### 40.5 Regla Fundamental del Limite Operativo
-Dentro del limite: idempotencia garantizada | Fuera del limite: Acta registrada + Fail‑Closed ejecutado + Sin garantia de Profundidad Maxima
 ## Registro de Estado Dual‑MIL
 SIMULACION = DESACTIVADA (Declarado, operatividad pendiente de verificación) · Dual‑MIL modo objetivo real declarado en repositorio main el 2026‑11‑04
 
