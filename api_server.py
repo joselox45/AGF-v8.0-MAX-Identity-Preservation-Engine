@@ -24,7 +24,6 @@ from core.agf_ledger import registrar_evidencia
 from core.governance_middleware import GovernanceMiddleware
 
 app = Flask(__name__)
-governance = GovernanceMiddleware(maxcap_chars=MAXCAP_INPUT_CHARS)
 CORS(app)
 
 # ─────────────────────────────────────────────────────────────
@@ -34,6 +33,9 @@ MAXCAP_INPUT_CHARS = 200              # N10: texto de entrada
 MAXCAP_IMAGEN_BYTES = 10 * 1024 * 1024  # 10 MB por imagen
 MAXCAP_OUTPUT_BYTES = 5120            # 5 KB para JSON de respuesta
 MAXCAP_TIMEOUT_SEG = 60               # 60 segundos máximo del motor
+
+# Instanciar el middleware de gobernanza (después de las constantes)
+governance = GovernanceMiddleware(maxcap_chars=MAXCAP_INPUT_CHARS)
 
 # Rutas
 ENGINE_SCRIPT = "./agf_full.sh"
