@@ -20,6 +20,7 @@ from datetime import datetime, timezone
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from tools.acta_final import generar_acta, guardar_acta
+from core.agf_ledger import registrar_evidencia
 
 app = Flask(__name__)
 CORS(app)
@@ -223,6 +224,16 @@ def audit():
             "hash_acta": acta["hash_acta"],
             "archivo": os.path.basename(acta_path)
         }
+        
+        # Registrar en el ledger hash-chain
+        try:
+            ledger_path = registrar_evidencia(acta_path, data)
+            response_data["ledger"] = {
+                "registrado": True,
+                "path": os.path.basename(ledger_path)
+            }
+        except Exception as e:
+            response_data["ledger"] = {"error": str(e)}
     except Exception as e:
         # Si falla el acta, no bloqueamos la respuesta principal
         response_data["acta_final"] = {

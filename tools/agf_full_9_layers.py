@@ -69,7 +69,7 @@ def capa_1_metadata(gen_path):
 
 
 def capa_2_tiling(orig_path, gen_path):
-    """Detección de rostros (tiling)."""
+    """Detección de rostros (tiling) — OpenCV o fallback."""
     try:
         import cv2
         import numpy as np
@@ -79,7 +79,6 @@ def capa_2_tiling(orig_path, gen_path):
             if img is None:
                 result[name] = {"error": "No se pudo cargar"}
                 continue
-            # Detección con Haar cascade (fallback si no hay BlazeFace)
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             cascade_path = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
             cascade = cv2.CascadeClassifier(cascade_path)
@@ -90,7 +89,28 @@ def capa_2_tiling(orig_path, gen_path):
             }
         return {"status": "PASS", **result}
     except ImportError:
-        return {"status": "SKIP", "detalle": "OpenCV no instalado"}
+        # Fallback: análisis de contraste por regiones
+        try:
+            from PIL import Image
+            import numpy as np
+            result = {}
+            for name, path in [("original", orig_path), ("generada", gen_path)]:
+                img = Image.open(path).convert("L").resize((256, 256))
+                arr = np.array(img).astype(np.float32)
+                # Dividir en 3x3 regiones y calcular contraste
+                h, w = arr.shape
+                regiones = []
+                for i in range(3):
+                    for j in range(3):
+                        region = arr[i*h//3:(i+1)*h//3, j*w//3:(j+1)*w//3]
+                        regiones.append(float(region.std()))
+                result[name] = {
+                    "contraste_regiones": [round(r, 2) for r in regiones],
+                    "metodo": "fallback_pil"
+                }
+            return {"status": "PARTIAL", "detalle": "Sin OpenCV, usando contraste por regiones", **result}
+        except Exception as e:
+            return {"status": "ERROR", "detalle": str(e)}
     except Exception as e:
         return {"status": "ERROR", "detalle": str(e)}
 
@@ -249,7 +269,7 @@ def capa_composite(orig_path, gen_path):
     except Exception as e:
         print(f"[WARN] Fourier falló: {e}")
 
-    # 5. Shazam (bordes) — aproximación con Canny
+    # 5. Shazam (bordes) — Canny con OpenCV, fallback con Sobel/PIL
     try:
         import cv2
         import numpy as np
@@ -258,8 +278,21 @@ def capa_composite(orig_path, gen_path):
             img = cv2.resize(img, (256, 256))
             edges = cv2.Canny(img, 100, 200)
             metricas["shazam"] = float(edges.mean() / 255.0)
+            print("[INFO] Shazam: OpenCV Canny")
     except ImportError:
-        print("[WARN] Shazam: OpenCV no instalado")
+        # Fallback: Sobel con PIL + NumPy
+        try:
+            from PIL import Image
+            import numpy as np
+            img = Image.open(gen_path).convert("L").resize((256, 256))
+            arr = np.array(img).astype(np.float32)
+            # Sobel horizontal y vertical
+            sobel_x = np.abs(np.diff(arr, axis=1)).mean()
+            sobel_y = np.abs(np.diff(arr, axis=0)).mean()
+            metricas["shazam"] = float((sobel_x + sobel_y) / 255.0)
+            print("[INFO] Shazam: Sobel fallback (sin OpenCV)")
+        except Exception as e:
+            print(f"[WARN] Shazam fallback falló: {e}")
     except Exception as e:
         print(f"[WARN] Shazam falló: {e}")
 
