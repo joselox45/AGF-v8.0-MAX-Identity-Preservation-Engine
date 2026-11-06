@@ -68,3 +68,6 @@ docs/governance/FULL_backup*
 registro_pruebas_*.csv
 SISTEMA_CUADRUPLE*
 *.FOSO_MARIANAS.txt
+
+# Evidencias generadas por el API
+termux_sealed/
