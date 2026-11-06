@@ -30,7 +30,7 @@ Motor de auditoría forense de imágenes generadas por IA. Verifica si una image
 ### Motor Forense
 - `tools/agf_full_9_layers.py` — Motor de 5 capas ponderadas + 4 de diagnóstico
 - `agf_full.sh` — Orquestador CLI
-- `api_server.py` — API Flask con `/health` y `/audit`
+- `main.py` — Orquestador CLI (audit, check, api)\n- `api_server.py` — API Flask con `/health` y `/audit`
 
 ### Infraestructura
 - `Dockerfile` — Imagen Python 3.11 + OpenCV
