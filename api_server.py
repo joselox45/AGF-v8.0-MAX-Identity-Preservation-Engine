@@ -17,6 +17,8 @@ CORS(app)
 ENGINE_SCRIPT = "./agf_full.sh"
 EVIDENCE_DIR = "./termux_sealed"
 MAXCAP_IMAGEN_BYTES = 10 * 1024 * 1024  # 10 MB
+MAXCAP_INPUT_CHARS = 200  # N10
+MAXCAP_OUTPUT_BYTES = 5120  # 5 KB para el JSON de respuesta  # 10 MB
 
 
 @app.route("/health", methods=["GET"])
@@ -33,6 +35,17 @@ def health():
 @app.route("/audit", methods=["POST"])
 def audit():
     """Recibe dos imágenes y ejecuta el motor forense."""
+    # MAXCAP: Validar que el request no exceda el límite
+    total_form = sum(len(str(v)) for v in request.form.values())
+    total_files = sum(f.content_length or 0 for f in request.files.values())
+    total_input = total_form + total_files
+    if total_input > MAXCAP_OUTPUT_BYTES * 2:
+        return jsonify({
+            "status": "BLOCKED",
+            "reason": "ACTA_FUERA_DE_LIMITE",
+            "detalle": f"Input de {total_input} bytes excede MAXCAP"
+        }), 413
+
     if "original" not in request.files or "generated" not in request.files:
         return jsonify({"error": "Faltan las imágenes 'original' y 'generated'"}), 400
 
@@ -75,14 +88,23 @@ def audit():
     # Sellar con hash
     hash_evidencia = hashlib.sha256(json.dumps(data, sort_keys=True).encode()).hexdigest()
 
-    return jsonify({
+    response_data = {
         "verdict": data.get("verdict"),
         "score": data.get("agf_score"),
         "arcface": data.get("metrics", {}).get("cosine"),
         "reason": data.get("reason"),
         "hash_sha256": hash_evidencia,
         "timestamp": datetime.utcnow().isoformat() + "Z"
-    }), 200
+    }
+    # MAXCAP: Validar que la respuesta no exceda 5KB
+    response_json = json.dumps(response_data)
+    if len(response_json.encode()) > MAXCAP_OUTPUT_BYTES:
+        return jsonify({
+            "status": "BLOCKED",
+            "reason": "ACTA_FUERA_DE_LIMITE",
+            "detalle": f"Respuesta de {len(response_json)} bytes excede MAXCAP"
+        }), 500
+    return jsonify(response_data), 200
 
 
 if __name__ == "__main__":
