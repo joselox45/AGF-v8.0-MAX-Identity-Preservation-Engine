@@ -284,3 +284,26 @@ Sin esta verificación, el MIL-B puede:
 - Emitir PASS sin medir (violando §37).
 
 **Esta sección cierra esa brecha.**
+
+---
+
+## 43. HERRAMIENTAS DEL MOTOR FORENSE (tools/)
+
+El kernel referencia las siguientes herramientas ejecutables:
+
+| Herramienta | Función | Estado |
+|-------------|---------|--------|
+| `tools/agf_full_9_layers.py` | Motor forense de 9 capas (ArcFace, Fourier, Shazam, SSIM, Color + 4 diagnósticas) | ✅ Implementado |
+| `tools/acta_final.py` | Genera el Acta Final firmada con SHA-256 (certificado para el cliente) | ✅ Implementado |
+| `tools/check_kernel.py` | Verifica la integridad del kernel (hash SHA-256) | ✅ Implementado |
+| `tools/auto_auditor.py` | Auditor automático (integración con APIs externas) | ✅ Implementado |
+
+### Flujo de herramientas
+
+1. `agf_full_9_layers.py` ejecuta las 9 capas y genera `composite_audit.json`.
+2. `acta_final.py` lee el `composite_audit.json` y genera `ACTA_FINAL_SELLADA_CLOSED.json` con hash de integridad.
+3. `check_kernel.py` verifica que el kernel no haya sido alterado.
+
+### Regla de Fail-Closed
+
+Si cualquiera de estas herramientas falta, el sistema entra en `BLOCKED`. No puede haber un PASS sin el acta final firmada.
