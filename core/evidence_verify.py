@@ -45,6 +45,20 @@ def verify_ledger(path: str) -> dict:
                 tampered.append({"line": lineno, "reason": "event_sha256 no coincide"})
                 continue
 
+            # 1.5 Verificar que el acta física no haya sido alterada
+            acta_path = event.get("acta_path")
+            acta_sha_declarado = event.get("acta_sha256")
+            
+            if acta_path and acta_sha_declarado and acta_sha_declarado != "ERROR_LECTURA":
+                # Resolver ruta (el API guarda ./termux_sealed/...)
+                ruta_real = acta_path.replace("./", "")
+                if os.path.exists(ruta_real):
+                    with open(ruta_real, "rb") as af:
+                        hash_real = digest_text(af.read().decode('utf-8', errors='ignore'))
+                    if hash_real != acta_sha_declarado:
+                        tampered.append({"line": lineno, "reason": f"Acta {ruta_real} modificada (hash no coincide)"})
+                        continue
+
             # 2. Verificar hash de cadena (prev_hash)
             prev = wrapper.get("prev_hash", "")
             if prev_line_hash is None:

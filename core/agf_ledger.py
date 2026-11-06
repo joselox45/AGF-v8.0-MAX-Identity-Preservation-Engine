@@ -12,9 +12,18 @@ def registrar_evidencia(acta_path, audit_data):
     ledger_path = os.path.join("termux_sealed", "ledger.jsonl")
     led = EvidenceLedger(ledger_path)
     
+    # Calcular el hash SHA-256 del contenido del acta
+    import hashlib
+    try:
+        with open(acta_path, "rb") as af:
+            hash_acta = hashlib.sha256(af.read()).hexdigest()
+    except Exception:
+        hash_acta = "ERROR_LECTURA"
+
     event = {
         "event_type": "audit_completed",
         "acta_path": acta_path,
+        "acta_sha256": hash_acta,
         "verdict": audit_data.get("verdict"),
         "score": audit_data.get("agf_score"),
         "arcface": audit_data.get("metrics", {}).get("cosine"),
