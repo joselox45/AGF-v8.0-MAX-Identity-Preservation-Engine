@@ -71,6 +71,7 @@ cd AGF-v8.0-MAX-Identity-Preservation-Engine
 scp arcface.onnx usuario@IP_VPS:~/
 docker compose up -d
 ```
+```
 
 ---
 
