@@ -19,6 +19,7 @@ import json
 from datetime import datetime, timezone
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from tools.acta_final import generar_acta, guardar_acta
 
 app = Flask(__name__)
 CORS(app)
@@ -203,7 +204,33 @@ def audit():
     }
 
     # ─────────────────────────────────────────────────────────
-    # 7. VALIDAR OUTPUT (MAXCAP)
+    # 7. GENERAR ACTA FINAL (certificado de auditoría)
+    # ─────────────────────────────────────────────────────────
+    try:
+        original_hash = hashlib.sha256(open(original_path, "rb").read()).hexdigest()[:16]
+        generated_hash = hashlib.sha256(open(generated_path, "rb").read()).hexdigest()[:16]
+        
+        acta = generar_acta(
+            veredicto=data.get("verdict"),
+            score=data.get("agf_score"),
+            arcface=data.get("metrics", {}).get("cosine"),
+            reason=data.get("reason"),
+            original_hash=original_hash,
+            generated_hash=generated_hash
+        )
+        acta_path = guardar_acta(acta)
+        response_data["acta_final"] = {
+            "hash_acta": acta["hash_acta"],
+            "archivo": os.path.basename(acta_path)
+        }
+    except Exception as e:
+        # Si falla el acta, no bloqueamos la respuesta principal
+        response_data["acta_final"] = {
+            "error": f"No se pudo generar el acta: {str(e)}"
+        }
+
+    # ─────────────────────────────────────────────────────────
+    # 8. VALIDAR OUTPUT (MAXCAP)
     # ─────────────────────────────────────────────────────────
     ok, error = validar_output(response_data)
     if not ok:
