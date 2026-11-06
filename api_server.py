@@ -130,9 +130,14 @@ def audit():
     # ─────────────────────────────────────────────────────────
     # 2. GUARDAR IMÁGENES TEMPORALMENTE
     # ─────────────────────────────────────────────────────────
-    os.makedirs("/data/data/com.termux/files/home/tmp/agf_audit", exist_ok=True)
-    original_path = "/data/data/com.termux/files/home/tmp/agf_audit/original.jpg"
-    generated_path = "/data/data/com.termux/files/home/tmp/agf_audit/generated.jpg"
+    # Directorio temporal configurable (portable: Termux, Linux, VPS)
+    AUDIT_TMP = os.environ.get(
+        "AGF_AUDIT_TMP",
+        os.path.join(os.path.expanduser("~"), "tmp", "agf_audit")
+    )
+    os.makedirs(AUDIT_TMP, exist_ok=True)
+    original_path = os.path.join(AUDIT_TMP, "original.jpg")
+    generated_path = os.path.join(AUDIT_TMP, "generated.jpg")
 
     request.files["original"].save(original_path)
     request.files["generated"].save(generated_path)
