@@ -16,7 +16,7 @@ import os
 import subprocess
 import hashlib
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -103,7 +103,7 @@ def health():
             "output_bytes": MAXCAP_OUTPUT_BYTES,
             "timeout_seg": MAXCAP_TIMEOUT_SEG
         },
-        "timestamp": datetime.utcnow().isoformat() + "Z"
+        "timestamp": datetime.now(timezone.utc).isoformat()
     }), 200
 
 
@@ -199,7 +199,7 @@ def audit():
         "arcface": data.get("metrics", {}).get("cosine"),
         "reason": data.get("reason"),
         "hash_sha256": hash_evidencia,
-        "timestamp": datetime.utcnow().isoformat() + "Z"
+        "timestamp": datetime.now(timezone.utc).isoformat()
     }
 
     # ─────────────────────────────────────────────────────────
