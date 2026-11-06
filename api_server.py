@@ -37,6 +37,8 @@ MAXCAP_TIMEOUT_SEG = 60               # 60 segundos máximo del motor
 # Instanciar el middleware de gobernanza (después de las constantes)
 governance = GovernanceMiddleware(maxcap_chars=MAXCAP_INPUT_CHARS)
 
+# Instanciar el middleware de gobernanza (después de las constantes)
+
 # Rutas
 ENGINE_SCRIPT = "./agf_full.sh"
 EVIDENCE_DIR = "./termux_sealed"
