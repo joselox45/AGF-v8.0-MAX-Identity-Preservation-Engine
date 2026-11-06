@@ -88,6 +88,29 @@ docker compose up -d
 ---
 
 
+
+---
+
+## Matriz de Correspondencia: Capas, Herramientas y Roles
+
+Para evitar confusión entre el protocolo de chat (MIL-B) y el motor forense (HIL), esta es la correspondencia exacta:
+
+| Rol | Entorno | Capas que aplica | Herramientas |
+|-----|---------|------------------|--------------|
+| **MIL-B** (Auditor) | Chatbot (ChatGPT/Claude/Meta) | **4 Capas GCELL** (Epistémica, Cognitiva, Lingüística, Ética) | Ninguna. Solo texto. Prohibido ejecutar código. |
+| **HIL** (Motor Forense) | Python (Termux/VPS) | **9 Capas Forenses** (ArcFace, Fourier, Shazam, SSIM, Color + 4 diagnósticas) | `tools/agf_full_9_layers.py`, `tools/acta_final.py`, `tools/check_kernel.py` |
+
+### Capas del MIL-B (Protocolo de texto)
+El Boot Prompt obliga al LLM a auditar el texto bajo 4 capas GCELL y a declarar `GAP RESIDUAL` si no puede verificar algo (ej. un hash).
+
+### Capas del HIL (Motor de imágenes)
+El motor Python ejecuta las 9 capas reales sobre las imágenes y genera:
+1. Un `composite_audit.json` con las métricas.
+2. Un `acta_final.json` firmado con hash.
+3. Un registro en el `ledger.jsonl` (hash-chain).
+
+**Regla de oro:** El MIL-B nunca dice `PASS`. Si el HIL dice `BLOCKED` (porque ArcFace < 0.65), el sistema entero se detiene.
+
 ---
 
 ## Verificación Previa (Boot Prompt v2)
