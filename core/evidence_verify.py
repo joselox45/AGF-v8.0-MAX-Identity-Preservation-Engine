@@ -1,16 +1,20 @@
-"""Verificacion de integridad del ledger: contenido + cadena.
+"""Verificación de integridad del ledger: contenido + cadena.
 
-- event_sha256 vs recalculo: atrapa edicion de bytes.
-- prev_hash vs hash de linea anterior: atrapa reordenamiento
-  y borrado de lineas.
+- event_sha256 vs recálculo: atrapa edición de bytes.
+- prev_hash vs hash de línea anterior: atrapa reordenamiento
+  y borrado de líneas.
 
 NO protege contra quien reescribe el archivo entero y recalcula
-toda la cadena (ver REJECTED.md R1): para eso se necesita anclaje
-externo del head hash.
+toda la cadena: para eso se necesita anclaje externo del head hash.
 """
 from __future__ import annotations
 
 import json
+import os
+import sys
+
+# Añadir el directorio actual al path para importar evidence_ledger
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from evidence_ledger import digest_text, canonical_json
 
@@ -28,28 +32,36 @@ def verify_ledger(path: str) -> dict:
             total += 1
             try:
                 wrapper = json.loads(line)
-                event = wrapper["event"]
-                recorded = wrapper["event_sha256"]
-            except (json.JSONDecodeError, KeyError):
-                tampered.append((lineno, "formato_invalido"))
-                prev_line_hash = digest_text(line)
+            except json.JSONDecodeError:
+                tampered.append({"line": lineno, "reason": "JSON inválido"})
                 continue
 
-            if digest_text(canonical_json(event)) != recorded:
-                tampered.append((lineno, "hash_no_coincide"))
+            # 1. Verificar hash del evento (contenido)
+            event = wrapper.get("event", {})
+            event_sha = wrapper.get("event_sha256", "")
+            recalculated = digest_text(canonical_json(event))
 
-            expected_prev = prev_line_hash if prev_line_hash else "GENESIS"
-            if wrapper.get("prev_hash") != expected_prev:
-                chain_breaks.append(
-                    (lineno, "cadena_rota: prev_hash no coincide"))
+            if recalculated != event_sha:
+                tampered.append({"line": lineno, "reason": "event_sha256 no coincide"})
+                continue
 
-            prev_line_hash = digest_text(line)
-            if not any(t[0] == lineno for t in tampered) and \
-               not any(c[0] == lineno for c in chain_breaks):
-                valid += 1
+            # 2. Verificar hash de cadena (prev_hash)
+            prev = wrapper.get("prev_hash", "")
+            if prev_line_hash is None:
+                if prev != "GENESIS":
+                    chain_breaks.append({"line": lineno, "reason": "primer evento no es GENESIS"})
+                    continue
+            else:
+                if prev != prev_line_hash:
+                    chain_breaks.append({"line": lineno, "reason": "prev_hash no coincide"})
+                    continue
 
-    return {"total": total, "valid": valid,
-            "tampered_count": len(tampered), "tampered": tampered,
-            "chain_breaks": chain_breaks,
-            "chain_ok": len(chain_breaks) == 0,
-            "head_hash": prev_line_hash}
+            valid += 1
+            prev_line_hash = event_sha
+
+    return {
+        "total": total,
+        "valid": valid,
+        "tampered": tampered,
+        "chain_breaks": chain_breaks,
+    }

@@ -208,8 +208,8 @@ def audit():
     # 7. GENERAR ACTA FINAL (certificado de auditoría)
     # ─────────────────────────────────────────────────────────
     try:
-        original_hash = hashlib.sha256(open(original_path, "rb").read()).hexdigest()[:16]
-        generated_hash = hashlib.sha256(open(generated_path, "rb").read()).hexdigest()[:16]
+        original_hash = hashlib.sha256(open(original_path, "rb").read()).hexdigest()
+        generated_hash = hashlib.sha256(open(generated_path, "rb").read()).hexdigest()
         
         acta = generar_acta(
             veredicto=data.get("verdict"),
