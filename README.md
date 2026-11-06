@@ -141,8 +141,8 @@ curl -X POST http://localhost:8000/audit -F "original=@original.jpg" -F "generat
 ## Observabilidad
 
 - **Prometheus:** `http://localhost:9090`
-- **Grafana:** `http://localhost:3000` (admin/agf_grafana_2026)
-- **MinIO:** `http://localhost:9001` (agfadmin/agf_secure_2026)
+- **Grafana:** `http://localhost:3000` (usuario: `admin` · password: ver variable `GF_SECURITY_ADMIN_PASSWORD`)
+- **MinIO:** `http://localhost:9001` (usuario: ver variable `MINIO_ROOT_USER` · password: ver `MINIO_ROOT_PASSWORD`)
 
 ---
 

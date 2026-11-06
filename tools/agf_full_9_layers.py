@@ -34,12 +34,12 @@ UMBRAL_SHAZAM = 0.50
 
 # Pesos (del README)
 PESOS = {
-    "arcface": 0.40,
-    "fourier": 0.30,
-    "shazam": 0.20,
-    "ssim": 0.10,
-    "color": 0.05
-}
+    "arcface": 0.40,   # 40% - Hard Gate
+    "fourier": 0.30,   # 30% - Anti-hallucination
+    "shazam": 0.15,    # 15% - Estructura (era 20%, corregido)
+    "ssim": 0.10,      # 10% - Similitud
+    "color": 0.05      # 5%  - Cromática
+}  # TOTAL: 100%
 
 
 def calcular_hash_imagen(path):
