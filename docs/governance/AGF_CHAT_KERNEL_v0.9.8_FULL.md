@@ -20,9 +20,9 @@ Cuando el MIL-B audite un texto, debe terminar su respuesta con el siguiente blo
 ---
 VERIFICACIÓN AGF-GCELL v1.0:
 - Capas activas: [I-Epistémica / II-Cognitiva / III-Lingüística / IV-Ética]
-- Overclaim: [PASS/FAIL + patrón específico si FAIL]
+- Overclaim: [HUMAN_REVIEW/BLOCKED + patrón específico si BLOCKED]
 - Sesgo cognitivo detectado: [ninguno / tipo + número de sesgo]
-- Vaguedad lingüística: [PASS/FAIL + código LS si FAIL]
+- Vaguedad lingüística: [HUMAN_REVIEW/BLOCKED + código LS si FAIL]
 - Calibración: [HECHO/EVIDENCIA/INFERENCIA/HIPÓTESIS/INCERTIDUMBRE]
 - Gap declarado: [descripción específica o ninguno]
 - Autorización de ejecución: [PENDIENTE VALIDACIÓN OPERADOR (HIL)]

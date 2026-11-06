@@ -81,9 +81,20 @@ docker compose up -d
 |---|---|---|
 | ArcFace (Identidad) | 40% | >= 0.65 (Hard Gate) |
 | Fourier 2D | 30% | >= 0.40 |
-| Shazam (Bordes) | 20% | >= 0.50 |
+| Shazam (Bordes) | 15% | >= 0.50 |
 | SSIM (Pixeles) | 10% | >= 0.70 |
 | Color Fingerprint | 5% | Delta H <= 90 grados |
+
+**Total: 100%**
+
+### Capas de Diagnóstico (no ponderan)
+
+| # | Capa | Función |
+|---|------|---------|
+| 1 | Metadata | Detecta firmas XMP/IA |
+| 2 | Tiling | Detección de rostros (OpenCV o fallback) |
+| 3 | Lighting | Consistencia de iluminación |
+| 4 | Base64 Differential | Comparación binaria de hashes |
 
 ---
 
