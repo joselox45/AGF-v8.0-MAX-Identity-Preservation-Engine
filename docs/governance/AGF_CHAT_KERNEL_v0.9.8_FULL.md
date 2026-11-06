@@ -158,24 +158,33 @@ Guardar en registro local: Fecha + Hash + Nivel alcanzado + Nomb
 ### 39.4 Regla de acción ante verificación inválida
 Detener cualquier nueva edición hasta restaurar el Kernel a la última versión válida y recalcular el hash correcto
 
-## 39 ARQUITECTURA JUDICIAL AGF (NODO 17 JUEZ COLEGIADO + NODO 35 JUEZ FINAL)
-El Kernel AGF define su flujo operativo mediante una cadena de nodos con roles inmutables bajo regla Fail‑Closed por defecto.
-### 39.1 Cadena Obligatoria de Nodos (orden fijo)
-N0 → N10 → N15 → N17 → S31 → N20 → N30 → N40 → N35
-### 39.2 Roles Oficiales del Kernel
-- N0 Externo: Inicia orden de preservacion; no juzga ni ejecuta
-- N10 MIL‑B - Fiscal: Validaciones S33 / S8 / S35 / S36 + MAXCAP 200 caracteres | 80 % carga operativa | Acusa
-- N15 MIL‑A - Auditor: Recoge pruebas + Hash‑Chain C1‑C4 | Audita | NO dicta veredicto
-- N17 Juez Colegiado: Recibe expediente MIL‑A | Delibera | Emite FALLO INOCENTE PASS / CULPABLE FAIL‑CLOSED | Requiere S34 firma colegiada para override MAXCAP = 0
-- Puente S31 AES‑256‑GCM: Solo se abre tras FALLO INOCENTE
-- N20 HIL Vault - Ejecutor: MAXCAP 100 | Ejecuta sentencia | Único autorizado para acceder a SIL
-- N30 SIL - Custodia Final: MAXCAP 50 | Read‑only tamper‑evident | Posicion final obligatoria del flujo valido
-- N40 Backup Georedundante: Replica estado SIL
-- N35 Juez Final Post‑SIL: Verifica cierre inverso C4→C3→C2→C1 + todos nodos cerrados | Emite ACTA_FINAL_SELLADA_CLOSED
-### 39.3 Regla Fail‑Closed Judicial Kernel Mandatorio
-Si N10 detecta violacion MAXCAP / Entropy Gate → N17 emite CULPABLE → S31 permanece cerrado → Sin ejecucion HIL → Sin custodia SIL
-### 39.4 Trazabilidad Acta Final
-Hash de ACTA_FINAL_SELLADA_CLOSED registrado en docs/evidence/ y encadenado al hash del kernel
+## 39. VERIFICACIÓN DEL ESTADO DEL KERNEL
+
+### 39.1. Objetivo
+Confirmar que cada estado del Kernel cumple la Regla I-01 antes de considerarlo un estado base válido, independientemente de que exista firma oficial o commit Git.
+
+### 39.2. Niveles de verificación
+
+**Nivel 1 — Verificación hash local (obligatorio):**
+1. Calcular SHA-256 de `AGF_CHAT_KERNEL_v0.9.8_FULL.md`
+2. Compararlo contra `.kernel_hash.sha256`
+3. Resultado = válido / inválido
+
+**Nivel 2 — Verificación estructural (revisión manual / script check-kernel):**
+- Orden numérico correcto de secciones
+- Existencia de todos los sub-apartados obligatorios de la sección modificada
+- Sin cortes de texto en inserciones sed / editor
+
+**Nivel 3 — Verificación desde extremo móvil (pendiente activar E2E):**
+- Enviar el hash Nivel 1 al dispositivo móvil
+- Validar (Reed-Solomon corrección + firma criptográfica cuando se requiera aprobación oficial)
+
+### 39.3. Registro obligatorio tras verificación válida
+Guardar en registro local: Fecha + Hash + Nivel alcanzado + Nombre verificador.
+Ejemplo: `2026-11-04 | 685fd4b… | Nivel 2 | Verificación local completa`
+
+### 39.4. Regla de acción ante verificación inválida
+Detener cualquier nueva edición hasta restaurar el Kernel a la última versión válida y recalcular el hash correcto.
 
 ## 40 LÍMITE OPERATIVO - PROFUNDIDAD MÁXIMA SELLADO KERNEL
 Conjunto cerrado de condiciones bajo las cuales se garantiza idempotencia y estado cerrado del kernel; fuera de el se emite ACTA_FUERA_DE_LIMITE y se aplica Fail‑Closed
