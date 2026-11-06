@@ -256,3 +256,31 @@ Las 4 capas GCELL originales siguen vigentes como **protocolo de auditoría del 
 - **HIL** aplica 9 capas forenses para auditar las imágenes.
 
 No son lo mismo, y no deben confundirse.
+
+---
+
+## 42. VERIFICACIÓN PREVIA OBLIGATORIA (FAIL-CLOSED)
+
+Todo agente MIL-B debe ejecutar esta verificación antes de procesar cualquier input.
+
+### 42.1. Las 3 preguntas obligatorias
+
+1. **¿Tengo los 4 requisitos?** Boot Prompt completo, input accesible, formato de salida conocido, capacidad de medir longitud.
+2. **¿El input cumple MAXCAP?** ≤ 200 caracteres (N10). Mayor → ACTA_FUERA_DE_LIMITE.
+3. **¿Voy a emitir PASS?** Si la respuesta contiene PASS → violación S04. Solo HUMAN_REVIEW o BLOCKED.
+
+### 42.2. Regla Fail-Closed
+
+Si cualquiera de las 3 preguntas falla:
+- NO procesar el input.
+- Emitir: `BLOCKED — Verificación previa fallida: <detalle>`
+- NO auditar nada más.
+
+### 42.3. Consecuencia
+
+Sin esta verificación, el MIL-B puede:
+- Aceptar un Boot Prompt truncado (incompleto).
+- Procesar un input gigante (violando MAXCAP).
+- Emitir PASS sin medir (violando §37).
+
+**Esta sección cierra esa brecha.**

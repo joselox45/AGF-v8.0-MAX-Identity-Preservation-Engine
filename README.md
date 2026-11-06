@@ -87,6 +87,21 @@ docker compose up -d
 
 ---
 
+
+---
+
+## Verificación Previa (Boot Prompt v2)
+
+El Boot Prompt incluye una **verificación previa obligatoria** (sección 0) que el LLM debe ejecutar antes de auditar cualquier input:
+
+1. ¿Tiene los 4 requisitos del MIL-B?
+2. ¿El input cumple MAXCAP (≤200 caracteres)?
+3. ¿Va a emitir PASS? (prohibido)
+
+Si falla cualquiera, el LLM debe responder `BLOCKED` y NO auditar.
+
+**Sin esta verificación, el Boot Prompt no cumple con el Kernel v0.9.8.**
+
 ## API Endpoints
 
 | Endpoint | Metodo | Descripcion |
