@@ -27,7 +27,7 @@ EVIDENCE_DIR = "termux_sealed"
 OUTPUT_FILE = os.path.join(EVIDENCE_DIR, "composite_audit.json")
 
 # Umbrales (del kernel)
-UMBRAL_ARCFACE = float(os.environ.get('AGF_ARCFACE_THRESHOLD', 0.65))  # Calibrado empíricamente
+UMBRAL_ARCFACE = float(os.environ.get('AGF_ARCFACE_THRESHOLD', 0.65))  # Umbral por defecto, pendiente de medición FAR/FRR
 UMBRAL_FOURIER = 0.40
 UMBRAL_SSIM = 0.70
 UMBRAL_SHAZAM = 0.50

@@ -1,6 +1,8 @@
 # AGF v8.0-MAX — Identity Preservation Engine
 
 **Versión:** v12.4.7.8-STRONG (Kernel v0.9.8)
+
+**Versionado:** Repo v8.0-MAX es producto. Motor v12.4.7.8-STRONG es motor forense. Kernel v0.9.8 es gobernanza. Tres números, tres capas, sin conflicto.
 **Estado:** Open Core · IP Privada Protegida
 
 ---
@@ -88,23 +90,16 @@ docker compose up -d
 **Total: 100%**
 
 ### Ledger de evidencia
-Ledger en core/evidence_ledger.py. Archivo core/agf_ledger.py existe en repo. Archivo autoritativo pendiente de decision HIL.
+Ledger núcleo en core/evidence_ledger.py (clase EvidenceLedger, hash-chain). Integración en core/agf_ledger.py (registrar_evidencia, verificar_ledger) usada por api_server.py. Ambos complementarios, no duplicados.
 
 ### Capas de Diagnóstico (no ponderan)
 
 | Capa | Funcion |
 |---|---|
-| Metadata (XMP / EXIF) | Revisar metadatos |
-| Tiling (OpenCV Haar) | Detectar rostros / mosaico |
-| Lighting (PIL + NumPy) | Consistencia de luz |
-| Base64 Differential (hashlib) | Diferencia entre originales |
-
-| # | Capa | Función |
-|---|------|---------|
-| 1 | Metadata | Detecta firmas XMP/IA |
-| 2 | Tiling | Detección de rostros (OpenCV o fallback) |
-| 3 | Lighting | Consistencia de iluminación |
-| 4 | Base64 Differential | Comparación binaria de hashes |
+| Metadata (XMP / EXIF) | Detecta firmas XMP/IA |
+| Tiling (OpenCV Haar) | Detección de rostros (OpenCV o fallback) |
+| Lighting (PIL + NumPy) | Consistencia de iluminación |
+| Base64 Differential (hashlib) | Comparación binaria de hashes |
 
 ---
 
