@@ -59,3 +59,12 @@ out_hil/
 out_p3_test/
 out_corrupcion/
 .env
+
+# Backups locales, temporales y basura
+BACKUP_*
+backup_*
+*-p
+docs/governance/FULL_backup*
+registro_pruebas_*.csv
+SISTEMA_CUADRUPLE*
+*.FOSO_MARIANAS.txt

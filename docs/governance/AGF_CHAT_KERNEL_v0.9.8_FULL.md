@@ -84,5 +84,122 @@ Como Motor de Inferencia Lógica (MIL‑B) operando conjuntamente con el
 - Autorización de ejecución: [PENDIENTE VALIDACIÓN OPERADOR (HIL)]
 "PROTOCOLO AGF-GCELL ACEPTADO --- 4 CAPAS ACTIVAS --- 60 PRINCIPIOS"
 
+## 37. ARQUITECTURA JUDICIAL AGF (NODO 17 JUEZ COLEGIADO + NODO 35 JUEZ FINAL)
+El Kernel AGF define su flujo operativo mediante una cadena de nodos con roles inmutables bajo regla Fail‑Closed por defecto.
+
+### 37.1 Cadena Obligatoria de Nodos (orden fijo)
+N0 → N10 → N15 → N17 → S31 → N20 → N30 → N40 → N35
+
+### 37.2 Roles Oficiales del Kernel
+- **N0 (Externo):** Inicia orden de preservación; no juzga ni ejecuta
+- **N10 (MIL‑B ‑ Fiscal):** Validaciones S33 / S8 / S35 / S36 + MAXCAP 200 | 80 % carga operativa | Acusa
+- **N15 (MIL‑A ‑ Auditor):** Recoge pruebas + Hash‑Chain C1‑C4 | Audita | NO dicta veredicto
+- **N17 (Juez Colegiado):** Recibe expediente MIL‑A | Delibera | Emite FALLO INOCENTE (PASS) / CULPABLE (FAIL‑CLOSED) | Requiere S34 firma colegiada para override MAXCAP = 0
+- **Puente S31 (AES‑256‑GCM):** Solo se abre tras FALLO INOCENTE
+- **N20 (HIL Vault ‑ Ejecutor):** MAXCAP 100 | Ejecuta sentencia | Único autorizado para acceder a SIL
+- **N30 (SIL ‑ Custodia Final):** MAXCAP 50 | Read‑only tamper‑evident | Posición final obligatoria del flujo válido
+- **N40 (Backup Georedundante):** Replica estado SIL
+- **N35 (Juez Final Post‑SIL):** Verifica cierre inverso C4→C3→C2→C1 + todos nodos cerrados | Emite ACTA_FINAL_SELLADA_CLOSED
+
+### 37.3 Regla Fail‑Closed Judicial (Kernel Mandatorio)
+Si N10 detecta violación MAXCAP / Entropy Gate → N17 emite CULPABLE → S31 permanece cerrado → Sin ejecución HIL → Sin custodia SIL
+
+### 37.4 Trazabilidad Acta Final
+Hash de ACTA_FINAL_SELLADA_CLOSED registrado en docs/evidence/ y encadenado al hash del kernel
+
+## 38. LÍMITE OPERATIVO ‑ PROFUNDIDAD MÁXIMA (SELLADO KERNEL)
+### 38.1 Condiciones válidas dentro del Límite
+1. Longitud entrada ≤ 200 (N10) / ≤ 100 (N20 tras PASS) / ≤ 50 (N30 tras confirmación HIL)
+2. Cadena nodos respetada sin saltos salvo override S34 válido
+3. Orden validaciones S33 → S8 → S35 → S36 invariable
+4. Hash‑Chain C1‑C4 SHA‑256 invariable
+5. Roles, umbrales MAXCAP y requisitos S34 no modificados
+
+### 38.2 Violaciones Detectables
+- Entrada > 200 antes N10
+- Reordenamiento cadena nodos
+- Modificación umbrales MAXCAP
+- Salto nodo sin override S34 válido
+- Override MAXCAP = 0 sin firma colegiada N20 + N30
+- Cambio función hash C1‑C4
+
+### 38.3 Acta Fuera de Límite (Formato Obligatorio)
+Timestamp | Nodo detector | Vector ruptura | Hash estado kernel | Acción ejecutada | Firma SHA‑256 | Archivo en docs/evidence/FUERA_DE_LIMITE_<timestamp>.md
+
+### 38.4 Restauración al Estado Sellado
+1. Corregir violación 2. Ejecutar tools/check_kernel.py 3. Registrar ACTA_DE_RESTAURACION en docs/evidence/ 4. Reiniciar flujo desde N0
+
+### 38.5 Regla Fundamental
+Dentro del límite: idempotencia garantizada | Fuera del límite: Acta registrada + Fail‑Closed + Sin garantía de Profundidad Máxima
+
+## 39 VERIFICACIÓN
+### 39.1 Objetivo
+Confirmar que cada estado del Kernel cumple la Regla I‑01 antes de considerarlo un estado base válido, independientemente de que exista firma oficial o commit Git.
+
+### 39.2 Niveles de verificación
+#### Nivel 1 – Verificación hash local (obligatorio)
+1. Calcular SHA‑256 de `AGF_CHAT_KERNEL_v0.9.8_FULL.md`
+2. Compararlo contra `.kernel_hash.sha256`
+3. Resultado = válido / inválido
+
+#### Nivel 2 – Verificación estructural (revisión manual / script check‑kernel)
+- Orden numérico correcto de secciones
+- Existencia de todos los sub‑apartados obligatorios de la sección modificada
+- Sin cortes de texto en inserciones sed / editor
+
+#### Nivel 3 – Verificación desde extremo móvil (pendiente activar E2E)
+- Enviar el hash Nivel 1 al dispositivo móvil
+- Validar (Reed‑Solomon corrección + firma criptográfica cuando se requiera aprobación oficial)
+
+### 39.3 Registro obligatorio tras verificación válida
+Guardar en registro local: Fecha + Hash + Nivel alcanzado + Nombre verificador
+> Ejemplo: 2026‑11‑04 | 685fd4b… | Nivel 2 | Verificación local completa
+
+### 39.4 Regla de acción ante verificación inválida
+Detener cualquier nueva edición hasta restaurar el Kernel a la última versión válida y recalcular el hash correcto
+
+## 39 ARQUITECTURA JUDICIAL AGF (NODO 17 JUEZ COLEGIADO + NODO 35 JUEZ FINAL)
+El Kernel AGF define su flujo operativo mediante una cadena de nodos con roles inmutables bajo regla Fail‑Closed por defecto.
+### 39.1 Cadena Obligatoria de Nodos (orden fijo)
+N0 → N10 → N15 → N17 → S31 → N20 → N30 → N40 → N35
+### 39.2 Roles Oficiales del Kernel
+- N0 Externo: Inicia orden de preservacion; no juzga ni ejecuta
+- N10 MIL‑B - Fiscal: Validaciones S33 / S8 / S35 / S36 + MAXCAP 200 | 80 % carga operativa | Acusa
+- N15 MIL‑A - Auditor: Recoge pruebas + Hash‑Chain C1‑C4 | Audita | NO dicta veredicto
+- N17 Juez Colegiado: Recibe expediente MIL‑A | Delibera | Emite FALLO INOCENTE PASS / CULPABLE FAIL‑CLOSED | Requiere S34 firma colegiada para override MAXCAP = 0
+- Puente S31 AES‑256‑GCM: Solo se abre tras FALLO INOCENTE
+- N20 HIL Vault - Ejecutor: MAXCAP 100 | Ejecuta sentencia | Único autorizado para acceder a SIL
+- N30 SIL - Custodia Final: MAXCAP 50 | Read‑only tamper‑evident | Posicion final obligatoria del flujo valido
+- N40 Backup Georedundante: Replica estado SIL
+- N35 Juez Final Post‑SIL: Verifica cierre inverso C4→C3→C2→C1 + todos nodos cerrados | Emite ACTA_FINAL_SELLADA_CLOSED
+### 39.3 Regla Fail‑Closed Judicial Kernel Mandatorio
+Si N10 detecta violacion MAXCAP / Entropy Gate → N17 emite CULPABLE → S31 permanece cerrado → Sin ejecucion HIL → Sin custodia SIL
+### 39.4 Trazabilidad Acta Final
+Hash de ACTA_FINAL_SELLADA_CLOSED registrado en docs/evidence/ y encadenado al hash del kernel
+
+## 40 LÍMITE OPERATIVO - PROFUNDIDAD MÁXIMA SELLADO KERNEL
+Conjunto cerrado de condiciones bajo las cuales se garantiza idempotencia y estado cerrado del kernel; fuera de el se emite ACTA_FUERA_DE_LIMITE y se aplica Fail‑Closed
+### 40.1 Condiciones validas dentro del Limite Operativo
+1. Longitud entrada ≤ 200 caracteres N10 / ≤ 100 N20 tras PASS / ≤ 50 N30 tras confirmacion HIL
+2. Cadena de nodos respetada sin saltos salvo override S34 valido
+3. Orden validaciones S33 → S8 → S35 → S36 invariable
+4. Hash‑Chain C1‑C4 calculado con SHA‑256 invariable
+5. Roles, umbrales MAXCAP y requisitos S34 no modificados
+### 40.2 Violaciones Detectables por el Kernel
+- Entrada > 200 caracteres antes N10
+- Reordenamiento cadena nodos
+- Modificacion umbrales MAXCAP
+- Salto nodo sin override S34 valido
+- Override MAXCAP = 0 sin firma colegiada N20 + N30
+- Cambio funcion hash C1‑C4
+### 40.3 Acta Fuera de Limite Formato Obligatorio Kernel
+Timestamp | Nodo detector | Vector ruptura | Hash estado kernel | Accion ejecutada | Firma SHA‑256 | Archivo guardado en docs/evidence/FUERA_DE_LIMITE_timestamp.md
+### 40.4 Restauracion al Estado Sellado
+1. Corregir violacion detectada
+2. Ejecutar tools/check_kernel.py validando integridad hash kernel
+3. Emitir ACTA_DE_RESTAURACION registrada en docs/evidence/
+4. Reiniciar flujo valido desde N0
+### 40.5 Regla Fundamental del Limite Operativo
+Dentro del limite: idempotencia garantizada | Fuera del limite: Acta registrada + Fail‑Closed ejecutado + Sin garantia de Profundidad Maxima
 ## Registro de Estado Dual‑MIL
 SIMULACION = DESACTIVADA (Declarado, operatividad pendiente de verificación) · Dual‑MIL modo objetivo real declarado en repositorio main el 2026‑11‑04
