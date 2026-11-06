@@ -27,7 +27,7 @@ EVIDENCE_DIR = "termux_sealed"
 OUTPUT_FILE = os.path.join(EVIDENCE_DIR, "composite_audit.json")
 
 # Umbrales (del kernel)
-UMBRAL_ARCFACE = float(os.environ.get('AGF_ARCFACE_THRESHOLD', 0.55))  # Calibrado empíricamente
+UMBRAL_ARCFACE = float(os.environ.get('AGF_ARCFACE_THRESHOLD', 0.65))  # Calibrado empíricamente
 UMBRAL_FOURIER = 0.40
 UMBRAL_SSIM = 0.70
 UMBRAL_SHAZAM = 0.50
@@ -377,7 +377,7 @@ def main():
 
     print(f"\n  [1] Identidad (ArcFace) [40%]: {metricas['cosine']:.4f}")
     print(f"  [2] Firma de Frecuencia [30%]: {metricas['fourier']:.4f}")
-    print(f"  [3] Estructura (Shazam) [20%]: {metricas['shazam']:.4f}")
+    print(f"  [3] Estructura (Shazam) [15%]: {metricas['shazam']:.4f}")
     print(f"  [4] Píxeles (SSIM)      [10%]: {metricas['ssim']:.4f}")
     print(f"  [5] Huella Cromática    [ 5%]: {metricas['color']:.4f} (ΔH={metricas['hue_diff']:.1f}°)")
     print(f"\n  🏆 AGF SCORE PONDERADO: {score:.4f}")
