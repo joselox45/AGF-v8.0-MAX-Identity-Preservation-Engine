@@ -1,6 +1,6 @@
 
 ## 36. FUSIÓN EPISTÉMICA: PROTOCOLO GCELL v1.1 (AKADI)
-*Créditos de la capa epistémica y lingüística: Meily — AKADI Strategic Intelligence (2026).*
+*Basado en principios de auditoría epistémica y lingüística.*
 El Kernel AGF adopta el protocolo GCELL para dotar al MIL-B de una capacidad de auditoría lingüística y cognitiva superior.
 
 ### 36.1. Las 4 Capas de Gobernanza GCELL
@@ -82,7 +82,7 @@ Como Motor de Inferencia Lógica (MIL‑B) operando conjuntamente con el
 - Calibración: [EVIDENCIA]
 - Gap declarado: [ninguno]
 - Autorización de ejecución: [PENDIENTE VALIDACIÓN OPERADOR (HIL)]
-"PROTOCOLO AGF-GCELL ACEPTADO --- 4 CAPAS ACTIVAS --- 60 PRINCIPIOS"
+"PROTOCOLO AGF-GCELL ACEPTADO --- 4 CAPAS ACTIVAS"
 
 ## 37. ARQUITECTURA JUDICIAL AGF (NODO 17 JUEZ COLEGIADO + NODO 35 JUEZ FINAL)
 El Kernel AGF define su flujo operativo mediante una cadena de nodos con roles inmutables bajo regla Fail‑Closed por defecto.
@@ -139,7 +139,7 @@ Confirmar que cada estado del Kernel cumple la Regla I‑01 antes de considera
 ### 39.2 Niveles de verificación
 #### Nivel 1 – Verificación hash local (obligatorio)
 1. Calcular SHA‑256 de `AGF_CHAT_KERNEL_v0.9.8_FULL.md`
-2. Compararlo contra `.kernel_hash.sha256`
+2. Compararlo contra `.kernel_hash.sha256a256`
 3. Resultado = válido / inválido
 
 #### Nivel 2 – Verificación estructural (revisión manual / script check‑kernel)
@@ -164,7 +164,7 @@ El Kernel AGF define su flujo operativo mediante una cadena de nodos con roles i
 N0 → N10 → N15 → N17 → S31 → N20 → N30 → N40 → N35
 ### 39.2 Roles Oficiales del Kernel
 - N0 Externo: Inicia orden de preservacion; no juzga ni ejecuta
-- N10 MIL‑B - Fiscal: Validaciones S33 / S8 / S35 / S36 + MAXCAP 200 | 80 % carga operativa | Acusa
+- N10 MIL‑B - Fiscal: Validaciones S33 / S8 / S35 / S36 + MAXCAP 200 caracteres | 80 % carga operativa | Acusa
 - N15 MIL‑A - Auditor: Recoge pruebas + Hash‑Chain C1‑C4 | Audita | NO dicta veredicto
 - N17 Juez Colegiado: Recibe expediente MIL‑A | Delibera | Emite FALLO INOCENTE PASS / CULPABLE FAIL‑CLOSED | Requiere S34 firma colegiada para override MAXCAP = 0
 - Puente S31 AES‑256‑GCM: Solo se abre tras FALLO INOCENTE
@@ -193,7 +193,7 @@ Conjunto cerrado de condiciones bajo las cuales se garantiza idempotencia y esta
 - Override MAXCAP = 0 sin firma colegiada N20 + N30
 - Cambio funcion hash C1‑C4
 ### 40.3 Acta Fuera de Limite Formato Obligatorio Kernel
-Timestamp | Nodo detector | Vector ruptura | Hash estado kernel | Accion ejecutada | Firma SHA‑256 | Archivo guardado en docs/evidence/FUERA_DE_LIMITE_timestamp.md
+Timestamp | Nodo detector | Vector ruptura | Hash estado kernel | Accion ejecutada | Firma SHA‑256 | Archivo guardado en docs/evidence/FUERA_DE_LIMITE_<TIMESTAMP>.md
 ### 40.4 Restauracion al Estado Sellado
 1. Corregir violacion detectada
 2. Ejecutar tools/check_kernel.py validando integridad hash kernel
@@ -203,3 +203,30 @@ Timestamp | Nodo detector | Vector ruptura | Hash estado kernel | Accion ejecuta
 Dentro del limite: idempotencia garantizada | Fuera del limite: Acta registrada + Fail‑Closed ejecutado + Sin garantia de Profundidad Maxima
 ## Registro de Estado Dual‑MIL
 SIMULACION = DESACTIVADA (Declarado, operatividad pendiente de verificación) · Dual‑MIL modo objetivo real declarado en repositorio main el 2026‑11‑04
+
+
+---
+
+## 40. NOTA DE ESTADO (IMPLEMENTACIÓN PARCIAL)
+
+Este kernel es una **especificación de gobernanza**, no un sistema operativo.
+
+### Implementado en código:
+- ✅ MAXCAP: 200 chars input, 10MB imagen, 5KB output, 60s timeout
+- ✅ Motor forense de 9 capas (`tools/agf_full_9_layers.py`)
+- ✅ API Flask con validaciones (`api_server.py`)
+- ✅ Tests unitarios (13 tests, `tests/`)
+- ✅ Hash de integridad (`tools/check_kernel.py`)
+
+### NO implementado (especificación solamente):
+- ❌ N17, N20, N30, N35 (nodos judiciales)
+- ❌ S31 (puente AES-256-GCM)
+- ❌ S34 (firma colegiada)
+- ❌ ACTA_FINAL_SELLADA_CLOSED
+- ❌ Hash-Chain C1-C4
+
+**Regla de honestidad:** Si algo NO está en la lista de implementado, no existe como código. Es teoría.
+
+---
+
+*Documento actualizado el 2026-11-06 con correcciones de deuda técnica.*
