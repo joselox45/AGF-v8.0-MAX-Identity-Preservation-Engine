@@ -179,3 +179,10 @@ MIT - Open Core, IP privada protegida.
 ---
 
 *Actualizado el 2026-11-06 bajo gobernanza del Kernel v0.9.8.*
+
+## No Dependency on Private Commercial LLM APIs
+
+AGF-GCELL core runs locally, without any dependency on private commercial LLM chatbot APIs.
+The forensic engine, the ledger, and the verification use local math (ArcFace + Fourier + SSIM), not the word of a chatbot.
+MIL-A / MIL-B can be any LLM, including a commercial one, but the core does not send biometric data, photos, embeddings, or keys to external APIs.
+Your photos, embeddings, and keys stay on your machine / your server.
