@@ -15,15 +15,10 @@ Motor de auditoría forense de imágenes generadas por IA. Verifica si una image
 
 ---
 
-## Arquitectura Dual (MIL/SIL/HIL)
 
 | Rol | Dónde corre | Qué hace |
 |-----|-------------|----------|
-| **MIL-A** | Chatbot | Genera imágenes y texto |
-| **MIL-B** | Chatbot con Boot Prompt | Audita la evidencia JSON |
-| **HIL** | Termux / VPS | Procesa píxeles reales con ArcFace |
 
-**Regla de oro:** Un LLM nunca dice `PASS`. Solo el HIL (Python) certifica identidad.
 
 ---
 
@@ -109,23 +104,17 @@ Ledger núcleo en core/evidence_ledger.py (clase EvidenceLedger, hash-chain). In
 
 ## Matriz de Correspondencia: Capas, Herramientas y Roles
 
-Para evitar confusión entre el protocolo de chat (MIL-B) y el motor forense (HIL), esta es la correspondencia exacta:
 
 | Rol | Entorno | Capas que aplica | Herramientas |
 |-----|---------|------------------|--------------|
-| **MIL-B** (Auditor) | Chatbot (ChatGPT/Claude/Meta) | **4 Capas GCELL** (Epistémica, Cognitiva, Lingüística, Ética) | Ninguna. Solo texto. Prohibido ejecutar código. |
-| **HIL** (Motor Forense) | Python (Termux/VPS) | **9 Capas Forenses** (ArcFace, Fourier, Shazam, SSIM, Color + 4 diagnósticas) | `tools/agf_full_9_layers.py`, `tools/acta_final.py`, `tools/check_kernel.py` |
 
-### Capas del MIL-B (Protocolo de texto)
 El Boot Prompt obliga al LLM a auditar el texto bajo 4 capas GCELL y a declarar `GAP RESIDUAL` si no puede verificar algo (ej. un hash).
 
-### Capas del HIL (Motor de imágenes)
 El motor Python ejecuta las 9 capas reales sobre las imágenes y genera:
 1. Un `composite_audit.json` con las métricas.
 2. Un `acta_final.json` firmado con hash.
 3. Un registro en el `ledger.jsonl` (hash-chain).
 
-**Regla de oro:** El MIL-B nunca dice `PASS`. Si el HIL dice `BLOCKED` (porque ArcFace < 0.65), el sistema entero se detiene.
 
 ---
 
@@ -133,7 +122,6 @@ El motor Python ejecuta las 9 capas reales sobre las imágenes y genera:
 
 El Boot Prompt incluye una **verificación previa obligatoria** (sección 0) que el LLM debe ejecutar antes de auditar cualquier input:
 
-1. ¿Tiene los 4 requisitos del MIL-B?
 2. ¿El input cumple MAXCAP (≤200 caracteres)?
 3. ¿Va a emitir PASS? (prohibido)
 
@@ -184,26 +172,15 @@ MIT - Open Core, IP privada protegida.
 
 AGF-GCELL core runs locally, without any dependency on private commercial LLM chatbot APIs.
 The forensic engine, the ledger, and the verification use local math (ArcFace + Fourier + SSIM), not the word of a chatbot.
-MIL-A / MIL-B can be any LLM, including a commercial one, but the core does not send biometric data, photos, embeddings, or keys to external APIs.
 Your photos, embeddings, and keys stay on your machine / your server.
 
 ## Roles in plain words / Roles en palabras simples
 
-English: Think of a kitchen. SIL is the oven, it only cooks, it does not think. MIL is the assistant cook, it prepares and checks. HIL is YOU, the chef owner, you taste and say YES or NO. No dish goes out without YOU.
 
-Espanol: Piensa en una cocina. SIL es el horno, solo cocina, no piensa. MIL es el ayudante de cocina, prepara y revisa. HIL eres TU, el chef dueno, tu pruebas y dices SI o NO. Ningun plato sale sin TI.
 
-English: SIL = Software, the code. It executes tests, calculates, generates reports. It does not decide.
-Espanol: SIL = Software, el codigo. Ejecuta tests, calcula, genera actas. No decide.
 
-English: MIL-A = AI Operator. It prepares commands, cleans, generates. It does the work.
-Espanol: MIL-A = IA Operadora. Prepara comandos, limpia, genera. Hace el trabajo.
 
-English: MIL-B = AI Auditor. It checks the work of MIL-A, asks for evidence, says HUMAN_REVIEW or BLOCKED. It does not execute changes.
-Espanol: MIL-B = IA Auditora. Revisa el trabajo de MIL-A, pide evidencia, dice HUMAN_REVIEW o BLOCKED. No ejecuta cambios.
 
-English: MIL-C = AI Keeper. It saves backup and compares before/after. It alerts if something is lost.
-Espanol: MIL-C = IA Guardiana. Guarda copia y compara antes/después. Alerta si algo se pierde.
 
 **COPIAR EL BOOT (PASOS PARA DESCARGAR, SI RECIEN ENTRAS A GITHUB:**
 **1. CREA UNA CUENTA EN GITHUB.COM SI NO TIENES, CON TU CORREO Y CONTRASENA. SI YA TIENES, ENTRA CON TU CUENTA.**
