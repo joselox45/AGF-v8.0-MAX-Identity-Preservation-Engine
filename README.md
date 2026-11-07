@@ -186,3 +186,35 @@ AGF-GCELL core runs locally, without any dependency on private commercial LLM ch
 The forensic engine, the ledger, and the verification use local math (ArcFace + Fourier + SSIM), not the word of a chatbot.
 MIL-A / MIL-B can be any LLM, including a commercial one, but the core does not send biometric data, photos, embeddings, or keys to external APIs.
 Your photos, embeddings, and keys stay on your machine / your server.
+
+## Roles in plain words / Roles en palabras simples
+
+English: Think of a kitchen. SIL is the oven, it only cooks, it does not think. MIL is the assistant cook, it prepares and checks. HIL is YOU, the chef owner, you taste and say YES or NO. No dish goes out without YOU.
+
+Espanol: Piensa en una cocina. SIL es el horno, solo cocina, no piensa. MIL es el ayudante de cocina, prepara y revisa. HIL eres TU, el chef dueno, tu pruebas y dices SI o NO. Ningun plato sale sin TI.
+
+English: SIL = Software, the code. It executes tests, calculates, generates reports. It does not decide.
+Espanol: SIL = Software, el codigo. Ejecuta tests, calcula, genera actas. No decide.
+
+English: MIL-A = AI Operator. It prepares commands, cleans, generates. It does the work.
+Espanol: MIL-A = IA Operadora. Prepara comandos, limpia, genera. Hace el trabajo.
+
+English: MIL-B = AI Auditor. It checks the work of MIL-A, asks for evidence, says HUMAN_REVIEW or BLOCKED. It does not execute changes.
+Espanol: MIL-B = IA Auditora. Revisa el trabajo de MIL-A, pide evidencia, dice HUMAN_REVIEW o BLOCKED. No ejecuta cambios.
+
+English: MIL-C = AI Keeper. It saves backup and compares before/after. It alerts if something is lost.
+Espanol: MIL-C = IA Guardiana. Guarda copia y compara antes/después. Alerta si algo se pierde.
+
+**COPIAR EL BOOT (PASOS PARA DESCARGAR, SI RECIEN ENTRAS A GITHUB:**
+**1. CREA UNA CUENTA EN GITHUB.COM SI NO TIENES, CON TU CORREO Y CONTRASENA. SI YA TIENES, ENTRA CON TU CUENTA.**
+**2. EN EL BUSCADOR DE GITHUB, ESCRIBE: JOSELOX45/AGF-V8.0-MAX-IDENTITY-PRESERVATION-ENGINE Y PULSA ENTER.**
+**3. ENTRA A LA CARPETA docs/governance/ PULSANDO SOBRE ELLA.**
+**4. ABRE EL ARCHIVO CHATBOT_BOOT_PROMPT.md PULSANDO SOBRE EL.**
+**5. PULSA RAW ARRIBA A LA DERECHA. AHORA VES SOLO EL TEXTO DEL BOOT, SIN BOTONES.**
+**PARA COPIARLO: EN EL MOVIL, MANTEN PULSADO EL TEXTO HASTA QUE SALGA SELECCIONAR TODO, PULSA SELECCIONAR TODO, LUEGO PULSA COPIAR. EN LA COMPUTADORA, PULSA CTRL + A PARA SELECCIONAR TODO, LUEGO CTRL + C PARA COPIAR.**
+**PARA DESCARGARLO: PULSA LOS 3 PUNTOS ... ARRIBA A LA DERECHA, PULSA DOWNLOAD O DESCARGAR. EL ARCHIVO BAJA A TU CARPETA DOWNLOADS / DESCARGAS.**
+**SUBELO O PEGALO AL CHATBOT DE TU PREFERENCIA: ABRE EL CHATBOT, ABRE UN CHAT NUEVO, PULSA EN EL CUADRO DE TEXTO DONDE ESCRIBES. EN EL MOVIL, MANTEN PULSADO Y PULSA PEGAR. EN LA COMPUTADORA, PULSA CTRL + V PARA PEGAR. SI QUIERES SUBIRLO COMO ARCHIVO, PULSA EL CLIP O + Y ELIGE EL ARCHIVO CHATBOT_BOOT_PROMPT.md QUE DESCARGASTE. LUEGO PULSA ENVIAR.**
+**SOLO NECESITAS EL BOOT. NO NECESITAS SUBIR NI PEGAR NINGUN OTRO ARCHIVO.**
+**PROBADO EN: CLAUDE, CHATGPT, META AI, CUENTA FREE. AUN NO EN CUENTAS PLUS / PREMIUM.**
+**AUN NO SE REALIZARON PRUEBAS EN OTROS CHATBOTS COMO GROK, DEEPSEEK, KIMI 3, DOLA, NI EN NINGUN OTRO ASISTENTE DE IA. PUEDES CREAR UNA CUENTA O USAR TU CUENTA Y PROBARLO.**
+**EL BOOT EN .TXT TAMBIEN EXISTE, PERO AUN NO SE REALIZARON PRUEBAS CON EL BOOT EN .TXT.**
